@@ -21,10 +21,8 @@ import java.util.logging.Logger;
  */
 public class JvxConfiguration {
     
-   public static final String genFolder = "data/";
-   	public static final String datadir = "data/";
-  	// public static final String datadir = "../../../../data/";
-	// public static final String datadir = "data/";
+   public static final String genFolder = "work/apps/common/";
+   	public static final String datadir = "work/apps/common/";
     public static String appFolder = "./";
     
     static Properties conf = null; //new Properties();
