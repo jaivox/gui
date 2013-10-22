@@ -1,0 +1,118 @@
+
+(<greeting>. how can i help you) (<want> table) 
+	(<quantq>) (<number>) 
+		(<usher>) (<excuse> <want> window seat)
+			(<sorry> we dont have a table by the window) (oh! well then, how about that one)
+				(<usher>) (<thank>)
+		(<usher>) (hmm, this area is too JJ. <want> table over there)
+			(<usher>) (<thank>)
+		(<usher>) (<thank>)
+
+(<greeting>. how can i help you) (<want> booth)
+	(<usher>) (<thank>)
+	
+(<greeting>. table for NUM) (<yes>) 
+	(<usher>) (<thank>)
+
+(<greeting>. table for one) (well, actually im expecting somebody)
+	(<which>) (a NN, please)
+		(<usher>) (<thank>)
+
+(<greeting>. table for NUM) (no, <want> booth)
+	(<sorry> all our booths are taken up) (oh, really? what about that one?)
+		(that one is reserved, ADR) (fine! then i'll take my business elsewhere!)
+	(<sorry> all our booths are taken up) (oh! well then, i guess i'll get a table for NUM after all)
+
+{
+<greeting>
+hello;
+good afternoon;
+good evening;
+}
+
+<want>
+id like a ;
+could i have a ;
+
+{
+<quantq>
+for how many people;
+AGR, for how many people;
+}
+
+{
+<number>
+NUM;
+just me;
+}
+
+{
+<ok>
+;
+AGR, ;
+AGR, ADR, ;
+certainly. ;
+}
+
+{
+<come>
+this way please;
+right this way;
+please follow me;
+}
+
+{
+<usher>
+<ok> <come>;
+}
+
+{
+<excuse>
+oh, sorry, ;
+oh, sorry, but ;
+excuse me, ;
+sorry, ;
+sorry, but ;
+sorry to say this, but ;
+im sorry, ;
+}
+
+{
+<sorry>
+sorry, ;
+im afraid ;
+im sorry, ;
+i am sorry, ;
+sorry, ADR, ;
+sorry, ADR, but ;
+im sorry, ADR, ;
+im sorry, ADR, but ;
+oh, im sorry, ;
+oh, im sorry, ADR, ;
+}
+
+{
+<thank>
+thanks;
+thank you;
+}
+
+{
+<yes>
+yes;
+yes, please;
+yeah;
+}
+
+{
+<offer>
+would you like ;
+do you want ;
+will you be needing ;
+}
+
+{
+<which>
+table or booth;
+<offer> a table or a booth;
+}

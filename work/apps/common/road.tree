@@ -1,0 +1,135 @@
+(<are NN JJ>) (<ask NN JJ>)
+(<do NN JJ>) (<ask NN JJ>)
+(<is NN JJ>) (<ask NN JJ>)
+(<which NN JJ>) (<find NN JJ>)
+	(<any ELS>) (<ask ELS>)
+	(<WP ELS>) (<find ELS>)
+	(<yes continue>) (<yes more>)
+	(<no continue>) (<no more>)
+(<WP JJ>) (<find NN JJ>)
+	(<any ELS>) (<ask ELS>)
+	(<WP ELS>) (<find ELS>)
+	(<yes continue>) (<yes more>)
+	(<no continue>) (<no more>)
+{
+<are NN JJ>
+	* are NNS JJ-N
+	* are NNS JJ-N at this time
+	* are the NNS JJ-N
+	* are the NNS RBS
+	* are there any JJ-P NNS
+}
+
+{
+<do NN JJ>
+	* do the NNS get JJ-N
+	* do the NNS get JJ-N
+	* do you think NNP is JJ-N
+	* do you think NNP is JJ-P
+	* do you think the NNS are JJ-N
+	* how JJ-P is NNP
+}
+
+{
+<is NN JJ>
+	* is NNP a JJ-P NN
+	* is NNP DT NN
+	* is NNP JJR-N
+	* is NNP JJR-P
+	* is NNP one of the JJ-P NN
+	* is NNP the JJS-P NN
+	* is there anything JJR-N than NNP
+	* is there anything JJR-P than NNP
+}
+
+{
+<which NN JJ>
+	* which NN is JJ-P
+	* which NN is JJR-N than NNP
+	* which NN is JJR-P than NNP
+	* which NN is JJR-P than NNP
+}
+
+{
+<WP JJ>
+	* WP are the JJ-P NNS
+	* WP is a JJ-P NN
+	* WP is DT JJS-P NN
+	* WP is JJR-P than NNP
+	* WP NN JJ-P
+	* WP NNS JJ-P
+}
+
+{
+<any ELS>
+	* any ELS
+	* any ELS JJ-P NNS
+	* any ELS JJR-P NNS
+	* anything ELS
+	* are there ELS
+	* ELS than WP
+	* is that the JJS-P
+	* how about NNP
+	* no i am asking something ELS
+}
+
+{
+<WP ELS>
+	* WP ELS
+	* WP ELS NNP
+	* WP ELS NNS
+}
+
+{
+<yes continue>
+	* how about that
+	* i guess
+	* yeah
+	* yes
+}
+
+{
+<no continue>
+	* never
+	* no
+	* nope
+	* no way
+	* that is insane
+	* that is ridiculous
+	* that is stupid
+}
+
+{
+<ask NN JJ>
+	not heard
+	mismatch
+	answer yesno
+
+{
+<find NN JJ>
+	not heard
+	mismatch
+	answer find
+}
+
+{
+<find ELS>
+	not heard
+	mismatch
+	answer else
+}
+
+{
+<yes more>
+	not heard
+	mismatch
+	answer yes
+}
+
+{
+<no more>
+	not heard
+	mismatch
+	answer no
+}
+

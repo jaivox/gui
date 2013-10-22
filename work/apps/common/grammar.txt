@@ -1,0 +1,419 @@
+a NN
+a NN VBZ DT NN
+am CD NN
+am FW JJ
+am JJ DT NN
+am NN
+any ELS
+any ELS JJ-P NNS
+any ELS JJR-P NNS
+anything ELS
+are CD JJ NN
+are CD NN
+are DT JJ NN
+are DT NN
+are JJ DT JJ NN
+are JJ DT NN
+are JJ DT NN IN NN
+are JJ JJ NN
+are JJ NN
+are JJ NN IN NN
+are JJ NN JJ
+are JJ NN RB
+are JJ NN VBN
+are JJ NN VBN IN NN
+are JJS NN JJ
+are NN
+are NN DT JJ NN
+are NN DT NN
+are NN DT NN IN NN
+are NN IN JJ NN
+are NN IN NN
+are NN JJ
+are NN JJ CC JJ
+are NN JJ IN NN
+are NN JJ JJ
+are NN JJ NN
+are NN JJ TO NN
+are NN JJ TO VB
+are NN JJR IN JJ
+are NN JJR IN NN
+are NN RB
+are NN RB JJ
+are NN RB VBN IN NN
+are NN RBR IN NN
+are NN RBR JJ IN NN
+are NN VBN
+are NN VBN IN DT NN
+are NN VBN IN NN
+are NN VBN RP IN NN
+are NN VBN TO NN
+are NN VBN TO VB NN
+are NNS JJ-N
+are NNS JJ-N at this time
+are PRP DT JJ NN
+are PRP DT NN
+are PRP JJ
+are PRP RB
+are PRP VBN
+are PRP VBN IN NN
+are RB CD NN IN DT NN
+are RB JJ NN
+are RB VBN IN DT NN
+are RB VBN IN NN
+are the NNS JJ-N
+are the NNS RBS
+are there any JJ-P NNS
+are there ELS
+can DT JJ NN VB
+can DT NN VB
+can DT NN VB DT NN
+can DT NN VB IN DT NN
+can DT NN VB JJ
+can DT NN VB NN
+can DT NN VB VBN
+can JJ NN VB
+can JJ NN VB NN
+can NN VB
+can NN VB DT JJ NN
+can NN VB DT NN
+can NN VB IN DT NN
+can NN VB IN NN
+can NN VB JJ
+can NN VB JJ NN
+can NN VB NN
+can NN VB PRP
+can NN VB PRP$ NN
+can NN VB VBN
+can NN VB VBN IN NN
+can NN VBP
+can PRP VB
+can PRP VB DT NN
+can PRP VB IN DT NN
+can PRP VB IN NN
+can PRP VB NN
+can PRP VB NN IN DT NN
+can PRP VB NN IN NN
+can PRP VB PRP
+did NN VB DT NN
+did NN VB IN NN
+did NN VB NN
+do CD NN
+do DT NN VB JJ NN
+do DT NN VB NN
+do JJ NN VB
+do JJ NN VB JJ NN
+do JJ NN VB NN
+do JJS NN VB CD NN
+do JJS NN VB NN
+do NN
+do NN RB VB
+do NN RB VB IN NN
+do NN RB VB NN
+do NN VB
+do NN VB CD NN
+do NN VB DT JJ NN
+do NN VB DT NN
+do NN VB DT NN IN NN
+do NN VB IN DT NN
+do NN VB IN JJ NN
+do NN VB IN NN
+do NN VB IN PRP$ NN
+do NN VB JJ
+do NN VB JJ NN
+do NN VB NN
+do NN VB NN IN NN
+do NN VB NN IN PRP$ NN
+do NN VB NN TO VB
+do NN VB PRP$ NN
+do NN VB RB
+do NN VB TO VB
+do NN VB TO VB NN
+do PRP VB
+do PRP VB DT JJ NN
+do PRP VB DT NN
+do PRP VB IN DT NN
+do PRP VB IN NN
+do PRP VB JJ
+do PRP VB JJ NN
+do PRP VB NN
+do PRP VB NN IN NN
+do PRP VB PRP
+do PRP VB PRP$ NN
+do PRP VB RB
+do PRP VB TO VB
+do PRP VB TO VB NN
+do the NNS get JJ-N
+do you think NNP is JJ-N
+do you think NNP is JJ-P
+do you think the NNS are JJ-N
+does CD NN
+does CD NN VB NN
+does DT JJ NN VB NN
+does DT NN
+does DT NN VB
+does DT NN VB CD NN
+does DT NN VB DT JJ NN
+does DT NN VB DT NN
+does DT NN VB IN DT NN
+does DT NN VB IN NN
+does DT NN VB JJ
+does DT NN VB JJ NN
+does DT NN VB NN
+does DT NN VB RP DT NN
+does JJ NN
+does JJ NN VB
+does JJ NN VB NN
+does NN
+does NN IN NN
+does NN VB
+does NN VB DT JJ NN
+does NN VB DT NN
+does NN VB IN DT NN
+does NN VB IN JJ NN
+does NN VB IN NN
+does NN VB JJ
+does NN VB JJ NN
+does NN VB NN
+does NN VB PRP
+does NN VB PRP JJ
+does NN VB RB
+ELS than WP
+good NN
+have PRP VBN DT NN
+how about NNP
+how JJ
+how JJ NN VBZ DT NN VB
+how JJ VBZ DT NN
+how JJ-P is NNP
+how VBP PRP VB
+i IN NN
+i MD VB
+i NN
+i VBD
+i VBP
+i VBP DT NN
+i VBP IN NN
+i VBP JJ
+i VBP NN
+i VBP PRP
+i VBP RB
+i VBP RB JJ
+i VBP RB VB
+i VBP RB VB DT NN
+i VBP RB VB NN
+i VBP TO VB
+i VBP VBG
+i VBP VBN
+ich NN
+il NN
+is CD JJ NN
+is CD NN
+is DT DT JJ NN
+is DT DT NN
+is DT JJ JJ NN
+is DT JJ NN
+is DT JJ NN DT JJ NN
+is DT JJ NN DT NN
+is DT JJ NN DT NN IN NN
+is DT JJ NN IN NN
+is DT JJ NN JJ
+is DT NN
+is DT NN DT JJ IN DT NN
+is DT NN DT JJ NN
+is DT NN DT NN
+is DT NN DT NN IN DT NN
+is DT NN DT NN IN NN
+is DT NN IN DT NN
+is DT NN IN JJ NN
+is DT NN IN NN
+is DT NN JJ
+is DT NN JJ IN DT NN
+is DT NN JJ IN NN
+is DT NN JJ JJ
+is DT NN JJ TO DT NN
+is DT NN JJR IN DT NN
+is DT NN RB IN DT NN
+is DT NN RB JJ
+is DT NN VBN IN NN
+is DT NN VBN TO VB NN
+is JJ DT JJ JJ NN
+is JJ DT JJ NN
+is JJ DT JJ NN IN NN
+is JJ DT NN
+is JJ DT NN IN DT NN
+is JJ DT NN IN JJ
+is JJ DT NN IN JJ NN
+is JJ DT NN IN NN
+is JJ JJ NN
+is JJ JJR IN NN
+is JJ NN
+is JJ NN DT JJ NN
+is JJ NN DT NN
+is JJ NN DT NN IN NN
+is JJ NN IN NN
+is JJ NN JJ
+is JJ RB
+is NN
+is NN DT JJ
+is NN DT JJ IN NN
+is NN DT JJ JJ NN
+is NN DT JJ NN
+is NN DT JJ NN IN NN
+is NN DT JJS NN
+is NN DT NN
+is NN DT NN IN DT NN
+is NN DT NN IN JJ NN
+is NN DT NN IN NN
+is NN IN DT JJ NN
+is NN IN DT NN
+is NN IN DT VBN NN
+is NN IN JJ NN
+is NN IN NN
+is NN JJ
+is NN JJ IN DT NN
+is NN JJ IN JJ NN
+is NN JJ IN NN
+is NN JJ IN PRP
+is NN JJ IN PRP$ NN
+is NN JJ JJ
+is NN JJ NN
+is NN JJ NN IN DT NN
+is NN JJ TO NN
+is NN JJ TO VB
+is NN JJR IN JJ
+is NN JJR IN NN
+is NN NN
+is NN RB
+is NN RB JJ
+is NN RBR JJ IN NN
+is NN VBN IN DT NN
+is NN VBN IN JJ NN
+is NN VBN IN NN
+is NN VBN RP IN NN
+is NNP a JJ-P NN
+is NNP DT NN
+is NNP JJR-N
+is NNP JJR-P
+is NNP one of the JJ-P NN
+is NNP the JJS-P NN
+is PRP JJ IN DT NN
+is PRP JJ IN NN
+is PRP JJ TO NN
+is PRP JJ TO VB
+is PRP JJ TO VB DT NN
+is PRP JJ TO VB IN NN
+is PRP JJ TO VB JJ
+is PRP JJ TO VB JJ NN
+is PRP JJ TO VB NN
+is PRP NN
+is PRP$ JJ NN
+is PRP$ NN DT NN
+is PRP$ NN JJ
+is RB DT NN
+is RB DT NN IN DT NN
+is RB DT NN IN NN
+is RB JJ
+is RB JJ DT JJ NN
+is RB JJ DT NN
+is RB NN IN DT NN
+is RB NN IN NN
+is there anything JJR-N than NNP
+is there anything JJR-P than NNP
+is VBG DT JJ NN
+is VBG DT NN
+is VBG DT NN IN NN
+is VBG JJ
+is VBG NN
+is VBG NN JJ
+is VBN DT NN
+is VBN DT NN IN NN
+is VBN JJ DT NN
+is VBN NN DT NN
+ist NN
+it VBZ DT NN
+it VBZ JJ
+my NN
+no i am asking something ELS
+not RB
+should NN VB NN
+should NN VB VBN
+tell PRP IN NN
+tell PRP IN PRP$ NN
+that VBZ JJ
+the NN
+the NN VBZ DT NN
+the NN VBZ JJ
+was JJ DT JJ NN
+was JJ DT NN
+was JJ NN DT JJ NN
+was JJ NN DT NN
+was NN DT JJ NN
+was NN DT NN
+was NN VBN IN NN
+was RB JJ DT NN
+was VBN DT JJ NN
+was VBN DT NN
+was VBN NN DT NN
+what NN
+what NN IN NN
+what NN VBZ DT NN
+what NN VBZ NN
+what VBP NN
+what VBP PRP VB
+what VBP PRP VB IN NN
+what VBP PRP$ NN
+what VBZ CD CC CD
+what VBZ DT JJ NN
+what VBZ DT JJS NN
+what VBZ DT NN
+what VBZ DT NN IN DT NN
+what VBZ DT NN IN NN
+what VBZ JJ
+what VBZ JJ NN
+what VBZ NN
+what VBZ PRP$ JJ NN
+what VBZ PRP$ NN
+what VBZ VBN
+where VBZ DT NN
+where VBZ JJ NN
+where VBZ NN
+where VBZ VBN
+which NN is JJ-P
+which NN is JJR-N than NNP
+which NN is JJR-P than NNP
+who VBD DT NN
+who VBD NN
+who VBZ DT JJ NN
+who VBZ DT NN
+who VBZ JJ NN
+who VBZ NN
+who VBZ PRP$ JJ NN
+who VBZ PRP$ NN
+why JJ
+why VBP PRP JJ
+why VBP PRP VB NN
+will DT NN VB
+will NN VB
+will NN VB DT NN
+will NN VB JJ
+will NN VB NN
+would PRP VB DT NN IN DT NN
+WP are the JJ-P NNS
+WP ELS
+WP ELS NNP
+WP ELS NNS
+WP is a JJ-P NN
+WP is DT JJS-P NN
+WP is JJR-P than NNP
+WP NN JJ-P
+WP NNS JJ-P
+you MD VB
+you VBD
+you VBP
+you VBP DT NN
+you VBP JJ
+you VBP NN
+you VBP RB JJ
+you VBP VBN
+your NN
