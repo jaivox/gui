@@ -12,7 +12,7 @@ import edu.stanford.nlp.trees.Tree;
 
 public class parse {
 
-	static final String penntags = "data/penntags.txt";
+	static final String penntags = "work/apps/common/penntags.txt";
 
 	TreeMap <String, String> tags;
 	ArrayList <String> statements;

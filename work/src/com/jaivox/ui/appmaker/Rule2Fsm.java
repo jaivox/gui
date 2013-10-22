@@ -12,7 +12,7 @@ public class Rule2Fsm {
 	TreeMap <String, String> states;
 	TreeMap <String, String> tags;
 	
-	static String name = "data/road1.tree";
+	static String name = "work/apps/common/road1.tree";
 	static String yes = "yes";
 	String startState = "def";
 	static String casedefault = "(default) (def)";
