@@ -13,10 +13,15 @@ import java.awt.event.*;
 import javax.swing.JPopupMenu;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.TreePath;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
+import javax.swing.undo.UndoableEditSupport;
 
 
 
@@ -24,11 +29,18 @@ public class JvxSynonymsHelper {
     static String datadir = JvxConfiguration.datadir;
     JvxMainFrame theFrame = null;
     
+   static UndoManager undoManager_;
+   static UndoableEditSupport undoSupport_;
     
-    public JvxSynonymsHelper(JvxMainFrame frame) {
-        super();
+    public JvxSynonymsHelper (JvxMainFrame frame) {
+        super ();
         theFrame = frame;
+        undoManager_ = new UndoManager ();
+        undoSupport_ = new UndoableEditSupport ();
+        undoSupport_.addUndoableEditListener (new UndoAdapter ());
+        refreshUndoRedo ();
     }
+	
     public JMenu createSynonymsMenu(Object ox) {
         JMenu submenu = new JMenu("Synonyms");
         
@@ -36,8 +48,9 @@ public class JvxSynonymsHelper {
             SentenceX sx = (SentenceX)ox;
             String words[] = sx.getWords();
             //String syns[] = JvxDialogLoader.gen.getSynonyms( words[words.length/2]);
+            int i = 0;
             for(String word : words) {
-                String syns[] = JvxDialogLoader.gen.getSynonyms( word );
+                String syns[] = JvxDialogLoader.gen.getSynonyms(word, sx.getTagFormAt(i) );
                 if(syns != null) {
                     JMenu syMenu = new JMenu(word);
                     for(String s : syns) {
@@ -46,6 +59,7 @@ public class JvxSynonymsHelper {
                     }
                     submenu.add(syMenu);
                 }
+                i++;
             }
             
         }
@@ -183,16 +197,26 @@ public class JvxSynonymsHelper {
             JMenuItem delMenuItem = new JMenuItem("Delete");
             JMenuItem editMenuItem = new JMenuItem("Edit Row");
             
+            JMenuItem undoMenuItem = new JMenuItem ("Undo");
+            JMenuItem redoMenuItem = new JMenuItem ("Redo");
+            
             selectMenuItem.addActionListener(menuAction);
             addMenuItem.addActionListener(menuAction);
             delMenuItem.addActionListener(menuAction);
             editMenuItem.addActionListener(menuAction);
-            
+            undoMenuItem.addActionListener (menuAction);
+            redoMenuItem.addActionListener (menuAction);
+           
             popup.add(selectMenuItem);
             popup.add(addMenuItem);
             popup.add(delMenuItem);
             popup.add(editMenuItem);
             
+            popup.add (undoMenuItem);
+            popup.add (redoMenuItem);
+            undoMenuItem.setEnabled (undoManager_.canUndo ());
+            redoMenuItem.setEnabled (undoManager_.canRedo ());
+             
             popup.show(table, x, y);
         }
     }
@@ -205,6 +229,11 @@ public class JvxSynonymsHelper {
             }
         }
     }
+	
+  public static void refreshUndoRedo() {
+	  // enable menu items depending on whether undo or redo is possible
+  }
+
     
 }
 class HeaderActionHandler extends MouseAdapter {
@@ -249,7 +278,8 @@ class TableActionHandler  implements TableModelListener {
                         regen = true;
                     }
                     else  {
-                        regen = theFrame.dlgLoader.gen.addSynonyms(columnName, new String[] { data.getValue().trim() });
+                        String tag = model.getSentenceX().getTagFormAt(col);
+                        regen = theFrame.dlgLoader.gen.addSynonyms(columnName, new String[] { data.getValue().trim() }, tag);
                         model.getSentenceX().addUserWord(data.getValue().trim());
                     }
                 }
@@ -331,15 +361,42 @@ class PopUpMenuAction implements ActionListener {
         System.out.println("Menu: " + action);
         // TODO - may be a confirm action here
         if(action.equals("Add Row")) {
-            model.insertRow(model.getRowCount());
+            int rowCount = model.getColumnCount ();
+            model.insertRow(rowCount);
+            UndoableEdit rowChange = new RowChange (model, rowCount);
+            JvxSynonymsHelper.undoSupport_.postEdit (rowChange);
         }
         else if(action.equals("Delete")) {
-            model.deleteColumn(table.getSelectedRow(), table.getSelectedColumn());
+            int r = table.getSelectedRow();
+            int c = table.getSelectedColumn();
+            SynsData sv = (SynsData) model.getValueAt(r, c);  // clone
+            UndoableEdit change = new CellChange (model, new SynsData(sv.getSelected(), sv.getValue()), r, c);
+            
+            model.deleteColumn(r, c);
+            JvxSynonymsHelper.undoSupport_.postEdit (change);
+            
         }
         else if(action.equals("Edit")) {
         }
         else if(action.equals("(Un)Select All")) {
             model.selectAll(table.getSelectedColumn());
         }
+        else if (action.equals ("Undo")) {
+            JvxSynonymsHelper.undoManager_.undo ();
+            mi.setEnabled (JvxSynonymsHelper.undoManager_.canUndo ());
+        }
+        else if (action.equals ("Redo")) {
+            JvxSynonymsHelper.undoManager_.redo ();
+            mi.setEnabled (JvxSynonymsHelper.undoManager_.canRedo ());
+        }
     }
 }
+
+  class UndoAdapter implements UndoableEditListener {
+     public void undoableEditHappened (UndoableEditEvent evt) {
+     	UndoableEdit edit = evt.getEdit();
+     	JvxSynonymsHelper.undoManager_.addEdit( edit );
+     	JvxSynonymsHelper.refreshUndoRedo();
+     }
+  }
+

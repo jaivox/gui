@@ -13,7 +13,6 @@ import com.jaivox.ui.db.JvxDBMgr;
 import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.SentenceX;
 import com.jaivox.ui.gengram.sentence;
-import static com.jaivox.ui.gui.JvxConfiguration.datadir;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,24 +32,42 @@ import java.util.logging.Logger;
  * @author lin
  */
 public class JvxDialogLoader {
-    static final String datadir = JvxConfiguration.datadir;
-    static final String filename = datadir + "road1.tree";
-    static final String datfile = datadir + "road1.data";
+    static String datadir = JvxConfiguration.datadir;
+    private String dlgfile = datadir + "road1.tree";
+    private String datfile = datadir + "road1.data";
         
     public static GrammarGenerator gen = null;
     JvxMainFrame theFrame = null;
     
     public JvxDialogLoader(JvxMainFrame frame) {
-		File dataFolder = new File (datadir);
-		System.out.println ("datadir path: "+dataFolder.getAbsolutePath ());
-        gen = new GrammarGenerator(filename, datfile);
-        gen.generate(filename);
+        File dataFolder = new File (datadir);
+        System.out.println ("datadir path: "+dataFolder.getAbsolutePath ());
+        gen = new GrammarGenerator(datadir);
+        //gen.generate(filename);
         theFrame = frame;
     }
-
-    public void loadDialogs(JTree dialogTree) {
+    public void reInit() {
+        datadir = JvxConfiguration.theConfig().getDataFolder();
+        dlgfile = JvxConfiguration.theConfig().getDialogFile();
+        datfile = JvxConfiguration.theConfig().getDataFile();
         
-        String filename = datadir + "road1.tree";
+        File dataFolder = new File (datadir);
+        System.out.println ("datadir path: "+dataFolder.getAbsolutePath ());
+        System.out.println ("Dialog file: " + dlgfile);
+        System.out.println ("Data file: " + datfile);
+        gen.load(dlgfile, datfile);
+        gen.generate(dlgfile);
+    }
+    public void loadDialogFile(String file) {
+        JvxConfiguration.theConfig().setDialogFile(file);
+        reInit();
+        loadDialogs(theFrame.getDialogTree());
+    }
+    public void loadDialogs(JTree dialogTree) {
+        loadDialogs(dialogTree, dlgfile);
+    }
+    public void loadDialogs(JTree dialogTree, String filename) {
+        if(dialogTree == null || filename == null) return;
         File f = new File (filename);
         System.out.println (f.getAbsolutePath ());
         DefaultMutableTreeNode node1 = readConversation (filename, "road");

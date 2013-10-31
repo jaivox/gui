@@ -4,25 +4,23 @@
  */
 package com.jaivox.ui.gui;
 
+import java.awt.BorderLayout;
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author lin
  */
 public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
-
-    JvxConfiguration jvxConf = null;
+    private static JvxMainFrame theApp = null;
+    
     JvxDialogLoader dlgLoader = null;
     JvxDialogHelper dlgHelper = null;
     JvxSynonymsHelper synsHelper = null;
@@ -31,14 +29,16 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     String headers [] = new String [4];
     DragSource ds;
     StringSelection transferable;
+    private String dlgFile;
+    private String dataFile;
     
         
     /**
      * Creates new form JvxMainFrame
      */
     public JvxMainFrame() {
+        new MenuUtils().setMenuBarForFrame(this);
         dlgLoader = new JvxDialogLoader (this);
-        jvxConf = new JvxConfiguration( "" );
         dlgHelper = new JvxDialogHelper (this);
         synsHelper = new JvxSynonymsHelper (this);
     
@@ -50,7 +50,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         headers [3] = "Smooth";
         
         initComponents();
-        dlgLoader.loadDialogs(dialogTree);
+        //dlgLoader.loadDialogs(dialogTree);
         //dlgLoader.loadNGenGrammar(this);
         
         DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
@@ -60,6 +60,8 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         this.synsTab.setTransferHandler(new DragHandler(this));
     }
 
+    public static JvxMainFrame getInstance() { return theApp; }
+    
     public JvxDialogLoader getDlgLoader() {
         return dlgLoader;
     }
@@ -113,7 +115,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         appName = new javax.swing.JTextField();
-        dumpButton = new javax.swing.JButton();
         targetSpecPanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         cbGoogleRecognizer = new javax.swing.JToggleButton();
@@ -181,17 +182,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Dialogs");
-        javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("are NNS JJ-N at this time ;");
-        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("which NN is JJ-P");
-        treeNode2.add(treeNode3);
-        treeNode1.add(treeNode2);
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("");
         dialogTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         dialogTree.setDragEnabled(true);
         dialogTree.setDropMode(javax.swing.DropMode.INSERT);
         dialogTree.setEditable(true);
         dialogTree.setScrollsOnExpand(true);
-        dlgLoader.loadDialogs(dialogTree);
         dialogTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dialogTreeMouseClicked(evt);
@@ -409,13 +405,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        dumpButton.setText("DumpTree");
-        dumpButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dumpButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout contentSpecPanelLayout = new javax.swing.GroupLayout(contentSpecPanel);
         contentSpecPanel.setLayout(contentSpecPanelLayout);
         contentSpecPanelLayout.setHorizontalGroup(
@@ -424,8 +413,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addComponent(appName, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58)
-                .addComponent(dumpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(langPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(dgdPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -437,8 +424,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                     .addComponent(langPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, contentSpecPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(appName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)
-                        .addComponent(dumpButton)))
+                        .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dgdPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 3, Short.MAX_VALUE))
@@ -649,11 +635,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         return proj;
     }
     public String fileDialog(String appname) {
-        final JFileChooser fc = new JFileChooser();
+        final JFileChooser fc = new JFileChooser(new File(JvxConfiguration.theConfig().getAppFolder()));
         String loc = null;
         fc.setDialogTitle("Choose Application Location(Folder)");
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fc.setCurrentDirectory(new File("./"));
+        fc.setCurrentDirectory(new File(appname));
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             loc = fc.getSelectedFile().getAbsolutePath();
@@ -671,33 +657,25 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             proj = "test"; appName.setText(proj);
             //return false;
         }
-        jvxConf.setAppName(appName.getText());
+        JvxConfiguration.theConfig().setAppName(appName.getText());
         String f = fileDialog(appName.getText());
-        if(f != null) jvxConf.appFolder = f + File.separatorChar + 
-                                            appName.getText() + 
+        if(f != null) {
+            String s = f + File.separatorChar + appName.getText() + 
                                             File.separatorChar;
-        jvxConf.save(this);
-        return true;
+            JvxConfiguration.theConfig().setAppFolder(s);
+        } 
+        if(f != null) JvxConfiguration.theConfig().save(this);
+        return (f != null);
     }
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         save();
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void dumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dumpButtonActionPerformed
-        try {
-            // TODO add your handling code here:
-            //this.dlgHelper.dumpTree(getDialogTree());
-            this.dlgHelper.dumpDialogToFile(JvxConfiguration.genFolder+"dlgtree.tree");
-        } catch (IOException ex) {
-            Logger.getLogger(JvxMainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_dumpButtonActionPerformed
-
     private void appNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appNameActionPerformed
         // TODO add your handling code here:
         JTextField apn = (JTextField)evt.getSource();
-        jvxConf.setAppName(apn.getText());
+        JvxConfiguration.theConfig().setAppName(apn.getText());
     }//GEN-LAST:event_appNameActionPerformed
 
     private void appNameMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appNameMousePressed
@@ -728,9 +706,17 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
     private void dialogTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dialogTreeMousePressed
         // TODO add your handling code here:
-        if( !evt.isPopupTrigger() ) dlgHelper.dialogTreeMouseClicked(evt);
-        //overlapDialog(evt, true);
-        dlgHelper.dialogTreeRClicked(evt);
+        JTree tree = (JTree)evt.getSource();
+        TreeModel model = tree.getModel();
+        if(model == null || model.getRoot() == null || 
+                    model.getChildCount(model.getRoot()) < 1) {
+            MenuUtils.openDialogFileMenu(evt);
+        }
+                
+        if( !evt.isPopupTrigger() ) {
+            dlgHelper.dialogTreeMouseClicked(evt);
+        }
+        else dlgHelper.dialogTreeRClicked(evt);
     }//GEN-LAST:event_dialogTreeMousePressed
 
     private void synsTabMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_synsTabMousePressed
@@ -809,7 +795,28 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     public boolean getCbSphinx() {
         return cbSphinx.isSelected();
     }
-    
+    void startWizard() {
+        final JFrame frame = this;
+        final WizardDialog dialog = new WizardDialog(frame, true);
+        dialog.setVisible(true);
+        /*
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        dialog.setVisible(false);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+        * */
+        //this.appName.setText( dialog.getCardValue("app_name").toString() );
+        this.dlgFile = (String) dialog.getCardValue("dialog_file");
+        this.dataFile = (String) dialog.getCardValue("data_file");
+        System.out.println("startWizard: " + dlgFile);
+    }
     /**
      * @param args the command line arguments
      */
@@ -840,9 +847,32 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JvxMainFrame().setVisible(true);
+                JvxMainFrame jf = new JvxMainFrame();
+                JvxMainFrame.theApp = jf;
+                jf.setVisible(true);
+                //jf.startWizard();
+                //jf.dlgLoader.reInit(jf);
+                //jf.dlgLoader.loadDialogs(jf.dialogTree);
+                //testframe();
             }
         });
+    }
+    static JFrame testframe() {
+        JFrame frame = new JFrame("FrameDemo");
+
+        //2. Optional: What happens when the frame closes?
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //3. Create components and put them in the frame.
+        //...create emptyLabel...
+        frame.getContentPane().add(new JLabel(), BorderLayout.CENTER);
+
+        //4. Size the frame.
+        frame.pack();
+
+        //5. Show it.
+        frame.setVisible(true);
+        return frame;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField appName;
@@ -860,7 +890,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTree dialogTree;
     private javax.swing.JSplitPane dlgSynsHSplitPane;
     private javax.swing.JScrollPane dlgTreeScrollPane;
-    private javax.swing.JButton dumpButton;
     private javax.swing.JList grammarList;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;

@@ -1,9 +1,9 @@
 package com.jaivox.ui.gengram;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 
@@ -59,14 +59,14 @@ public class sentence {
 		System.out.println (id+" "+orig+"\n"+tree+"\n"+form);
 	}
 	
+        
 	int maxlen = 4;
 	
 	void multiwordsubs (parse P, wnlink link) {
 		ArrayList <String> modwords = new ArrayList <String> ();
 		ArrayList <String> modforms = new ArrayList <String> ();
 		ArrayList <Integer> modlens = new ArrayList <Integer> ();
-		TreeMap <String, String []> syns = link.syns;
-		TreeMap <String, String []> dbsyns = link.dbsyns;
+                Map <String, String []> dbsyns = link.dbsyns;
 		Integer One = new Integer (1);
 		for (int i=0; i<N; i++) {
 			String w = "";
@@ -76,7 +76,7 @@ public class sentence {
 				if (i+j >= N) break;
 				w += (" "+ words [i+j]);
 				w = w.trim ();
-				if (syns.get (w) != null) {
+				if (link.synsget (w, forms[i+j]) != null) {
 					best = j;
 					bestw = w;
 				}
@@ -118,7 +118,7 @@ public class sentence {
 			String word = words [i];
                         if(basicVerbs.contains(word)) continue;
                         
-			String syn [] = syns.get (word);
+			String syn [] = link.synsget (word, forms[i]);
 			// if (lens [i] > 1) Debug ("Checking in syns "+word);
 			if (syn == null) continue;
 			// if (lens [i] > 1) Debug ("Checking in dbsys "+word);

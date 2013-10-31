@@ -23,6 +23,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 
 /**
@@ -130,13 +133,17 @@ class SynonymsTableModel extends AbstractTableModel {
                 values.get(row).set(col, new SynsData(Boolean.TRUE, v));
             }
         }
-        if(value instanceof Boolean) {
+        else if(value instanceof Boolean) {
             SynsData d = (SynsData)values.get(row).get(col);
             prev.setSelected(d.getSelected());
             prev.setValue(d.getValue());
             
             d.setSelected((Boolean) value);
             if(!d.getSelected()) this.colSelected.set(col, Boolean.FALSE);
+        }
+        else if(value instanceof SynsData) {   // undo
+            SynsData d = (SynsData)value;
+            values.get(row).set(col, new SynsData(d.getSelected(), d.getValue()));
         }
         if(! prev.equals(values.get(row).get(col))) {
             this.fireTableCellUpdated(row, col);
@@ -222,9 +229,17 @@ class SynonymsTableModel extends AbstractTableModel {
         this.fireTableRowsInserted(at, at);
         //this.fireTableChanged(null);
     }
+	
+    public void removeRow (int at) {
+        int n = values.size ();
+        if (n > 0) values.remove (n-1);
+        this.fireTableRowsDeleted (at, at);
+        System.out.println ("Removed row at "+at);
+    }
+	
     public void deleteColumn(int row, int col) {
-        this.setValueAt(Boolean.FALSE, row, col);
-        values.get(row).set(col, defaultValue(0,0));
+        this.setValueAt(Boolean.FALSE, row, col);  // unselect - required to regen the options
+        values.get(row).set(col, defaultValue(0,0));  // actually delete the cell text
         this.fireTableChanged(new TableModelEvent(this, row, row, col, TableModelEvent.DELETE));
     }
     void debug() {
@@ -426,7 +441,7 @@ class SynsDataEditor extends AbstractCellEditor implements TableCellEditor, Item
     public Component getTableCellEditorComponent(JTable table,
         Object value, boolean isSelected, int row, int col) {
         
-        System.out.println("SynsDataEditor: (" + row +", "+ col +","+ isSelected +") "+ value.getClass() +" "+ value.toString());
+        //System.out.println("SynsDataEditor: (" + row +", "+ col +","+ isSelected +") "+ value.getClass() +" "+ value.toString());
         
         if(value instanceof String) {
             JTextField tf = new JTextField();
@@ -455,4 +470,72 @@ class SynsDataEditor extends AbstractCellEditor implements TableCellEditor, Item
     public void itemStateChanged(ItemEvent e) {
         this.fireEditingStopped();
     }
+}
+
+class RowChange extends AbstractUndoableEdit {
+
+	SynonymsTableModel model_;
+	int position_ = 0;
+
+	public RowChange (SynonymsTableModel model, int rowPosition) {
+		model_ = model;
+		position_ = rowPosition;
+	}
+
+	public void undo () throws CannotUndoException {
+		// save information at the row
+		model_.removeRow (position_);
+	}
+
+	public void redo () throws CannotRedoException {
+		model_.insertRow (position_);
+	}
+
+	public boolean canUndo () {
+		return true;
+	}
+
+	public boolean canRedo () {
+		return true;
+	}
+
+	public String getPresentationName () {
+		return "Add Row";
+	}
+}
+
+class CellChange extends AbstractUndoableEdit {
+
+	SynonymsTableModel model_;
+        Object val = null;
+	int row = -1;
+        int col= -1;
+
+	public CellChange (SynonymsTableModel model, Object cell, int row, int col) {
+		model_ = model;
+		this.row = row;
+                this.col = col;
+                this.val = cell;
+	}
+
+	public void undo () throws CannotUndoException {
+		// save information at the row
+		model_.setValueAt(val, row, col);
+	}
+
+	public void redo () throws CannotRedoException {
+		model_.deleteColumn(row, col);
+	}
+
+	public boolean canUndo () {
+		return true;
+	}
+
+	public boolean canRedo () {
+		return true;
+	}
+
+	public String getPresentationName () {
+		return "Delete Row";
+	}
 }

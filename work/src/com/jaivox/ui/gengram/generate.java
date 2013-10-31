@@ -13,9 +13,10 @@ public class generate {
 	public generate (String filename) {
 		P = new parse (filename);
 		if (P.Valid) P.createsentences ();
-		W = new wnlink ();
+		W = new wnlinkJWNL ();
+                //W = new wnlinkDb ();
 		W.createsyns ();
-		W.addtablecolumn ("road.data", ",\r\n", 3, 0);
+		W.addtablecolumn ("work/apps/common/road1.data", ",\r\n", 3, 0);
 		// W.test ("house");
 		
 		TreeMap <String, sentence> sentences = P.sentences;
@@ -45,6 +46,7 @@ public class generate {
 
 	public static void main (String args []) {
 		//new generate (args [0]);
-		new generate ("road.tree");
+                parse.penntags  = "work/apps/common/" + parse.penntags;
+		new generate ("work/apps/common/road1.tree");
 	}
 }

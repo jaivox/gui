@@ -192,12 +192,14 @@ public class JvxDialogHelper {
                 theFrame.getGrammarList().setListData(oks.toArray());
                 theFrame.getSynsHelper().populateSynonymsTab(node.getUserObject());
             }
-                
+            else {
+                // Open file dialog
+            }    
         }
     }
 
     void generateApp(JvxMainFrame ui) {
-        guiprep.generateApp(JvxConfiguration.getConfFile());
+        guiprep.generateApp(JvxConfiguration.theConfig().getConfFile());
     }
 }
 class DialogMenuAction implements ActionListener {
@@ -342,7 +344,7 @@ class DlgTreeModelListener implements TreeModelListener {
         //System.out.println("TtreeNodesInserted");
     }
     public void treeNodesRemoved(TreeModelEvent e) {
-        System.out.println("treeNodesRemoved");
+        //System.out.println("treeNodesRemoved");
     }
     public void treeStructureChanged(TreeModelEvent e) {
         //System.out.println("treeStructureChanged");

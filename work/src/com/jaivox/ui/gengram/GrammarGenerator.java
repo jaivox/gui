@@ -16,21 +16,34 @@ import java.util.TreeMap;
  */
 public class GrammarGenerator {
     public static String DLG_DLIM = "()\r\n";
-    static parse P;
+    static parse P = null;;
     static wnlink W;
 
     static String tests [];
 
-    public GrammarGenerator(String dlgFile, String datFile) {
-        W = new wnlink ();
-        W.createsyns ();
-        W.addtablecolumn (datFile, ",\r\n", 3, 0);
+    public GrammarGenerator(String dataFolder) {
+        //W.synsfile = dataFolder + W.synsfile;
+        parse.penntags = dataFolder + P.penntags;
         
-        P = new parse (dlgFile);
-        if (P.Valid) P.createsentences ();
+        //W = new wnlinkDb ();
+        W = new wnlinkJWNL ();
+        W.createsyns ();
+    }
+    public void load(String dlgFile, String datFile) {
+        if(datFile != null) {
+            W.addtablecolumn (datFile, ",\r\n", 3, 0);
+        }
+        
+        if(dlgFile != null)  {
+            P = new parse (dlgFile);
+            if (P.Valid) P.createsentences ();
+        }
     }
     public String[] getSynonyms(String word) {
         return W.getsynonyms (word);
+    }
+    public String[] getSynonyms(String word, String form) {
+        return W.synsget (word, form);
     }
     public sentence getSentence(String key) {
         return P.sentences.get(key);
@@ -39,6 +52,7 @@ public class GrammarGenerator {
         return P.statements;
     }
     public void generate (String filename) {
+        if(P == null || !P.Valid) return;
         TreeMap <String, sentence> sentences = P.sentences;
         Set <String> keys = sentences.keySet ();
         int n = keys.size ();
@@ -74,10 +88,10 @@ public class GrammarGenerator {
         return sents;
     }
     
-    public boolean addSynonyms(String word, String[] addsyns) {
+    public boolean addSynonyms(String word, String[] addsyns, String tag) {
         int news = 0;
         
-        String[] ar = W.syns.get(word);
+        String[] ar = W.synsget(word, tag);
         ArrayList<String> arl = new ArrayList<String>();
         if(ar != null) arl.addAll(Arrays.asList(ar));
         for(String k : addsyns) {
@@ -88,7 +102,7 @@ public class GrammarGenerator {
         }
         //arl.addAll(Arrays.asList(addsyns));
         ar = arl.toArray(new String[0]);
-        W.syns.put(word, ar);
+        W.synsput(word, ar, tag);
 
         ar = W.dbsyns.get(word);
         if(ar != null) {
@@ -103,6 +117,7 @@ public class GrammarGenerator {
             ar = arl.toArray(new String[0]);
             W.dbsyns.put(word, ar);
         }
+        W.dumpSynonyms();
         return news > 0;
     }
     public sentence generateAlts(String key) {
@@ -118,8 +133,10 @@ public class GrammarGenerator {
     }
     public static SentenceX createSentence(String statement) {
         sentence sent = P.doparse (statement);
-        if (sent != null) P.sentences.put (sent.orig, sent);
-        sent.multiwordsubs (P, W);
+        if (sent != null) {
+            P.sentences.put (sent.orig, sent);
+            sent.multiwordsubs (P, W);
+        }
         SentenceX sx = sent == null ? null : new SentenceX( sent );
         return sx;
     }

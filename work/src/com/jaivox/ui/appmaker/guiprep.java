@@ -9,7 +9,7 @@ public class guiprep {
 	
 	static String outfile = "test.dlg";
 	static String questions = "test.quest";
-	static String errors = "data/errors.txt";
+	static String errors = "errors.txt";
         
         public static void main (String args []) {
             generate();

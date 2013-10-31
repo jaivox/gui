@@ -101,8 +101,6 @@
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="appName" min="-2" pref="160" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-                      <Component id="dumpButton" min="-2" pref="98" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="langPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -117,7 +115,6 @@
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="appName" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="dumpButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -275,7 +272,7 @@
                                 <Component class="javax.swing.JTree" name="dialogTree">
                                   <Properties>
                                     <Property name="model" type="javax.swing.tree.TreeModel" editor="org.netbeans.modules.form.editors2.TreeModelEditor">
-                                      <TreeModel code="Dialogs&#xa; are NNS JJ-N at this time ;&#xa;  which NN is JJ-P"/>
+                                      <TreeModel code=""/>
                                     </Property>
                                     <Property name="dragEnabled" type="boolean" value="true"/>
                                     <Property name="dropMode" type="javax.swing.DropMode" editor="org.netbeans.modules.form.editors.EnumEditor">
@@ -289,9 +286,6 @@
                                     <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMousePressed"/>
                                     <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseReleased"/>
                                   </Events>
-                                  <AuxValues>
-                                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="dlgLoader.loadDialogs(dialogTree);"/>
-                                  </AuxValues>
                                 </Component>
                               </SubComponents>
                             </Container>
@@ -613,14 +607,6 @@
               <Events>
                 <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="appNameMousePressed"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="appNameActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="dumpButton">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="DumpTree"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dumpButtonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

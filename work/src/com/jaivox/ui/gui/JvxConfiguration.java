@@ -20,14 +20,23 @@ import java.util.logging.Logger;
  * @author lin
  */
 public class JvxConfiguration {
+    private static JvxConfiguration theConfig = null;
+    public static String datadir = "work/apps/common/";
+    private static String appFolder = "work/apps/";
+    public static String WNconfig = "/home/rj/devspace/jlibs/jwnl14-rc2/config/file_properties.xml";
     
-   public static final String genFolder = "work/apps/common/";
-   	public static final String datadir = "work/apps/common/";
-    public static String appFolder = "./";
+    private static Properties conf = null; //new Properties();
+    private static String appName = "";
     
-    static Properties conf = null; //new Properties();
-    static String appName = null;
-    JvxConfiguration(String text) {
+    public synchronized  static JvxConfiguration theConfig() {
+        return theConfig != null ? theConfig : newconfig();
+    }
+    private static JvxConfiguration newconfig() { 
+        theConfig = new JvxConfiguration(); 
+        return theConfig;
+    }
+    
+    private JvxConfiguration() {
         conf = new Properties() {
             @Override
             public Object put(Object key, Object value) {
@@ -54,12 +63,10 @@ public class JvxConfiguration {
         finally {
             try{ if(bf != null) bf.close(); } catch (Exception ex) { ex.printStackTrace(); }
         }
-        appName = text;
+        setDataFolder(datadir);
+        setAppFolder(appFolder);
     }
-    public static String getAppFolder() {
-        return appFolder.endsWith(File.separator) ? appFolder : (appFolder + File.separator);
-    }
-    public static String getConfFile() {
+    public String getConfFile() {
         return getAppFolder() + appName + ".conf";
     }
     void save(JvxMainFrame theFrame) {
@@ -101,7 +108,7 @@ public class JvxConfiguration {
 
     private void setMisc(JvxMainFrame theFrame) {
         conf.put("destination", getAppFolder());
-        conf.put("cpsrc", "data");
+        conf.put("cpsrc", datadir);
     }
 
     private void setTargetSpec(JvxMainFrame theFrame) {
@@ -142,5 +149,35 @@ public class JvxConfiguration {
     public void setAppName(String appName) {
         this.appName = appName;
     }
+    public String getAppFolder() {
+        return conf.getProperty("app_folder");
+    }
+    public void setAppFolder(String s) {
+        conf.put("app_folder", s);
+        appFolder = s;
+    }
     
+    public void setAppName1(String s) {
+        conf.put("app_name", s);
+        appName = s;
+    }
+    public String getDialogFile() {
+        return conf.getProperty("dlg_tree_file");
+    }
+    public void setDialogFile(String s) {
+        conf.put("dlg_tree_file", s);
+    }
+    public String getDataFile() {
+        return conf.getProperty("dlg_data_file");
+    }
+    public void setDataFile(String s) {
+        conf.put("dlg_data_file", s);
+    }
+    public String getDataFolder() {
+        return conf.getProperty("data_folder");
+    }
+    public void setDataFolder(String s) {
+        conf.put("data_folder", s);
+        datadir = s;
+    }
 }
