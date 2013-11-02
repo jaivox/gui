@@ -14,6 +14,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoableEdit;
 
 /**
  *
@@ -34,14 +40,33 @@ public class MenuUtils {
         menu.getAccessibleContext().setAccessibleDescription("Choose Dialog Input Files");
         menuBar.add(menu);
 
-        //a group of JMenuItems
         menuItem = new JMenuItem(MenuAction.MA_NEW);
         menu.add(menuItem);
         menuItem = new JMenuItem(MenuAction.MA_DIALOG_TREE);
         menu.add(menuItem);
-
         menuItem = new JMenuItem(MenuAction.MA_DATA_FILE);
         menu.add(menuItem);
+
+        final JMenu edmenu = new JMenu("Edit");
+        edmenu.setMnemonic(KeyEvent.VK_E);
+        edmenu.getAccessibleContext().setAccessibleDescription("Edit");
+        edmenu.addMenuListener(
+                new MenuListener() { 
+                    @Override
+                    public void menuSelected(MenuEvent e) {
+                        edmenu.getItem(0).setEnabled(JvxMainFrame.undoManager_.canUndo ());
+                        edmenu.getItem(1).setEnabled(JvxMainFrame.undoManager_.canRedo ());
+                    }
+                    @Override
+                    public void menuDeselected(MenuEvent e) {
+                    }
+                    @Override
+                    public void menuCanceled(MenuEvent e) {
+                    }
+                });
+        menuBar.add(edmenu);
+        addUndoRedoMenus(edmenu.getPopupMenu());
+        
         frame.setJMenuBar(menuBar);
         return menuBar;
     }
@@ -52,6 +77,17 @@ public class MenuUtils {
         item = new JMenuItem(MenuAction.MA_DIALOG_TREE);
         popup.add(item);
         popup.show(evt.getComponent(), evt.getX(), evt.getY());
+    }
+
+    public static void addUndoRedoMenus(JPopupMenu parent) {
+        JMenuItem undoMenuItem = new JMenuItem(UndoRedoAction.MA_UNDO);
+        JMenuItem redoMenuItem = new JMenuItem(UndoRedoAction.MA_REDO);
+        
+        undoMenuItem.setEnabled ( JvxMainFrame.undoManager_.canUndo () );
+        parent.add(undoMenuItem);
+        
+        redoMenuItem.setEnabled ( JvxMainFrame.undoManager_.canRedo () );
+        parent.add(redoMenuItem);
     }
 }
 class MenuAction extends AbstractAction {
@@ -74,8 +110,8 @@ class MenuAction extends AbstractAction {
             
             if(s != null) xframe.dlgLoader.loadDialogFile(s);
         }
-        else if (action.equals(MA_DATA_FILE.getValue(NAME))) {
-            
+        else if (action.equals(MA_NEW.getValue(NAME))) {
+            JvxMainFrame.getInstance().dlgLoader.newDialog();
         }
     }
     
@@ -93,3 +129,39 @@ class MenuAction extends AbstractAction {
         return loc;
     }
 }
+
+
+class UndoRedoAction extends AbstractAction {
+    public static UndoRedoAction MA_UNDO = new UndoRedoAction("Undo");
+    public static UndoRedoAction MA_REDO = new UndoRedoAction("Redo");
+    
+    public UndoRedoAction(String text) {
+        super(text);
+        putValue(SHORT_DESCRIPTION, text);
+        //putValue(MNEMONIC_KEY, mnemonic);
+    }
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
+        JMenuItem mi = (JMenuItem)e.getSource();
+        
+        System.out.println("UndoRedoAction: " + e.getActionCommand());
+        
+        JvxMainFrame xframe = JvxMainFrame.getInstance();
+        if(action.equals(MA_UNDO.getValue(NAME))) {
+            JvxMainFrame.undoManager_.undo ();
+            mi.setEnabled (JvxMainFrame.undoManager_.canUndo ());
+        }
+        else if (action.equals(MA_REDO.getValue(NAME))) {
+            JvxMainFrame.undoManager_.redo ();
+            mi.setEnabled (JvxMainFrame.undoManager_.canRedo ());
+        }
+    }
+}
+
+class UndoAdapter implements UndoableEditListener {
+     public void undoableEditHappened (UndoableEditEvent evt) {
+     	UndoableEdit edit = evt.getEdit();
+     	JvxMainFrame.undoManager_.addEdit( edit );
+     	//refreshUndoRedo();
+     }
+  }

@@ -97,6 +97,7 @@ public class guiprep {
                 out.println(code.toString());
                 out.close ();
             }
+            System.out.println("Application Generated: Path: "+ destination);
             
         } catch (IOException ex) {
             ex.printStackTrace();

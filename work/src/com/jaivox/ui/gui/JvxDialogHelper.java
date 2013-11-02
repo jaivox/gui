@@ -4,6 +4,7 @@
  */
 package com.jaivox.ui.gui;
 
+import bitpix.list.basicNode;
 import com.jaivox.ui.appmaker.guiprep;
 import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.SentenceX;
@@ -25,8 +26,13 @@ import javax.swing.tree.TreeNode;
 import javax.swing.JTree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
 
 
 
@@ -64,6 +70,8 @@ public class JvxDialogHelper {
         popup.add(editMenuItem);
         //popup.add(createSynonymsMenu(rightClickedNode.getUserObject()));
         popup.add(theFrame.getSynsHelper().createOkaysSynonymsMenu(rightClickedNode.getUserObject()));
+        
+        MenuUtils.addUndoRedoMenus(popup);
         
         return popup;
     }
@@ -191,6 +199,7 @@ public class JvxDialogHelper {
                 }
                 theFrame.getGrammarList().setListData(oks.toArray());
                 theFrame.getSynsHelper().populateSynonymsTab(node.getUserObject());
+                JvxMainFrame.undoManager_.discardAllEdits();
             }
             else {
                 // Open file dialog
@@ -230,9 +239,29 @@ class DialogMenuAction implements ActionListener {
             //dialogTree.startEditingAtPath(tpath);
         }
         else if(action.equals("Delete")) {
-            rightClickedNode.removeAllChildren();
-            model.removeNodeFromParent(rightClickedNode);
+            if (rightClickedNode != null) {
+                rightClickedNode = (DefaultMutableTreeNode) (rightClickedNode.isRoot() ? 
+                                                              rightClickedNode.getChildAt(0) :
+                                                              rightClickedNode);
+                UndoableEdit rowChange = new DialogTreeNodeChange 
+                                            (dialogTree, rightClickedNode, 
+                                            (MutableTreeNode) rightClickedNode.getParent());
+                if (rightClickedNode.isRoot()) {
+                    //rightClickedNode.removeAllChildren();
+                    //model.nodeStructureChanged(rightClickedNode); // update tree
+                
+                    model.removeNodeFromParent((MutableTreeNode) rightClickedNode.getChildAt(0));
+                }
+                else {
+                    model.removeNodeFromParent(rightClickedNode);  // model calls nodesWereRemoved
+                }
+
+                JvxMainFrame.undoSupport_.postEdit (rowChange);
+            }
             rightClickedNode = null;
+            // clear the right side table and list
+            JvxMainFrame.getInstance().getGrammarList().setListData(new String[]{});
+            JvxMainFrame.getInstance().getSynsHelper().populateSynonymsTab("");
         }
         else if(action.equals("Edit")) {
             dialogTree.startEditingAtPath(dialogTree.getSelectionPath());
@@ -360,4 +389,57 @@ class DlgTreeModelListener implements TreeModelListener {
             }
         }
     }
+}
+
+
+class DialogTreeNodeChange extends AbstractUndoableEdit {
+
+	JTree tree_;
+        MutableTreeNode node_ = null;
+        MutableTreeNode parent_ = null;
+        int childIndex_ = 0;
+        
+	public DialogTreeNodeChange (JTree tree, MutableTreeNode node, MutableTreeNode parent) {
+		tree_ = tree;
+                node_ = node;
+                parent_ = parent;
+                childIndex_ = parent_ == null ? 0 : parent_.getIndex(node_);
+                basicNode bn = save((DefaultMutableTreeNode) node_, null);
+                bn.SaveAsText(0);
+	}
+
+	public void undo () throws CannotUndoException {
+            DefaultTreeModel model = (DefaultTreeModel)tree_.getModel();
+            if(parent_ == null) {
+            }
+            else {
+                DefaultMutableTreeNode p = (DefaultMutableTreeNode)parent_;
+                p.insert((MutableTreeNode) node_, childIndex_);
+            }
+           model.reload(parent_);
+	}
+
+	public void redo () throws CannotRedoException {
+	}
+
+	public boolean canUndo () {
+		return true;
+	}
+
+	public boolean canRedo () {
+		return true;
+	}
+
+	public String getPresentationName () {
+		return "Delete Node";
+	}
+        basicNode save(DefaultMutableTreeNode node, basicNode root) {
+            if(root == null) root = new basicNode(node.getUserObject());
+            for(int i = 0; i < node.getChildCount(); i++) {
+                DefaultMutableTreeNode n = (DefaultMutableTreeNode) node.getChildAt(i);
+                basicNode child = root.CreateChildNode(n.getUserObject());
+                save(n, child);
+            }
+            return root;
+	}
 }

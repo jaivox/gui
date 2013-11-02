@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEditSupport;
 
 /**
  *
@@ -24,6 +26,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     JvxDialogLoader dlgLoader = null;
     JvxDialogHelper dlgHelper = null;
     JvxSynonymsHelper synsHelper = null;
+    
+    static UndoManager undoManager_;
+    static UndoableEditSupport undoSupport_;
+  
     
     String qualData [][] = null;
     String headers [] = new String [4];
@@ -37,7 +43,8 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
      * Creates new form JvxMainFrame
      */
     public JvxMainFrame() {
-        new MenuUtils().setMenuBarForFrame(this);
+        theApp = this;
+        undoManager_ = new UndoManager ();
         dlgLoader = new JvxDialogLoader (this);
         dlgHelper = new JvxDialogHelper (this);
         synsHelper = new JvxSynonymsHelper (this);
@@ -50,6 +57,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         headers [3] = "Smooth";
         
         initComponents();
+        new MenuUtils().setMenuBarForFrame(this);
         //dlgLoader.loadDialogs(dialogTree);
         //dlgLoader.loadNGenGrammar(this);
         
@@ -58,6 +66,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
        
         this.dialogTree.setTransferHandler(new DragHandler(this));
         this.synsTab.setTransferHandler(new DragHandler(this));
+        
+        undoSupport_ = new UndoableEditSupport ();
+        undoSupport_.addUndoableEditListener (new UndoAdapter ());
+        //refreshUndoRedo ();
     }
 
     public static JvxMainFrame getInstance() { return theApp; }
@@ -708,7 +720,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         // TODO add your handling code here:
         JTree tree = (JTree)evt.getSource();
         TreeModel model = tree.getModel();
+        DefaultMutableTreeNode node = null;
+        if(model != null && model.getRoot() != null) {
+            node = (DefaultMutableTreeNode) model.getRoot();
+        }
         if(model == null || model.getRoot() == null || 
+                    node.getChildCount() < 1 ||
                     model.getChildCount(model.getRoot()) < 1) {
             MenuUtils.openDialogFileMenu(evt);
         }
