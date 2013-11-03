@@ -26,7 +26,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     JvxDialogLoader dlgLoader = null;
     JvxDialogHelper dlgHelper = null;
     JvxSynonymsHelper synsHelper = null;
-    
+	
+	static JvxHelpFrame helpFrame = null;
+	static String helpDirectory = "/work/data/help/"; // use file.separator property?
+    static String urlDirectory = null;
+	
     String qualData [][] = null;
     String headers [] = new String [4];
     DragSource ds;
@@ -48,7 +52,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         headers [1] = "Road";
         headers [2] = "Fast";
         headers [3] = "Smooth";
-        
+
+		// help system
+		String workingDirectory = System.getProperty ("user.dir");
+		// System.out.println ("Current directory: "+workingDirectory);
+		urlDirectory = "file://" + workingDirectory + helpDirectory;
+
         initComponents();
         dlgLoader.loadDialogs(dialogTree);
         //dlgLoader.loadNGenGrammar(this);
@@ -190,7 +199,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         dialogTree.setDragEnabled(true);
         dialogTree.setDropMode(javax.swing.DropMode.INSERT);
         dialogTree.setEditable(true);
-        dialogTree.setScrollsOnExpand(true);
         dlgLoader.loadDialogs(dialogTree);
         dialogTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -262,7 +270,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,10 +283,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         primaryVSplitPane.setTopComponent(dlgSynsHSplitPane);
 
-        jTabbedPane1.setBorder(null);
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-
-        jPanel1.setBorder(null);
 
         selectDbButton.setText("Select DB");
         selectDbButton.addActionListener(new java.awt.event.ActionListener() {
@@ -318,7 +323,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(selectDbButton)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -361,7 +366,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
@@ -410,9 +415,27 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         });
 
         dumpButton.setText("DumpTree");
+        dumpButton.setToolTipText ("<html><b>Write</b> application <a href=\"http://www.google.com\">details</a> to file.</html>");
+        dumpButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
+        put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
+        dumpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                dumpButtonMouseEntered(evt);
+            }
+        });
         dumpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dumpButtonActionPerformed(evt);
+            }
+        });
+        dumpButton.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                dumpButtonFocusGained(evt);
+            }
+        });
+        dumpButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dumpButtonKeyPressed(evt);
             }
         });
 
@@ -441,7 +464,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                         .addComponent(dumpButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dgdPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(0, 4, Short.MAX_VALUE))
         );
 
         targetSpecPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Target Specification", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(210, 90, 90)));
@@ -621,7 +644,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         pack();
@@ -684,16 +707,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         save();
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void dumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dumpButtonActionPerformed
-        try {
-            // TODO add your handling code here:
-            //this.dlgHelper.dumpTree(getDialogTree());
-            this.dlgHelper.dumpDialogToFile(JvxConfiguration.genFolder+"dlgtree.tree");
-        } catch (IOException ex) {
-            Logger.getLogger(JvxMainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_dumpButtonActionPerformed
-
     private void appNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appNameActionPerformed
         // TODO add your handling code here:
         JTextField apn = (JTextField)evt.getSource();
@@ -754,6 +767,50 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         this.dlgHelper.generateApp(this);
     }//GEN-LAST:event_btnRunActionPerformed
 
+    private void dumpButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dumpButtonKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_F1)
+        System.out.println("F1 pressed");
+		// showHelp ("http://www.jaivox.com/languages.html");
+		String urlPath = urlDirectory + "dumpButton.html";
+		// System.out.println ("Path to help directory: "+urlPath);
+		showHelp (urlPath);
+    }//GEN-LAST:event_dumpButtonKeyPressed
+
+    private void dumpButtonFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dumpButtonFocusGained
+        // TODO add your handling code here:
+        // dumpButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
+        // put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
+        // System.out.println ("Dump button gained focus.");
+    }//GEN-LAST:event_dumpButtonFocusGained
+
+    private void dumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dumpButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            //this.dlgHelper.dumpTree(getDialogTree());
+            this.dlgHelper.dumpDialogToFile(JvxConfiguration.genFolder+"dlgtree.tree");
+        } catch (IOException ex) {
+            Logger.getLogger(JvxMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_dumpButtonActionPerformed
+
+	/*
+    private void dumpButtonFocusGained(java.awt.event.FocusEvent evt) {                                       
+        // TODO add your handling code here:
+		// dumpButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
+			// put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
+		System.out.println ("Dump button gained focus.");
+    }                                      
+	*/
+    private void dumpButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dumpButtonMouseEntered
+        // dumpButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
+        // put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
+        System.out.println ("Dump button mouse entered.");
+        dumpButton.grabFocus ();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dumpButtonMouseEntered
+
+	/*	*/
     public JTree getDialogTree() {
         return dialogTree;
     }
@@ -809,6 +866,18 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     public boolean getCbSphinx() {
         return cbSphinx.isSelected();
     }
+	
+    static void createHelpFrame () {
+		if (helpFrame == null) {
+			helpFrame = new JvxHelpFrame ();
+		}
+		helpFrame.setVisible (true);
+    }
+	
+	static void showHelp (String url) {
+		createHelpFrame ();
+		helpFrame.setHelpPage (url);
+	}
     
     /**
      * @param args the command line arguments
@@ -837,7 +906,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+       /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new JvxMainFrame().setVisible(true);

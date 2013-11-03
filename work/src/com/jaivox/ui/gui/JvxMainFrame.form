@@ -31,7 +31,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="mainPanel" max="32767" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="2" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -122,7 +122,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="dgdPanel" max="32767" attributes="0"/>
-                      <EmptySpace min="0" pref="3" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="5" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -282,7 +282,6 @@
                                       <Value id="INSERT"/>
                                     </Property>
                                     <Property name="editable" type="boolean" value="true"/>
-                                    <Property name="scrollsOnExpand" type="boolean" value="true"/>
                                   </Properties>
                                   <Events>
                                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseClicked"/>
@@ -380,7 +379,7 @@
                               <Layout>
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jScrollPane2" alignment="0" pref="347" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane2" alignment="0" pref="362" max="32767" attributes="0"/>
                                   </Group>
                                 </DimensionLayout>
                                 <DimensionLayout dim="1">
@@ -416,9 +415,6 @@
                     </Container>
                     <Container class="javax.swing.JTabbedPane" name="jTabbedPane1">
                       <Properties>
-                        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="null"/>
-                        </Property>
                         <Property name="tabPlacement" type="int" value="2"/>
                       </Properties>
                       <Constraints>
@@ -430,11 +426,6 @@
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
                       <SubComponents>
                         <Container class="javax.swing.JPanel" name="jPanel1">
-                          <Properties>
-                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                              <Border info="null"/>
-                            </Property>
-                          </Properties>
                           <Constraints>
                             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                               <JTabbedPaneConstraints tabName="DB Interface">
@@ -459,7 +450,7 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                                       <Component id="selectDbButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="108" max="32767" attributes="0"/>
+                                      <EmptySpace pref="110" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="jScrollPane4" alignment="0" pref="0" max="32767" attributes="0"/>
                               </Group>
@@ -526,7 +517,7 @@
                                       <Component id="jTextField1" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jScrollPane3" pref="136" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane3" pref="142" max="32767" attributes="0"/>
                                           <Component id="jScrollPane5" pref="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -617,10 +608,13 @@
             </Component>
             <Component class="javax.swing.JButton" name="dumpButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="DumpTree"/>
+                <Property name="text" type="java.lang.String" value="DumpTree" postCode="dumpButton.setToolTipText (&quot;&lt;html&gt;&lt;b&gt;Write&lt;/b&gt; application &lt;a href=\&quot;http://www.google.com\&quot;&gt;details&lt;/a&gt; to file.&lt;/html&gt;&quot;);&#xa;dumpButton.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).&#xa;&#x9;put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), &quot;F1&quot;);"/>
               </Properties>
               <Events>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dumpButtonMouseEntered"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dumpButtonActionPerformed"/>
+                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="dumpButtonFocusGained"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dumpButtonKeyPressed"/>
               </Events>
             </Component>
           </SubComponents>
