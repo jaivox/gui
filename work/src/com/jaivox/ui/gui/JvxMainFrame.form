@@ -279,12 +279,15 @@
                                       <Value id="INSERT"/>
                                     </Property>
                                     <Property name="editable" type="boolean" value="true"/>
+                                    <Property name="name" type="java.lang.String" value="dialog_tree" noResource="true"/>
                                     <Property name="scrollsOnExpand" type="boolean" value="true"/>
                                   </Properties>
                                   <Events>
                                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseClicked"/>
+                                    <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseEntered"/>
                                     <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMousePressed"/>
                                     <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseReleased"/>
+                                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dialogTreeKeyPressed"/>
                                   </Events>
                                 </Component>
                               </SubComponents>
@@ -355,6 +358,7 @@
                                         <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                           <Color blue="ec" green="83" red="4d" type="rgb"/>
                                         </Property>
+                                        <Property name="name" type="java.lang.String" value="synonyms_table" noResource="true"/>
                                       </Properties>
                                       <Events>
                                         <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="synsTabMousePressed"/>
@@ -395,6 +399,7 @@
                                       <Properties>
                                         <Property name="toolTipText" type="java.lang.String" value=""/>
                                         <Property name="dragEnabled" type="boolean" value="true"/>
+                                        <Property name="name" type="java.lang.String" value="alt_sentence_list" noResource="true"/>
                                       </Properties>
                                       <Events>
                                         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="grammarListMouseClicked"/>
@@ -463,6 +468,7 @@
                             <Component class="javax.swing.JButton" name="selectDbButton">
                               <Properties>
                                 <Property name="text" type="java.lang.String" value="Select DB"/>
+                                <Property name="name" type="java.lang.String" value="select_db" noResource="true"/>
                               </Properties>
                               <Events>
                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectDbButtonActionPerformed"/>
@@ -838,10 +844,16 @@
         <Component class="javax.swing.JButton" name="btnSave">
           <Properties>
             <Property name="text" type="java.lang.String" value="Save"/>
+            <Property name="name" type="java.lang.String" value="save_button" noResource="true"/>
           </Properties>
           <Events>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSaveMouseEntered"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btnSaveKeyPressed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnSave.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).&#xa;    put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), &quot;F1&quot;);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btnRun">
           <Properties>

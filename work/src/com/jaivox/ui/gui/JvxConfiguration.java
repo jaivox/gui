@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,8 @@ public class JvxConfiguration {
     public static String datadir = "work/apps/common/";
     private static String appFolder = "work/apps/";
     public static String WNconfig = "/home/rj/devspace/jlibs/jwnl14-rc2/config/file_properties.xml";
+    
+    public static ResourceBundle helpTips = null;
     
     private static Properties conf = null; //new Properties();
     private static String appName = "";
@@ -65,7 +68,25 @@ public class JvxConfiguration {
         }
         setDataFolder(datadir);
         setAppFolder(appFolder);
+        helpTips = ResourceBundle.getBundle("helptooltips");
     }
+    
+    public static String getHelpText(String key) {
+        String tip = null;
+        try {
+            tip = theConfig().helpTips.getString(key);
+        } catch (java.util.MissingResourceException e) {
+            return null;
+        }
+        return tip;
+    }
+    public static String getHelpToolTip(String key) {
+        return getHelpText(key + "_tip");
+    }
+    public static String getHelpURL(String key) {
+        return getHelpText(key + "_url");
+    }
+    
     public String getConfFile() {
         return getAppFolder() + appName + ".conf";
     }

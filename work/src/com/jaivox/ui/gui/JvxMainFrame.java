@@ -5,6 +5,8 @@
 package com.jaivox.ui.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.datatransfer.StringSelection;
@@ -30,7 +32,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     static UndoManager undoManager_;
     static UndoableEditSupport undoSupport_;
   
-    
+    static JvxHelpFrame helpFrame = null;
+    static String helpDirectory = "/work/data/help/"; // use file.separator property?
+    static String urlDirectory = null;
+
     String qualData [][] = null;
     String headers [] = new String [4];
     DragSource ds;
@@ -55,8 +60,14 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         headers [1] = "Road";
         headers [2] = "Fast";
         headers [3] = "Smooth";
-        
+
+		// help system
+		String workingDirectory = System.getProperty ("user.dir");
+		// System.out.println ("Current directory: "+workingDirectory);
+		urlDirectory = "file://" + workingDirectory + helpDirectory;
+
         initComponents();
+        setAllToolTip();
         new MenuUtils().setMenuBarForFrame(this);
         //dlgLoader.loadDialogs(dialogTree);
         //dlgLoader.loadNGenGrammar(this);
@@ -71,7 +82,29 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         undoSupport_.addUndoableEditListener (new UndoAdapter ());
         //refreshUndoRedo ();
     }
-
+    public static List<Component> getAllComponents(final Container c) {
+        Component[] comps = c.getComponents();
+        List<Component> compList = new ArrayList<Component>();
+        for (Component comp : comps) {
+          compList.add(comp);
+          if (comp instanceof Container) {
+            compList.addAll(getAllComponents((Container) comp));
+          }
+        }
+        return compList;
+    }
+    void setAllToolTip() {
+        for (Component c : getAllComponents(this)) { 
+            if(c instanceof JComponent) {
+                String k = c.getName();
+                if(k != null) {
+                    String tip = JvxConfiguration.getHelpToolTip(k);
+                    //System.out.println("setAllToolTip:" + k +": "+ tip);
+                    if(tip != null) ((JComponent)c).setToolTipText(tip);
+                }
+            }
+        }
+    }
     public static JvxMainFrame getInstance() { return theApp; }
     
     public JvxDialogLoader getDlgLoader() {
@@ -194,21 +227,30 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             }
         });
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("");
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         dialogTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         dialogTree.setDragEnabled(true);
         dialogTree.setDropMode(javax.swing.DropMode.INSERT);
         dialogTree.setEditable(true);
+        dialogTree.setName("dialog_tree"); // NOI18N
         dialogTree.setScrollsOnExpand(true);
         dialogTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dialogTreeMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                dialogTreeMouseEntered(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 dialogTreeMousePressed(evt);
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 dialogTreeMouseReleased(evt);
+            }
+        });
+        dialogTree.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dialogTreeKeyPressed(evt);
             }
         });
         dlgTreeScrollPane.setViewportView(dialogTree);
@@ -237,6 +279,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         synsTab.setDragEnabled(true);
         synsTab.setDropMode(javax.swing.DropMode.INSERT);
         synsTab.setGridColor(new java.awt.Color(77, 131, 236));
+        synsTab.setName("synonyms_table"); // NOI18N
         synsTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 synsTabMousePressed(evt);
@@ -259,6 +302,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         grammarList.setToolTipText("");
         grammarList.setDragEnabled(true);
+        grammarList.setName("alt_sentence_list"); // NOI18N
         grammarList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 grammarListMouseClicked(evt);
@@ -289,6 +333,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel1.setBorder(null);
 
         selectDbButton.setText("Select DB");
+        selectDbButton.setName("select_db"); // NOI18N
         selectDbButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectDbButtonActionPerformed(evt);
@@ -565,9 +610,22 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         );
 
         btnSave.setText("Save");
+        btnSave.setName("save_button"); // NOI18N
+        btnSave.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
+        put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
+        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnSaveMouseEntered(evt);
+            }
+        });
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
+            }
+        });
+        btnSave.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnSaveKeyPressed(evt);
             }
         });
 
@@ -757,6 +815,29 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         this.dlgHelper.generateApp(this);
     }//GEN-LAST:event_btnRunActionPerformed
 
+    private void btnSaveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSaveKeyPressed
+        // TODO add your handling code here:
+        handleHelpKey(evt);
+    }//GEN-LAST:event_btnSaveKeyPressed
+
+    private void btnSaveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseEntered
+        // TODO add your handling code here:
+        System.out.println ("Save button mouse entered.");
+        this.btnSave.grabFocus ();
+    }//GEN-LAST:event_btnSaveMouseEntered
+
+    private void dialogTreeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dialogTreeMouseEntered
+        // TODO add your handling code here:
+        this.dialogTree.grabFocus ();
+    }//GEN-LAST:event_dialogTreeMouseEntered
+
+    private void dialogTreeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dialogTreeKeyPressed
+        // TODO add your handling code here:
+                JComponent o = (JComponent) evt.getSource();
+
+        handleHelpKey(evt);
+    }//GEN-LAST:event_dialogTreeKeyPressed
+
     public JTree getDialogTree() {
         return dialogTree;
     }
@@ -834,6 +915,27 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         this.dataFile = (String) dialog.getCardValue("data_file");
         System.out.println("startWizard: " + dlgFile);
     }
+
+    static void createHelpFrame () {
+        if (helpFrame == null) {
+                helpFrame = new JvxHelpFrame ();
+        }
+        helpFrame.setVisible (true);
+    }
+	
+    static void showHelp (String url) {
+        createHelpFrame ();
+        helpFrame.setHelpPage (url);
+    }
+    void handleHelpKey(java.awt.event.KeyEvent evt) {
+        if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_F1) {
+            System.out.println("F1 pressed");
+            JComponent c = (JComponent) evt.getSource();
+            String key = c.getName();
+            String urlPath = urlDirectory + JvxConfiguration.getHelpURL(key);
+            showHelp (urlPath);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -868,29 +970,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 JvxMainFrame.theApp = jf;
                 jf.setVisible(true);
                 //jf.startWizard();
-                //jf.dlgLoader.reInit(jf);
-                //jf.dlgLoader.loadDialogs(jf.dialogTree);
-                //testframe();
             }
         });
     }
-    static JFrame testframe() {
-        JFrame frame = new JFrame("FrameDemo");
 
-        //2. Optional: What happens when the frame closes?
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //3. Create components and put them in the frame.
-        //...create emptyLabel...
-        frame.getContentPane().add(new JLabel(), BorderLayout.CENTER);
-
-        //4. Size the frame.
-        frame.pack();
-
-        //5. Show it.
-        frame.setVisible(true);
-        return frame;
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField appName;
     private javax.swing.JButton btnRun;
