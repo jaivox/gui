@@ -4,7 +4,6 @@
  */
 package com.jaivox.ui.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import javax.swing.*;

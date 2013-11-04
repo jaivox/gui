@@ -5,9 +5,16 @@
 package com.jaivox.ui.gui;
 
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -66,6 +73,17 @@ public class MenuUtils {
                 });
         menuBar.add(edmenu);
         addUndoRedoMenus(edmenu.getPopupMenu());
+        
+        // Help
+        menu = new JMenu("Help");
+        menu.setMnemonic(KeyEvent.VK_H);
+        menuItem = new JMenuItem(HelpAction.MA_Help);
+        menu.add(menuItem);
+        menuItem = new JMenuItem(HelpAction.MA_ONLINE);
+        menu.add(menuItem);
+        menuItem = new JMenuItem(HelpAction.MA_ABOUT);
+        menu.add(menuItem);
+        menuBar.add(menu);
         
         frame.setJMenuBar(menuBar);
         return menuBar;
@@ -157,7 +175,32 @@ class UndoRedoAction extends AbstractAction {
         }
     }
 }
-
+class HelpAction extends AbstractAction {
+    public static HelpAction MA_Help = new HelpAction("Help Contents", KeyEvent.VK_H);
+    public static HelpAction MA_ONLINE = new HelpAction("Online Docs", KeyEvent.VK_D);
+    public static HelpAction MA_ABOUT = new HelpAction("About", KeyEvent.VK_A);
+    
+    public HelpAction(String text, Integer mnemonic) {
+        super(text);
+        putValue(SHORT_DESCRIPTION, text);
+        putValue(MNEMONIC_KEY, mnemonic);
+    }
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
+        System.out.println("HelpAction: " + e.getActionCommand());
+        
+        JvxMainFrame xframe = JvxMainFrame.getInstance();
+        if(action.equals(MA_Help.getValue(NAME))) {
+        }
+        else if (action.equals(MA_ONLINE.getValue(NAME))) {
+            try {
+                Desktop.getDesktop().browse(new URL("http://www.jaivox.com/documentation.html").toURI());
+            } catch (Exception ex) {
+                Logger.getLogger(HelpAction.class.getName()).log(Level.SEVERE, null, ex);
+            }
+      }
+    }
+}
 class UndoAdapter implements UndoableEditListener {
      public void undoableEditHappened (UndoableEditEvent evt) {
      	UndoableEdit edit = evt.getEdit();
