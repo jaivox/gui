@@ -132,10 +132,12 @@ public class GrammarGenerator {
         return sent;
     }
     public static SentenceX createSentence(String statement) {
+        if(P == null) P = new parse();
         sentence sent = P.doparse (statement);
         if (sent != null) {
             P.sentences.put (sent.orig, sent);
             sent.multiwordsubs (P, W);
+            sent.generateokays ();
         }
         SentenceX sx = sent == null ? null : new SentenceX( sent );
         return sx;

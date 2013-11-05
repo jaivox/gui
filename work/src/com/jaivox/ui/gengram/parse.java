@@ -18,7 +18,7 @@ public class parse {
 	ArrayList <String> statements;
 	
 	int testlimit = 10;
-	LexicalizedParser lp;
+	LexicalizedParser lp = null;
 	
 	boolean Valid = false;
 	
@@ -32,11 +32,20 @@ public class parse {
 		if (!ok) return;
 		ok = loadstatements (filename);
 		if (!ok) return;
-		ok = loadparser ();
+		if(lp == null) ok = loadparser ();
 		if (!ok) return;
 		Valid = true;
 	}
-
+        public parse () {
+		tags = new TreeMap <String, String> ();
+		statements = new ArrayList <String> ();
+		sentences = new TreeMap <String, sentence> ();
+		boolean ok = loadtags ();
+		if (!ok) return;
+		if(lp == null) ok = loadparser ();
+		if (!ok) return;
+		Valid = true;
+	}
 	void Debug (String s) {
 		System.out.println ("[parse]" + s);
 	}

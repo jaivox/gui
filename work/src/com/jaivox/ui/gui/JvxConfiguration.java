@@ -7,10 +7,12 @@ package com.jaivox.ui.gui;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -24,9 +26,7 @@ public class JvxConfiguration {
     private static JvxConfiguration theConfig = null;
     public static String datadir = "work/apps/common/";
     private static String appFolder = "work/apps/";
-    public static String WNconfig = "/home/rj/devspace/jlibs/jwnl14-rc2/config/file_properties.xml";
-    
-    public static ResourceBundle helpTips = null;
+    public static String WNconfig = "work/config/file_properties.xml";
     
     private static Properties conf = null; //new Properties();
     private static String appName = "";
@@ -68,23 +68,6 @@ public class JvxConfiguration {
         }
         setDataFolder(datadir);
         setAppFolder(appFolder);
-        helpTips = ResourceBundle.getBundle("helptooltips");
-    }
-    
-    public static String getHelpText(String key) {
-        String tip = null;
-        try {
-            tip = theConfig().helpTips.getString(key);
-        } catch (java.util.MissingResourceException e) {
-            return null;
-        }
-        return tip;
-    }
-    public static String getHelpToolTip(String key) {
-        return getHelpText(key + "_tip");
-    }
-    public static String getHelpURL(String key) {
-        return getHelpText(key + "_url");
     }
     
     public String getConfFile() {
@@ -200,5 +183,46 @@ public class JvxConfiguration {
     public void setDataFolder(String s) {
         conf.put("data_folder", s);
         datadir = s;
+    }
+    
+    
+    /// Help
+    static Locale locale = new Locale("en", "US");
+    static String helpDirectory = "/work/data/help/";
+    static Properties helpTips = new Properties();
+    
+    static String getResourceValue(String key) {
+        String val = null;
+        val = helpTips.getProperty(key);
+        if(val != null) return val;
+        try {
+            String workingDirectory = System.getProperty ("user.dir");
+            File file = new File(workingDirectory + helpDirectory 
+                            +"/"+ locale.getLanguage() +"/"+ key.toLowerCase());
+            if(file.exists()) {
+                Properties p = new Properties();
+                p.load(new FileInputStream(file));
+                val = p.getProperty("tip");
+                if(val != null) helpTips.put(key, val);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(JvxConfiguration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return val;
+    }
+    public static String getHelpText(String key) {
+        String tip = null;
+        try {
+            tip = getResourceValue(key);
+        } catch (Exception e) {
+            return null;
+        }
+        return tip;
+    }
+    public static String getHelpToolTip(String key) {
+        return getHelpText(key + ".tt");
+    }
+    public static String getHelpURL(String key) {
+        return locale.getLanguage() +"/"+ key.toLowerCase() + ".html";
     }
 }

@@ -59,9 +59,11 @@ public class JvxDialogLoader {
         gen.generate(dlgfile);
     }
     public void loadDialogFile(String file) {
+        WaitCursor wait = new WaitCursor();
         JvxConfiguration.theConfig().setDialogFile(file);
         reInit();
         loadDialogs(theFrame.getDialogTree());
+        wait.go();
     }
     public void loadDialogs(JTree dialogTree) {
         loadDialogs(dialogTree, dlgfile);
@@ -82,14 +84,7 @@ public class JvxDialogLoader {
         model.setRoot(root);
 
     }
-    public void newDialog() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Dialogs");
-
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode("New App Root");
-        root.add(node);
-        DefaultTreeModel model = (DefaultTreeModel)JvxMainFrame.getInstance().getDialogTree().getModel();
-        model.setRoot(root);
-    }
+    
     void readExpressions(String file, DefaultMutableTreeNode root) {
         QaList qs = new QaList(file);
         Vector <String []> hold = new Vector <String []> ();

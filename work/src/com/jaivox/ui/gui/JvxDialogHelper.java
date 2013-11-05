@@ -54,12 +54,12 @@ public class JvxDialogHelper {
         
         JPopupMenu popup = new JPopupMenu();
         JMenuItem addMenuItem = new JMenuItem("Add");
-        JMenuItem delMenuItem = new JMenuItem("Delete");
+        JMenuItem delMenuItem = new JMenuItem( DialogTreeDeleteAction.DLG_DELETE ); //("Delete");
         JMenuItem editMenuItem = new JMenuItem("Edit");
         //JMenuItem synMenuItem = new JMenuItem("Synonyms");
         
         addMenuItem.addActionListener(menuAction);
-        delMenuItem.addActionListener(menuAction);
+        //delMenuItem.addActionListener(menuAction);
         editMenuItem.addActionListener(menuAction);
         //synMenuItem.addActionListener(menuAction);
         
@@ -75,7 +75,16 @@ public class JvxDialogHelper {
         
         return popup;
     }
-    
+    public void newDialog() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Dialogs");
+
+        DefaultMutableTreeNode node = new DefaultMutableTreeNode("New App Root");
+        root.add(node);
+        DefaultTreeModel model = (DefaultTreeModel)JvxMainFrame.getInstance().getDialogTree().getModel();
+        model.setRoot(root);
+        
+        registerUndo(node, JvxMainFrame.getInstance().getDialogTree());
+    }
     public void dialogTreeRClicked(java.awt.event.MouseEvent evt) {
         JTree tree = (JTree)evt.getSource();
             
@@ -183,20 +192,25 @@ public class JvxDialogHelper {
             if(tpath != null) {
                 ArrayList<String> oks = new ArrayList<String>();
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode)tpath.getLastPathComponent();
+                if(node.isRoot() || node.getLevel() <= 1) return;
+                        
                 System.out.println(node);
-                for(Enumeration e = node.breadthFirstEnumeration(); e.hasMoreElements();) {
-                    DefaultMutableTreeNode nd = (DefaultMutableTreeNode)e.nextElement();
-                    ArrayList<String> al = null;
-                    Object sx = nd.getUserObject();
-                    if(sx instanceof SentenceX) {
-                        al = new ArrayList<String> ();
-                        ((SentenceX)sx).generateokays(al);
-                    }
-                    if(al != null) {
-                        oks.addAll(al);
-                    }
-                    break; ///?
+                
+                ArrayList<String> al = null;
+                Object sx = node.getUserObject();
+                if(sx instanceof SentenceX) {
+                    al = new ArrayList<String> ();
+                    ((SentenceX)sx).generateokays(al);
                 }
+                else if(sx.toString().trim().length() > 0) {
+                    al = new ArrayList<String> ();
+                    sx = JvxDialogHelper.createSentence(sx.toString().trim());
+                    if(sx != null) node.setUserObject(sx);
+                }
+                if(al != null) {
+                    oks.addAll(al);
+                }
+                
                 theFrame.getGrammarList().setListData(oks.toArray());
                 theFrame.getSynsHelper().populateSynonymsTab(node.getUserObject());
                 JvxMainFrame.undoManager_.discardAllEdits();
@@ -209,6 +223,59 @@ public class JvxDialogHelper {
 
     void generateApp(JvxMainFrame ui) {
         guiprep.generateApp(JvxConfiguration.theConfig().getConfFile());
+    }
+    
+    static void registerUndo(DefaultMutableTreeNode node, JTree tree) {
+        node = (DefaultMutableTreeNode) (node.isRoot() ? node.getChildAt(0) : node);
+        UndoableEdit rowChange = new DialogTreeNodeUndoableInsert 
+                                    (tree, node, (MutableTreeNode) node.getParent());
+        JvxMainFrame.undoSupport_.postEdit (rowChange);        
+    }
+    static Object createSentence(String text) {
+        WaitCursor c = new WaitCursor();
+        Object o = GrammarGenerator.createSentence(text);
+        c.go();
+        return o;
+    }
+}
+class DialogTreeDeleteAction extends AbstractAction {
+    public static DialogTreeDeleteAction DLG_DELETE = new DialogTreeDeleteAction("Delete");
+    
+    public DialogTreeDeleteAction(String text) {
+        super(text);
+    }
+    public void actionPerformed(ActionEvent ae) {
+        String action = ae.getActionCommand();
+        System.out.println("DialogTreeAction: " + ae.getActionCommand());
+        
+        JvxMainFrame xframe = JvxMainFrame.getInstance();
+        JTree tree = xframe.getDialogTree();
+        TreePath tpath = tree.getSelectionPath();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)tpath.getLastPathComponent();
+        DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+        
+        if(node != null && action.equals(DLG_DELETE.getValue(NAME))) {
+            if(node.isRoot() && node.isLeaf()) return;
+            node = (DefaultMutableTreeNode) (node.isRoot() ? 
+                                             node.getChildAt(0) : node);
+            UndoableEdit rowChange = new DialogTreeNodeUndoableDelete 
+                                        (tree, node, 
+                                        (MutableTreeNode) node.getParent());
+            if (node.isRoot()) {
+                //rightClickedNode.removeAllChildren();
+                //model.nodeStructureChanged(rightClickedNode); // update tree
+
+                model.removeNodeFromParent((MutableTreeNode) node.getChildAt(0));
+            }
+            else {
+                model.removeNodeFromParent(node);  // model calls nodesWereRemoved
+            }
+
+            JvxMainFrame.undoSupport_.postEdit (rowChange);
+            // clear the right side table and list
+            JvxMainFrame.getInstance().getGrammarList().setListData(new String[]{});
+            JvxMainFrame.getInstance().getSynsHelper().populateSynonymsTab("");
+        }
     }
 }
 class DialogMenuAction implements ActionListener {
@@ -225,10 +292,10 @@ class DialogMenuAction implements ActionListener {
         DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
         JMenuItem mi = (JMenuItem)ae.getSource();
         String action = mi.getText();
-        System.out.println("Menu: " + action);
+        System.out.println("DialogMenuAction: " + action);
         // TODO - may be a confirm action here
         if(action.equals("Add")) {
-            DefaultMutableTreeNode anotherNode = new DefaultMutableTreeNode(" ");
+            DefaultMutableTreeNode anotherNode = new DefaultMutableTreeNode("");
             rightClickedNode.add(anotherNode);
             model.reload(rightClickedNode);
             TreeNode[] nodes = ((DefaultTreeModel) dialogTree.getModel()).getPathToRoot(anotherNode);
@@ -237,13 +304,15 @@ class DialogMenuAction implements ActionListener {
             dialogTree.expandPath(tpath);
             dialogTree.setSelectionPath(tpath);
             //dialogTree.startEditingAtPath(tpath);
+            
+            JvxDialogHelper.registerUndo(anotherNode, dialogTree);
         }
         else if(action.equals("Delete")) {
             if (rightClickedNode != null) {
                 rightClickedNode = (DefaultMutableTreeNode) (rightClickedNode.isRoot() ? 
                                                               rightClickedNode.getChildAt(0) :
                                                               rightClickedNode);
-                UndoableEdit rowChange = new DialogTreeNodeChange 
+                UndoableEdit rowChange = new DialogTreeNodeUndoableDelete 
                                             (dialogTree, rightClickedNode, 
                                             (MutableTreeNode) rightClickedNode.getParent());
                 if (rightClickedNode.isRoot()) {
@@ -322,7 +391,7 @@ class DragHandler extends TransferHandler {
                 dropnode.add(dragnode);
                 ((DefaultTreeModel)theFrame.getDialogTree().getModel()).reload(dropnode);
                 
-                Object sx = GrammarGenerator.createSentence(item);
+                Object sx = JvxDialogHelper.createSentence(item);
                 if(sx != null) dragnode.setUserObject(sx);
              }
          }
@@ -349,15 +418,20 @@ class DlgTreeModelListener implements TreeModelListener {
         DefaultMutableTreeNode node;
         node = (DefaultMutableTreeNode)
                  (e.getTreePath().getLastPathComponent());
+        
         try {
             int inds[] = e.getChildIndices();
             for(int i : inds) {
                 node = (DefaultMutableTreeNode)(node.getChildAt(i));
                 //System.out.println("New value: " + node.getUserObject());
-        
+                if(node.isRoot() || node.getLevel() <= 1) continue;
+                
                 String s = (String) node.getUserObject();
-                Object sx = GrammarGenerator.createSentence(s);
-
+                Cursor cr = JvxMainFrame.getInstance().getCursor();
+                JvxMainFrame.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Object sx = JvxDialogHelper.createSentence(s.trim());
+                JvxMainFrame.getInstance().setCursor(cr);
+                
                 if(sx != null) node.setUserObject(sx);
             }
         } catch (NullPointerException exc) {}
@@ -374,9 +448,14 @@ class DlgTreeModelListener implements TreeModelListener {
     }
     public void treeNodesRemoved(TreeModelEvent e) {
         //System.out.println("treeNodesRemoved");
+        // can not register undo here, as this is called post delete
     }
     public void treeStructureChanged(TreeModelEvent e) {
         //System.out.println("treeStructureChanged");
+        DefaultMutableTreeNode node;
+        node = (DefaultMutableTreeNode)
+                 (e.getTreePath().getLastPathComponent());
+        //JvxDialogHelper.registerUndo(node, theFrame.getDialogTree());
     }
     void fireMouseclick(TreePath tpath) {
         JTree tree = theFrame.getDialogTree();
@@ -390,16 +469,35 @@ class DlgTreeModelListener implements TreeModelListener {
         }
     }
 }
+class WaitCursor {
+    Cursor oldC = null;
+    boolean b = false;
+    JFrame f = null;
+    //final static MouseAdapter ma =  new MouseAdapter() {};
+    WaitCursor() {
+        // TODO - may need a thread to work around a blocked EDT
+        f = JvxMainFrame.getInstance();
+        b = JvxMainFrame.getInstance().getGlassPane().isVisible();
+        oldC = f.getGlassPane().getCursor();
+        f.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        //f.getGlassPane().addMouseListener(ma);
+        f.getGlassPane().setVisible(b ? b : !b);
+    }
+    void go() {
+        f.getGlassPane().setCursor(oldC);
+        f.getGlassPane().setVisible(b);
+        //f.getGlassPane().removeMouseListener(ma);
+    }
+}
 
-
-class DialogTreeNodeChange extends AbstractUndoableEdit {
+class DialogTreeNodeUndoableDelete extends AbstractUndoableEdit {
 
 	JTree tree_;
         MutableTreeNode node_ = null;
         MutableTreeNode parent_ = null;
         int childIndex_ = 0;
         
-	public DialogTreeNodeChange (JTree tree, MutableTreeNode node, MutableTreeNode parent) {
+	public DialogTreeNodeUndoableDelete (JTree tree, MutableTreeNode node, MutableTreeNode parent) {
 		tree_ = tree;
                 node_ = node;
                 parent_ = parent;
@@ -420,6 +518,14 @@ class DialogTreeNodeChange extends AbstractUndoableEdit {
 	}
 
 	public void redo () throws CannotRedoException {
+            DefaultTreeModel model = (DefaultTreeModel)tree_.getModel();
+            if(parent_ == null) {
+            }
+            else {
+                DefaultMutableTreeNode p = (DefaultMutableTreeNode)parent_;
+                p.remove(node_);
+            }
+           model.reload(parent_);
 	}
 
 	public boolean canUndo () {
@@ -441,5 +547,24 @@ class DialogTreeNodeChange extends AbstractUndoableEdit {
                 save(n, child);
             }
             return root;
+	}
+}
+
+class DialogTreeNodeUndoableInsert extends DialogTreeNodeUndoableDelete {
+
+	public DialogTreeNodeUndoableInsert (JTree tree, MutableTreeNode node, MutableTreeNode parent) {
+            super(tree, node, parent);
+	}
+
+	public void undo () throws CannotUndoException {
+            super.redo();
+	}
+
+	public void redo () throws CannotRedoException {
+            super.undo();
+	}
+        
+	public String getPresentationName () {
+		return "Insert Node";
 	}
 }

@@ -38,8 +38,11 @@ public class wnlinkJWNL implements wnlink {
     }
     public String[] synsget(String word, String form) {
         //POS type
-         String pos = findPOSTag(form);
-        if(pos == null) System.out.println("synsget: " + word +"---"+form);
+        String pos = findPOSTag(form);
+        if(pos == null) {
+//            System.out.println("synsget: " + word +"---"+form +"---"+ parse.tags.get(form));
+//            return null;  // trial - avoid Determiner, Preposition, conjunction etc.
+        }
         return getsynonyms(word, pos);
     }
     public void synsput(String word, String[] words, String form) {

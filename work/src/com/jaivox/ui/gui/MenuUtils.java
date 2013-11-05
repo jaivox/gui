@@ -9,9 +9,6 @@ import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +18,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.MenuElement;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.UndoableEditEvent;
@@ -129,7 +125,7 @@ class MenuAction extends AbstractAction {
             if(s != null) xframe.dlgLoader.loadDialogFile(s);
         }
         else if (action.equals(MA_NEW.getValue(NAME))) {
-            JvxMainFrame.getInstance().dlgLoader.newDialog();
+            JvxMainFrame.getInstance().dlgHelper.newDialog();
         }
     }
     

@@ -231,7 +231,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         dialogTree.setDragEnabled(true);
         dialogTree.setDropMode(javax.swing.DropMode.INSERT);
         dialogTree.setEditable(true);
-        dialogTree.setName("dialog_tree"); // NOI18N
+        dialogTree.setName("dialogTree"); // NOI18N
         dialogTree.setScrollsOnExpand(true);
         dialogTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -278,7 +278,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         synsTab.setDragEnabled(true);
         synsTab.setDropMode(javax.swing.DropMode.INSERT);
         synsTab.setGridColor(new java.awt.Color(77, 131, 236));
-        synsTab.setName("synonyms_table"); // NOI18N
+        synsTab.setName("synonymsTab"); // NOI18N
         synsTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 synsTabMousePressed(evt);
@@ -301,7 +301,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         grammarList.setToolTipText("");
         grammarList.setDragEnabled(true);
-        grammarList.setName("alt_sentence_list"); // NOI18N
+        grammarList.setName("grammarList"); // NOI18N
         grammarList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 grammarListMouseClicked(evt);
@@ -332,7 +332,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel1.setBorder(null);
 
         selectDbButton.setText("Select DB");
-        selectDbButton.setName("select_db"); // NOI18N
+        selectDbButton.setName("selectDbButton"); // NOI18N
         selectDbButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectDbButtonActionPerformed(evt);
@@ -450,6 +450,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jLabel4.setText("App Name");
 
         appName.setText("Type Name ...");
+        appName.setName("appName"); // NOI18N
         appName.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 appNameMousePressed(evt);
@@ -609,7 +610,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         );
 
         btnSave.setText("Save");
-        btnSave.setName("save_button"); // NOI18N
+        btnSave.setName("Save"); // NOI18N
         btnSave.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
         put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
         btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -631,6 +632,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         btnRun.setText("Run");
         btnRun.setMaximumSize(new java.awt.Dimension(42, 27));
         btnRun.setMinimumSize(new java.awt.Dimension(42, 27));
+        btnRun.setName("Run"); // NOI18N
         btnRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRunActionPerformed(evt);
