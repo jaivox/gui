@@ -101,6 +101,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                     String tip = JvxConfiguration.getHelpToolTip(k);
                     //System.out.println("setAllToolTip:" + k +": "+ tip);
                     if(tip != null) ((JComponent)c).setToolTipText(tip);
+                    //if(tip != null) registerFocusHandler((JComponent) c);
                 }
             }
         }

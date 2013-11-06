@@ -206,6 +206,7 @@ public class JvxDialogHelper {
                     al = new ArrayList<String> ();
                     sx = JvxDialogHelper.createSentence(sx.toString().trim());
                     if(sx != null) node.setUserObject(sx);
+                    ((SentenceX)sx).generateokays(al);
                 }
                 if(al != null) {
                     oks.addAll(al);

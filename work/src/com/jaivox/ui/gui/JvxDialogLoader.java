@@ -72,7 +72,7 @@ public class JvxDialogLoader {
         if(dialogTree == null || filename == null) return;
         File f = new File (filename);
         System.out.println (f.getAbsolutePath ());
-        DefaultMutableTreeNode node1 = readConversation (filename, "road");
+        DefaultMutableTreeNode node1 = readConversation (filename, f.getName());
 
         //DefaultMutableTreeNode node2 = readConversation(datadir + "eattemplate.txt", "restaurant");
         //readExpressions(datadir + "road.tree", node2);
