@@ -187,6 +187,8 @@ class HelpAction extends AbstractAction {
         
         JvxMainFrame xframe = JvxMainFrame.getInstance();
         if(action.equals(MA_Help.getValue(NAME))) {
+            String urlPath = JvxMainFrame.urlDirectory + JvxConfiguration.getHelpURL(null);
+            JvxMainFrame.showHelp (urlPath);
         }
         else if (action.equals(MA_ONLINE.getValue(NAME))) {
             try {

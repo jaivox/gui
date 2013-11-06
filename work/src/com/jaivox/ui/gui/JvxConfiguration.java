@@ -223,6 +223,16 @@ public class JvxConfiguration {
         return getHelpText(key + ".tt");
     }
     public static String getHelpURL(String key) {
-        return locale.getLanguage() +"/"+ key + ".html";
+        String hfile = "allHelp.html";
+        if(key != null && key.trim().length() > 0) {
+            key = key + ".html";
+            String workingDirectory = System.getProperty ("user.dir");
+            File file = new File(workingDirectory + helpDirectory 
+                            +"/"+ locale.getLanguage() +"/"+ key);
+            if(file.exists()) {
+                hfile = key;
+            }
+        }
+        return locale.getLanguage() +"/"+ hfile;
     }
 }

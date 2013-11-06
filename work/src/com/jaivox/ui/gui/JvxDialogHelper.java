@@ -8,8 +8,6 @@ import bitpix.list.basicNode;
 import com.jaivox.ui.appmaker.guiprep;
 import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.SentenceX;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -22,7 +20,6 @@ import java.util.Enumeration;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.JTree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -54,12 +51,12 @@ public class JvxDialogHelper {
         
         JPopupMenu popup = new JPopupMenu();
         JMenuItem addMenuItem = new JMenuItem("Add");
-        JMenuItem delMenuItem = new JMenuItem( DialogTreeDeleteAction.DLG_DELETE ); //("Delete");
+        JMenuItem delMenuItem = new JMenuItem("Delete");
         JMenuItem editMenuItem = new JMenuItem("Edit");
         //JMenuItem synMenuItem = new JMenuItem("Synonyms");
         
         addMenuItem.addActionListener(menuAction);
-        //delMenuItem.addActionListener(menuAction);
+        delMenuItem.addActionListener(menuAction);
         editMenuItem.addActionListener(menuAction);
         //synMenuItem.addActionListener(menuAction);
         
@@ -83,7 +80,7 @@ public class JvxDialogHelper {
         DefaultTreeModel model = (DefaultTreeModel)JvxMainFrame.getInstance().getDialogTree().getModel();
         model.setRoot(root);
         
-        registerUndo(node, JvxMainFrame.getInstance().getDialogTree());
+        registerUndoAddNode(node, JvxMainFrame.getInstance().getDialogTree());
     }
     public void dialogTreeRClicked(java.awt.event.MouseEvent evt) {
         JTree tree = (JTree)evt.getSource();
@@ -226,7 +223,7 @@ public class JvxDialogHelper {
         guiprep.generateApp(JvxConfiguration.theConfig().getConfFile());
     }
     
-    static void registerUndo(DefaultMutableTreeNode node, JTree tree) {
+    static void registerUndoAddNode(DefaultMutableTreeNode node, JTree tree) {
         node = (DefaultMutableTreeNode) (node.isRoot() ? node.getChildAt(0) : node);
         UndoableEdit rowChange = new DialogTreeNodeUndoableInsert 
                                     (tree, node, (MutableTreeNode) node.getParent());
@@ -239,106 +236,7 @@ public class JvxDialogHelper {
         return o;
     }
 }
-class DialogTreeDeleteAction extends AbstractAction {
-    public static DialogTreeDeleteAction DLG_DELETE = new DialogTreeDeleteAction("Delete");
-    
-    public DialogTreeDeleteAction(String text) {
-        super(text);
-    }
-    public void actionPerformed(ActionEvent ae) {
-        String action = ae.getActionCommand();
-        System.out.println("DialogTreeAction: " + ae.getActionCommand());
-        
-        JvxMainFrame xframe = JvxMainFrame.getInstance();
-        JTree tree = xframe.getDialogTree();
-        TreePath tpath = tree.getSelectionPath();
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode)tpath.getLastPathComponent();
-        DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-        
-        if(node != null && action.equals(DLG_DELETE.getValue(NAME))) {
-            if(node.isRoot() && node.isLeaf()) return;
-            node = (DefaultMutableTreeNode) (node.isRoot() ? 
-                                             node.getChildAt(0) : node);
-            UndoableEdit rowChange = new DialogTreeNodeUndoableDelete 
-                                        (tree, node, 
-                                        (MutableTreeNode) node.getParent());
-            if (node.isRoot()) {
-                //rightClickedNode.removeAllChildren();
-                //model.nodeStructureChanged(rightClickedNode); // update tree
 
-                model.removeNodeFromParent((MutableTreeNode) node.getChildAt(0));
-            }
-            else {
-                model.removeNodeFromParent(node);  // model calls nodesWereRemoved
-            }
-
-            JvxMainFrame.undoSupport_.postEdit (rowChange);
-            // clear the right side table and list
-            JvxMainFrame.getInstance().getGrammarList().setListData(new String[]{});
-            JvxMainFrame.getInstance().getSynsHelper().populateSynonymsTab("");
-        }
-    }
-}
-class DialogMenuAction implements ActionListener {
-
-    public void actionPerformed(ActionEvent ae) {
-        JTree dialogTree = JvxMainFrame.getInstance().getDialogTree();
-        DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
-        TreePath tpath = dialogTree.getSelectionPath();
-        DefaultMutableTreeNode rightClickedNode = (DefaultMutableTreeNode)tpath.getLastPathComponent();
-            
-        String action = ae.getActionCommand();
-        System.out.println("DialogMenuAction: " + action);
-        // TODO - may be a confirm action here
-        if(action.equals("Add")) {
-            DefaultMutableTreeNode anotherNode = new DefaultMutableTreeNode("");
-            rightClickedNode.add(anotherNode);
-            model.reload(rightClickedNode);
-            TreeNode[] nodes = model.getPathToRoot(anotherNode);
-            TreePath newpath = new TreePath(nodes);
-            //dialogTree.scrollPathToVisible(tpath);
-            dialogTree.expandPath(newpath);
-            dialogTree.setSelectionPath(newpath);
-            //dialogTree.startEditingAtPath(tpath);
-            
-            JvxDialogHelper.registerUndo(anotherNode, dialogTree);
-        }
-        else if(action.equals("Delete")) {
-            if (rightClickedNode != null) {
-                rightClickedNode = (DefaultMutableTreeNode) (rightClickedNode.isRoot() ? 
-                                                              rightClickedNode.getChildAt(0) :
-                                                              rightClickedNode);
-                UndoableEdit rowChange = new DialogTreeNodeUndoableDelete 
-                                            (dialogTree, rightClickedNode, 
-                                            (MutableTreeNode) rightClickedNode.getParent());
-                if (rightClickedNode.isRoot()) {
-                    //rightClickedNode.removeAllChildren();
-                    //model.nodeStructureChanged(rightClickedNode); // update tree
-                
-                    model.removeNodeFromParent((MutableTreeNode) rightClickedNode.getChildAt(0));
-                }
-                else {
-                    model.removeNodeFromParent(rightClickedNode);  // model calls nodesWereRemoved
-                }
-
-                JvxMainFrame.undoSupport_.postEdit (rowChange);
-            }
-            rightClickedNode = null;
-            // clear the right side table and list
-            JvxMainFrame.getInstance().getGrammarList().setListData(new String[]{});
-            JvxMainFrame.getInstance().getSynsHelper().populateSynonymsTab("");
-        }
-        else if(action.equals("Edit")) {
-            dialogTree.startEditingAtPath(dialogTree.getSelectionPath());
-        }
-        if(action.equals("Synonyms")) {
-            Object sx = rightClickedNode.getUserObject();
-            if(sx instanceof SentenceX) {
-            }
-        }
-        model.reload(rightClickedNode);
-    }
-}
 class DragHandler extends TransferHandler {
     JvxMainFrame theFrame = null;
     public DragHandler(JvxMainFrame frame)
@@ -382,8 +280,11 @@ class DragHandler extends TransferHandler {
                 dropnode.add(dragnode);
                 ((DefaultTreeModel)theFrame.getDialogTree().getModel()).reload(dropnode);
                 
-                Object sx = JvxDialogHelper.createSentence(item);
-                if(sx != null) dragnode.setUserObject(sx);
+                if(!dragnode.isRoot() && dragnode.getLevel() > 1) {
+                    Object sx = JvxDialogHelper.createSentence(item);
+                    if(sx != null) dragnode.setUserObject(sx);
+                }
+                JvxDialogHelper.registerUndoAddNode(dragnode, theFrame.getDialogTree());
              }
          }
          if(data != null && data.length > 0) fireMouseclick(dl.getDropPoint());

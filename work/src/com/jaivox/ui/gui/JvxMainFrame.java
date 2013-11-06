@@ -372,19 +372,19 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         jTabbedPane1.addTab("DB Interface", jPanel1);
 
-        jTextField1.setText("jTextField1");
+        jTextField1.setText("Enter web address...");
+        jTextField1.setToolTipText("");
 
+        treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane3.setViewportView(jTree1);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3"
             }
         ));
         jScrollPane5.setViewportView(jTable1);
