@@ -198,7 +198,7 @@ public class JvxConfiguration {
         try {
             String workingDirectory = System.getProperty ("user.dir");
             File file = new File(workingDirectory + helpDirectory 
-                            +"/"+ locale.getLanguage() +"/"+ key.toLowerCase());
+                            +"/"+ locale.getLanguage() +"/"+ key);
             if(file.exists()) {
                 Properties p = new Properties();
                 p.load(new FileInputStream(file));
@@ -223,6 +223,6 @@ public class JvxConfiguration {
         return getHelpText(key + ".tt");
     }
     public static String getHelpURL(String key) {
-        return locale.getLanguage() +"/"+ key.toLowerCase() + ".html";
+        return locale.getLanguage() +"/"+ key + ".html";
     }
 }

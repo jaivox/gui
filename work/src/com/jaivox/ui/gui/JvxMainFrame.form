@@ -141,7 +141,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jComboBox1" min="-2" pref="120" max="-2" attributes="0"/>
+                          <Component id="langCombo" min="-2" pref="120" max="-2" attributes="0"/>
                           <EmptySpace pref="72" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -150,13 +150,13 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="langCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JComboBox" name="jComboBox1">
+                <Component class="javax.swing.JComboBox" name="langCombo">
                   <Properties>
                     <Property name="editable" type="boolean" value="true"/>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -171,6 +171,7 @@
                         <StringItem index="3" value="Spanish"/>
                       </StringArray>
                     </Property>
+                    <Property name="name" type="java.lang.String" value="langCombo" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel1">
@@ -284,10 +285,8 @@
                                   </Properties>
                                   <Events>
                                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseClicked"/>
-                                    <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseEntered"/>
                                     <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMousePressed"/>
                                     <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dialogTreeMouseReleased"/>
-                                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="dialogTreeKeyPressed"/>
                                   </Events>
                                 </Component>
                               </SubComponents>
@@ -358,7 +357,7 @@
                                         <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                           <Color blue="ec" green="83" red="4d" type="rgb"/>
                                         </Property>
-                                        <Property name="name" type="java.lang.String" value="synonymsTab" noResource="true"/>
+                                        <Property name="name" type="java.lang.String" value="synsTab" noResource="true"/>
                                       </Properties>
                                       <Events>
                                         <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="synsTabMousePressed"/>
@@ -488,6 +487,7 @@
                                     </Property>
                                     <Property name="cellSelectionEnabled" type="boolean" value="true"/>
                                     <Property name="dragEnabled" type="boolean" value="true"/>
+                                    <Property name="name" type="java.lang.String" value="qualdbTable" noResource="true"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
@@ -694,11 +694,13 @@
                 <Component class="javax.swing.JToggleButton" name="cbGoogleRecognizer">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Google"/>
+                    <Property name="name" type="java.lang.String" value="cbGoogleRecognizer" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JToggleButton" name="cbSphinx">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Sphinx"/>
+                    <Property name="name" type="java.lang.String" value="cbSphinx" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -748,23 +750,27 @@
                 <Component class="javax.swing.JCheckBox" name="cbFreetts">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="FreeTTS"/>
+                    <Property name="name" type="java.lang.String" value="cbFreetts" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="cbGoogletts">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Google TTS"/>
+                    <Property name="name" type="java.lang.String" value="cbGoogletts" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="cbFestival">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Festival"/>
                     <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="cbFestival" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="cbEspeak">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Espeak"/>
                     <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="cbEspeak" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -830,12 +836,14 @@
                       </StringArray>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="osList" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="cbConsole">
                   <Properties>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Console Version"/>
+                    <Property name="name" type="java.lang.String" value="cbConsole" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -845,12 +853,10 @@
         <Component class="javax.swing.JButton" name="btnSave">
           <Properties>
             <Property name="text" type="java.lang.String" value="Save"/>
-            <Property name="name" type="java.lang.String" value="Save" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="btnSave" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnSaveMouseEntered"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSaveActionPerformed"/>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btnSaveKeyPressed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnSave.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).&#xa;    put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), &quot;F1&quot;);"/>
@@ -865,7 +871,7 @@
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[42, 27]"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="Run" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="btnRun" noResource="true"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRunActionPerformed"/>

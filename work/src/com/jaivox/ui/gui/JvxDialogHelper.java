@@ -50,7 +50,7 @@ public class JvxDialogHelper {
         theFrame = frame;
     }
     public JPopupMenu createPopup( DefaultMutableTreeNode rightClickedNode) {
-        final DialogMenuAction menuAction = new DialogMenuAction(theFrame.getDialogTree(), rightClickedNode);
+        final DialogMenuAction menuAction = new DialogMenuAction();
         
         JPopupMenu popup = new JPopupMenu();
         JMenuItem addMenuItem = new JMenuItem("Add");
@@ -280,29 +280,24 @@ class DialogTreeDeleteAction extends AbstractAction {
 }
 class DialogMenuAction implements ActionListener {
 
-    private JTree dialogTree = null;
-    DefaultMutableTreeNode rightClickedNode = null;
-    
-    DialogMenuAction(JTree tree, DefaultMutableTreeNode rNode) {
-        dialogTree = tree;
-        rightClickedNode = rNode;
-    }
-    
     public void actionPerformed(ActionEvent ae) {
+        JTree dialogTree = JvxMainFrame.getInstance().getDialogTree();
         DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
-        JMenuItem mi = (JMenuItem)ae.getSource();
-        String action = mi.getText();
+        TreePath tpath = dialogTree.getSelectionPath();
+        DefaultMutableTreeNode rightClickedNode = (DefaultMutableTreeNode)tpath.getLastPathComponent();
+            
+        String action = ae.getActionCommand();
         System.out.println("DialogMenuAction: " + action);
         // TODO - may be a confirm action here
         if(action.equals("Add")) {
             DefaultMutableTreeNode anotherNode = new DefaultMutableTreeNode("");
             rightClickedNode.add(anotherNode);
             model.reload(rightClickedNode);
-            TreeNode[] nodes = ((DefaultTreeModel) dialogTree.getModel()).getPathToRoot(anotherNode);
-            TreePath tpath = new TreePath(nodes);
+            TreeNode[] nodes = model.getPathToRoot(anotherNode);
+            TreePath newpath = new TreePath(nodes);
             //dialogTree.scrollPathToVisible(tpath);
-            dialogTree.expandPath(tpath);
-            dialogTree.setSelectionPath(tpath);
+            dialogTree.expandPath(newpath);
+            dialogTree.setSelectionPath(newpath);
             //dialogTree.startEditingAtPath(tpath);
             
             JvxDialogHelper.registerUndo(anotherNode, dialogTree);
@@ -336,13 +331,8 @@ class DialogMenuAction implements ActionListener {
             dialogTree.startEditingAtPath(dialogTree.getSelectionPath());
         }
         if(action.equals("Synonyms")) {
-            TreePath tpath = dialogTree.getSelectionPath();
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode)tpath.getLastPathComponent();
-            
-            Object sx = node.getUserObject();
+            Object sx = rightClickedNode.getUserObject();
             if(sx instanceof SentenceX) {
-   
-                
             }
         }
         model.reload(rightClickedNode);

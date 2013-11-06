@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Example of a Dialog Tree</title>
+</head>
+<body>
+<h1>Example of a Dialog Tree</h1>
+<p>
+This is an example of how a dialog may be considered as a tree. To keep it
+somewhat simple, the questions and corresponding answers are given one line.
+(In the dialog tree, the answer is a child of the question.) Follow up questions
+and answers appear at a later level of the tree.
+</p><p>
+This dialog deals with a conversation between a user and a system
+acting as a medical professional.
+<pre>
+IF user = i am feeling sick THEN System = do you feel hot and THEN
+  IF user = a little THEN System = is your nose runny and THEN
+    IF user = yes THEN System = how is your throat and THEN
+      IF user = itchy THEN System = it is probably just a cold
+      ELSE IF user = hurts THEN System = could be an infection. are you coughing and THEN
+        IF user = a lot THEN System = go to a doctor
+        ELSE IF user = a little THEN System = may be best to go to a doctor
+        ELSE IF user = no THEN System = try drinking some fluids
+      ELSE IF user = fine THEN System = are you wheezing and THEN
+        IF user = yes THEN System = a lot or just a little and THEN
+          IF user = a lot THEN System = could be asthma
+          ELSE IF user = a little THEN System = could be allergies
+    ELSE IF user = no THEN System = do you feel congested and THEN
+      IF user = yes THEN System = did you have a cold earlier and THEN
+        IF user = yes THEN System = well give it some time
+      ELSE IF user = no THEN System = are you allergic to anything and THEN
+        IF user = yes THEN System = what and THEN
+          IF user = pollen THEN System = well it is the season
+          ELSE IF user = dust THEN System = try cleaning your house
+          ELSE IF user = dogs THEN System = do you have a dog and THEN
+            IF user = no THEN System = did you visit somebody who has a dog and THEN
+              IF user = no THEN System = well come in for an evaluation and THEN
+              ELSE IF user = yes THEN System = that could be it
+</pre>
+</p><p>
+You can see other short <a href="allHelp.html">help topics</a> here, or see more
+detailed information from <a href="http://www.jaivox.com/guitool/documentation.html">
+The Jaivox Site</a>
+</p>
+</body>
+</html>

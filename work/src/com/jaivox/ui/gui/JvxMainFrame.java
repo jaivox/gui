@@ -67,6 +67,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         initComponents();
         setAllToolTip();
+        registerF1Help();
         new MenuUtils().setMenuBarForFrame(this);
         //dlgLoader.loadDialogs(dialogTree);
         //dlgLoader.loadNGenGrammar(this);
@@ -130,7 +131,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         mainPanel = new javax.swing.JPanel();
         contentSpecPanel = new javax.swing.JPanel();
         langPanel = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
+        langCombo = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         dgdPanel = new javax.swing.JPanel();
         primaryVSplitPane = new javax.swing.JSplitPane();
@@ -184,10 +185,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         langPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jComboBox1.setEditable(true);
-        jComboBox1.setForeground(new java.awt.Color(112, 125, 209));
-        jComboBox1.setMaximumRowCount(100);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "English - US", "French", "Hindi", "Spanish" }));
+        langCombo.setEditable(true);
+        langCombo.setForeground(new java.awt.Color(112, 125, 209));
+        langCombo.setMaximumRowCount(100);
+        langCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "English - US", "French", "Hindi", "Spanish" }));
+        langCombo.setName("langCombo"); // NOI18N
 
         jLabel1.setText("Select Language:");
 
@@ -199,14 +201,14 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(langCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(72, Short.MAX_VALUE))
         );
         langPanelLayout.setVerticalGroup(
             langPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(langPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel1)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(langCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         dgdPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "                   Dialogs                                                                          Synonyms                                                               Alt Sentence preview", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(151, 149, 198)));
@@ -237,19 +239,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dialogTreeMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                dialogTreeMouseEntered(evt);
-            }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 dialogTreeMousePressed(evt);
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 dialogTreeMouseReleased(evt);
-            }
-        });
-        dialogTree.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                dialogTreeKeyPressed(evt);
             }
         });
         dlgTreeScrollPane.setViewportView(dialogTree);
@@ -278,7 +272,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         synsTab.setDragEnabled(true);
         synsTab.setDropMode(javax.swing.DropMode.INSERT);
         synsTab.setGridColor(new java.awt.Color(77, 131, 236));
-        synsTab.setName("synonymsTab"); // NOI18N
+        synsTab.setName("synsTab"); // NOI18N
         synsTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 synsTabMousePressed(evt);
@@ -353,6 +347,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         });
         qualdbTable.setCellSelectionEnabled(true);
         qualdbTable.setDragEnabled(true);
+        qualdbTable.setName("qualdbTable"); // NOI18N
         jScrollPane4.setViewportView(qualdbTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -492,8 +487,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Recognizer Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 8))); // NOI18N
 
         cbGoogleRecognizer.setText("Google");
+        cbGoogleRecognizer.setName("cbGoogleRecognizer"); // NOI18N
 
         cbSphinx.setText("Sphinx");
+        cbSphinx.setName("cbSphinx"); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -517,14 +514,18 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "TTS options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Abyssinica SIL", 0, 8))); // NOI18N
 
         cbFreetts.setText("FreeTTS");
+        cbFreetts.setName("cbFreetts"); // NOI18N
 
         cbGoogletts.setText("Google TTS");
+        cbGoogletts.setName("cbGoogletts"); // NOI18N
 
         cbFestival.setText("Festival");
         cbFestival.setEnabled(false);
+        cbFestival.setName("cbFestival"); // NOI18N
 
         cbEspeak.setText("Espeak");
         cbEspeak.setEnabled(false);
+        cbEspeak.setName("cbEspeak"); // NOI18N
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -558,9 +559,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         osList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Linux-RH", "Linux-Debian", "Windows", "Mac", "Tab-Android", "Tab-iOS" }));
         osList.setEnabled(false);
+        osList.setName("osList"); // NOI18N
 
         cbConsole.setSelected(true);
         cbConsole.setText("Console Version");
+        cbConsole.setName("cbConsole"); // NOI18N
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -610,29 +613,19 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         );
 
         btnSave.setText("Save");
-        btnSave.setName("Save"); // NOI18N
+        btnSave.setName("btnSave"); // NOI18N
         btnSave.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
         put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
-        btnSave.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnSaveMouseEntered(evt);
-            }
-        });
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
-            }
-        });
-        btnSave.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnSaveKeyPressed(evt);
             }
         });
 
         btnRun.setText("Run");
         btnRun.setMaximumSize(new java.awt.Dimension(42, 27));
         btnRun.setMinimumSize(new java.awt.Dimension(42, 27));
-        btnRun.setName("Run"); // NOI18N
+        btnRun.setName("btnRun"); // NOI18N
         btnRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRunActionPerformed(evt);
@@ -815,30 +808,30 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         if(!save()) return;
         this.dlgHelper.generateApp(this);
     }//GEN-LAST:event_btnRunActionPerformed
-
-    private void btnSaveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnSaveKeyPressed
-        // TODO add your handling code here:
-        handleHelpKey(evt);
-    }//GEN-LAST:event_btnSaveKeyPressed
-
-    private void btnSaveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSaveMouseEntered
-        // TODO add your handling code here:
-        System.out.println ("Save button mouse entered.");
-        this.btnSave.grabFocus ();
-    }//GEN-LAST:event_btnSaveMouseEntered
-
-    private void dialogTreeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dialogTreeMouseEntered
-        // TODO add your handling code here:
-        this.dialogTree.grabFocus ();
-    }//GEN-LAST:event_dialogTreeMouseEntered
-
-    private void dialogTreeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dialogTreeKeyPressed
-        // TODO add your handling code here:
-                JComponent o = (JComponent) evt.getSource();
-
-        handleHelpKey(evt);
-    }//GEN-LAST:event_dialogTreeKeyPressed
-
+    void registerF1Help() {
+        JComponent cl[] = { cbFestival, dialogTree, appName, cbFreetts, grammarList,
+                            btnRun,  cbGoogleRecognizer, osList, btnSave,
+                            cbGoogletts, qualdbTable, cbConsole, cbSphinx,
+                            selectDbButton, cbEspeak, synsTab };
+        for(JComponent c : cl) {
+            registerFocusHandler(c);
+        }
+    }
+    void registerFocusHandler(final JComponent c) {
+        c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
+        put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
+        c.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                //System.out.println ("registerFocusHandler: mouseEntered: " + c.getName());
+                c.grabFocus ();
+            }
+        });
+        c.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                handleHelpKey(evt);
+            }
+        });
+    }
     public JTree getDialogTree() {
         return dialogTree;
     }
@@ -930,7 +923,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     }
     void handleHelpKey(java.awt.event.KeyEvent evt) {
         if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_F1) {
-            System.out.println("F1 pressed");
+            //System.out.println("F1 pressed");
             JComponent c = (JComponent) evt.getSource();
             String key = c.getName();
             String urlPath = urlDirectory + JvxConfiguration.getHelpURL(key);
@@ -992,7 +985,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JSplitPane dlgSynsHSplitPane;
     private javax.swing.JScrollPane dlgTreeScrollPane;
     private javax.swing.JList grammarList;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -1014,6 +1006,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTree jTree1;
+    private javax.swing.JComboBox langCombo;
     private javax.swing.JPanel langPanel;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JComboBox osList;
