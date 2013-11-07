@@ -126,10 +126,6 @@ public class JvxSynonymsHelper {
                 sx.setTabModvalues(model.getValues());
             }
             
-            for (int col = 0; col < table.getColumnCount(); col++) {
-                TableColumn tc = table.getColumnModel().getColumn(col);
-                //tc.setHeaderRenderer(new SynsDataRenderer()); 
-            }
             table.getTableHeader().setToolTipText("Click to Select All");
             table.getTableHeader().addMouseListener(new HeaderActionHandler() {
                             @Override
@@ -147,6 +143,8 @@ public class JvxSynonymsHelper {
             
             //model.debug();
             table.setShowGrid(true);
+            if(table.getRowCount() == 0) model.insertRow(0);   // atleast one row for the right click to work
+            
             //theFrame.getSynsTab().setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
             for (int col = 0; col < table.getColumnCount(); col++) {
                 int width = 0;
