@@ -130,7 +130,7 @@ class SynonymsTableModel extends AbstractTableModel {
         if(value instanceof String) {
             String v = (String)value;
             if(v.length() > 0) {
-                values.get(row).set(col, new SynsData(Boolean.TRUE, v));
+                values.get(row).set(col, new SynsData(Boolean.TRUE, v, true));
             }
         }
         else if(value instanceof Boolean) {
@@ -143,7 +143,7 @@ class SynonymsTableModel extends AbstractTableModel {
         }
         else if(value instanceof SynsData) {   // undo
             SynsData d = (SynsData)value;
-            values.get(row).set(col, new SynsData(d.getSelected(), d.getValue()));
+            values.get(row).set(col, new SynsData(d.getSelected(), d.getValue(), d.isUserWord()));
         }
         if(! prev.equals(values.get(row).get(col))) {
             this.fireTableCellUpdated(row, col);
@@ -298,14 +298,21 @@ class SynonymsTableModel extends AbstractTableModel {
     }
 }
 
+
 class SynsData implements Comparable<SynsData> {
 
     private Boolean selected;
     private String value;
-
+    private Boolean userWord = false;
+    
     public SynsData(Boolean selected, String value) {
         this.selected = selected;
         this.value = value;
+    }
+    public SynsData(Boolean selected, String value, Boolean uw) {
+        this.selected = selected;
+        this.value = value;
+        userWord = uw;
     }
     @Override
     public String toString() {
@@ -345,6 +352,15 @@ class SynsData implements Comparable<SynsData> {
     public int hashCode() {
         return this.value.hashCode();
     }
+
+    public Boolean isUserWord() {
+        return userWord;
+    }
+
+    public void setIsUserWord(Boolean userWord) {
+        this.userWord = userWord;
+    }
+    
 }
 
 class ComboRenderer implements TableCellRenderer {
@@ -520,7 +536,9 @@ class CellChange extends AbstractUndoableEdit {
 
 	public void undo () throws CannotUndoException {
 		// save information at the row
-		model_.setValueAt(val, row, col);
+                SynsData sv = (SynsData) val;
+                SynsData v = new SynsData(sv.getSelected(), sv.getValue(), sv.isUserWord());
+		model_.setValueAt(v, row, col);
 	}
 
 	public void redo () throws CannotRedoException {
@@ -536,6 +554,24 @@ class CellChange extends AbstractUndoableEdit {
 	}
 
 	public String getPresentationName () {
-		return "Delete Row";
+		return "Delete Cell";
+	}
+}
+class CellChangeInsert extends CellChange {
+
+	public CellChangeInsert (SynonymsTableModel model, Object cell, int row, int col) {
+		super(model, cell, row, col);
+	}
+
+	public void undo () throws CannotUndoException {
+		super.redo();
+	}
+
+	public void redo () throws CannotRedoException {
+		super.undo();
+	}
+        
+	public String getPresentationName () {
+		return "Change Cell";
 	}
 }

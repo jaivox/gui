@@ -203,13 +203,20 @@ public class JvxSynonymsHelper {
         }
     }
 
-    void dropSynonym(String line, int row, int col) {
+    int dropSynonym(String line, int row, int col) {
+        int newRow = -1;
         SynonymsTableModel model = (SynonymsTableModel)theFrame.getSynsTab().getModel();
+        if(row >= model.getRowCount()) {
+            row = model.getRowCount();
+            model.insertRow(row);
+        }
         if(! (model.getValueAt(row, col) instanceof SynsData)) {
             if(! model.isInColumn(line, col) ) {
                 model.setValueAt(line, row, col);
+                newRow = row;
             }
         }
+        return newRow;
     }
 }
 class HeaderActionHandler extends MouseAdapter {
@@ -246,23 +253,28 @@ class TableActionHandler  implements TableModelListener {
             System.out.println("TableModelListener: ("+ columnName +": "+ firstrow +"-"+ lastrow +", "+ col +") "+ model.getSentence() +" - "+ value.toString());
             if(value instanceof SynsData) {
                 data = (SynsData)value;
+                String word = data.getValue().trim();
+                boolean selected = data.getSelected();
                 
-                if(data.getSelected() && data.getValue().length() > 0) {
-                    if(model.getSentenceX().isExcluded(data.getValue())) {
-                        model.getSentenceX().removeExclusion(data.getValue().trim());
-                        model.getSentenceX().removeUserWord(data.getValue().trim());
-                        regen = true;
-                    }
-                    else  {
+                if(selected && word.length() > 0) {     // add, select
+                    if(data.isUserWord()) {             // add
                         String tag = model.getSentenceX().getTagFormAt(col);
-                        regen = theFrame.dlgLoader.gen.addSynonyms(columnName, new String[] { data.getValue().trim() }, tag);
-                        model.getSentenceX().addUserWord(data.getValue().trim());
+                        regen = theFrame.dlgLoader.gen.addSynonyms(columnName, new String[] { word }, tag);
+                        model.getSentenceX().addUserWord(word);
+                    }
+                    else {                              // select
+                        model.getSentenceX().removeExclusion(word);
                     }
                 }
-                else if(!data.getSelected() && data.getValue().length() > 0) {
-                    model.getSentenceX().addExclusion(data.getValue()); 
-                    regen = true;
+                else {                                  // unselect
+                    if(data.isUserWord()) {
+                        model.getSentenceX().removeUserWord(word);
+                    }
+                    else {
+                        model.getSentenceX().addExclusion(word); 
+                    }
                 }
+                regen = true;
             }
             else {
                 regen = true;
@@ -275,7 +287,7 @@ class TableActionHandler  implements TableModelListener {
             theFrame.getGrammarList().setListData(model.getSentenceX().getSentenceOptions());
         }
     }
-
+ 
     void fireMouseclick() {
         JTree tree = theFrame.getDialogTree();
         TreePath tpath = tree.getSelectionPath();
@@ -348,7 +360,7 @@ class PopUpMenuAction implements ActionListener {
             Object v = model.getValueAt(r, c);
             if(v instanceof SynsData) {  // only if the cell has some data
                 SynsData sv = (SynsData) v;
-                UndoableEdit change = new CellChange (model, new SynsData(sv.getSelected(), sv.getValue()), r, c);
+                UndoableEdit change = new CellChange (model, new SynsData(sv.getSelected(), sv.getValue(), sv.isUserWord()), r, c);
             
                 model.deleteColumn(r, c);
                 JvxMainFrame.undoSupport_.postEdit (change);

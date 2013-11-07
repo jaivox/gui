@@ -82,7 +82,9 @@ public class JvxDialogLoader {
         //root.add(node2);
         DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
         model.setRoot(root);
-
+        for (int i = 0; i < dialogTree.getRowCount(); i++) {
+            dialogTree.expandRow(i);
+        }
     }
     
     void readExpressions(String file, DefaultMutableTreeNode root) {

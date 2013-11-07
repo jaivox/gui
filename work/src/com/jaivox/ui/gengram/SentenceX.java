@@ -134,7 +134,9 @@ public class SentenceX implements SelectionHandler {
         //System.out.println("filterUnSelected: "+ pre +"---"+ allsyns.size());
         return allsyns.toArray(new String[allsyns.size()]);
     }
-
+    public boolean isUserWord(String word) {
+        return userWords.contains(word);
+    }
     @Override
     public boolean skipPOSFormMatch(String word) {
         return userWords.contains(word);

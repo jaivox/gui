@@ -117,7 +117,7 @@ public class GrammarGenerator {
             ar = arl.toArray(new String[0]);
             W.dbsyns.put(word, ar);
         }
-        W.dumpSynonyms();
+        //W.dumpSynonyms();
         return news > 0;
     }
     public sentence generateAlts(String key) {

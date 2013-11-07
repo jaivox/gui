@@ -75,8 +75,8 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
         model.addTreeModelListener(new DlgTreeModelListener(this));
        
-        this.dialogTree.setTransferHandler(new DragHandler(this));
-        this.synsTab.setTransferHandler(new DragHandler(this));
+        this.dialogTree.setTransferHandler(new DialogTreeDNDHandler());
+        this.synsTab.setTransferHandler(new SynsTabDNDHandler());
         
         undoSupport_ = new UndoableEditSupport ();
         undoSupport_.addUndoableEditListener (new UndoAdapter ());
