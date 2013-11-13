@@ -259,6 +259,7 @@ class TableActionHandler  implements TableModelListener {
                         String tag = model.getSentenceX().getTagFormAt(col);
                         regen = theFrame.dlgLoader.gen.addSynonyms(columnName, new String[] { word }, tag);
                         model.getSentenceX().addUserWord(word);
+                        model.getSentenceX().addUserSynonym(columnName, tag, word);
                     }
                     else {                              // select
                         model.getSentenceX().removeExclusion(word);
@@ -266,7 +267,9 @@ class TableActionHandler  implements TableModelListener {
                 }
                 else {                                  // unselect
                     if(data.isUserWord()) {
+                        String tag = model.getSentenceX().getTagFormAt(col);
                         model.getSentenceX().removeUserWord(word);
+                        model.getSentenceX().removeUserSynonym(columnName, tag, word);
                     }
                     else {
                         model.getSentenceX().addExclusion(word); 

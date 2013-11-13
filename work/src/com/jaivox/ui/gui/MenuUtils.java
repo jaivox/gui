@@ -49,7 +49,9 @@ public class MenuUtils {
         menu.add(menuItem);
         menuItem = new JMenuItem(MenuAction.MA_DATA_FILE);
         menu.add(menuItem);
-
+        menuItem = new JMenuItem(RealodAction.MA_RELOAD);
+        menu.add(menuItem);
+        
         final JMenu edmenu = new JMenu("Edit");
         edmenu.setMnemonic(KeyEvent.VK_E);
         edmenu.getAccessibleContext().setAccessibleDescription("Edit");
@@ -103,6 +105,19 @@ public class MenuUtils {
         redoMenuItem.setEnabled ( JvxMainFrame.undoManager_.canRedo () );
         parent.add(redoMenuItem);
     }
+    public static String fileDialog(Component parent, int option, String startAt, String title) {
+        String appfolder = JvxConfiguration.theConfig().getAppFolder();
+        final JFileChooser fc = new JFileChooser(new File(appfolder == null ? "" : appfolder));
+        String loc = null;
+        fc.setDialogTitle(title);
+        fc.setFileSelectionMode(option);
+        fc.setCurrentDirectory(new File(startAt));
+        int returnVal = fc.showOpenDialog(parent);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            loc = fc.getSelectedFile().getAbsolutePath();
+        } 
+        return loc;
+    }
 }
 class MenuAction extends AbstractAction {
     public static MenuAction MA_NEW = new MenuAction("New", KeyEvent.VK_T);
@@ -120,7 +135,7 @@ class MenuAction extends AbstractAction {
         
         JvxMainFrame xframe = JvxMainFrame.getInstance();
         if(action.equals(MA_DIALOG_TREE.getValue(NAME))) {
-            String s = fileDialog(xframe, JFileChooser.FILES_ONLY, "", "Choose Dialog file");
+            String s = MenuUtils.fileDialog(xframe, JFileChooser.FILES_ONLY, "", "Choose Dialog file");
             
             if(s != null) xframe.dlgLoader.loadDialogFile(s);
         }
@@ -128,22 +143,31 @@ class MenuAction extends AbstractAction {
             JvxMainFrame.getInstance().dlgHelper.newDialog();
         }
     }
-    
-    public String fileDialog(Component parent, int option, String startAt, String title) {
-        String appfolder = JvxConfiguration.theConfig().getAppFolder();
-        final JFileChooser fc = new JFileChooser(new File(appfolder == null ? "" : appfolder));
-        String loc = null;
-        fc.setDialogTitle(title);
-        fc.setFileSelectionMode(option);
-        fc.setCurrentDirectory(new File(startAt));
-        int returnVal = fc.showOpenDialog(parent);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            loc = fc.getSelectedFile().getAbsolutePath();
-        } 
-        return loc;
-    }
 }
 
+class RealodAction extends AbstractAction {
+    public static RealodAction MA_RELOAD = new RealodAction("Reload Dialog", KeyEvent.VK_R);
+    
+    public RealodAction(String text, Integer mnemonic) {
+        super(text);
+        putValue(SHORT_DESCRIPTION, text);
+        putValue(MNEMONIC_KEY, mnemonic);
+    }
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
+        System.out.println("RealodAction: " + e.getActionCommand());
+        
+        JvxMainFrame xframe = JvxMainFrame.getInstance();
+        String s = MenuUtils.fileDialog(xframe, JFileChooser.FILES_ONLY, "", "Choose Dialog file to Realod");
+        if(s == null) return;
+        xframe.dlgLoader.loadDialogFile(s);
+        String synsfile = s.substring(0, s.lastIndexOf('.'));
+        try {
+            xframe.dlgHelper.readUserSynonyms(synsfile);
+            xframe.dlgHelper.readSynonymSelections(synsfile);
+        } catch (Exception ex) { ex.printStackTrace(); }
+    }
+}
 
 class UndoRedoAction extends AbstractAction {
     public static UndoRedoAction MA_UNDO = new UndoRedoAction("Undo");

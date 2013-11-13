@@ -8,13 +8,16 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,6 +65,10 @@ public class JvxConfiguration {
         try {
             bf = new BufferedReader(new FileReader(datadir + "template.conf"));
             conf.load(bf);
+        } catch (FileNotFoundException ex) {
+            Reader reader = new InputStreamReader(
+                    getClass().getClassLoader().getResourceAsStream(datadir + "template.conf"));
+            bf = new BufferedReader(reader);
         } catch (Exception e) { e.printStackTrace(); }
         finally {
             try{ if(bf != null) bf.close(); } catch (Exception ex) { ex.printStackTrace(); }
@@ -100,11 +107,20 @@ public class JvxConfiguration {
             try{ if(bf != null) bf.close(); } catch (Exception ex) { ex.printStackTrace(); }
         }
     }
-
+    //java 7
+    public static void copyFile(String s, String t) throws IOException {
+        File src = new File(s);
+        File targ = new File(t);
+        Files.copy(src.toPath(), targ.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+    }
+    
     private void setContentSpec(JvxMainFrame theFrame) {
         try {
             theFrame.dlgHelper.dumpTreeToFile(appFolder + appName + ".tree");
             theFrame.dlgHelper.dumpDialogToFile(appFolder + "dialog" + ".tree");
+            theFrame.dlgHelper.dumpUserSynonyms(appFolder + appName);
+            theFrame.dlgHelper.dumpSynonymSelections(appFolder + appName);
+            copyFile(appFolder + "dialog" + ".tree", appFolder + appName + ".sav");
         } catch (IOException ex) {
             Logger.getLogger(JvxConfiguration.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -184,7 +200,9 @@ public class JvxConfiguration {
         conf.put("data_folder", s);
         datadir = s;
     }
-    
+    public String getDoNotExpandWords() {
+        return conf.getProperty("do_not_expand");
+    }    
     
     /// Help
     static Locale locale = new Locale("en", "US");

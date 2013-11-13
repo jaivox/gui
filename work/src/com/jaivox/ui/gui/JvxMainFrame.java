@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.dnd.DragSource;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
@@ -52,14 +53,14 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         dlgLoader = new JvxDialogLoader (this);
         dlgHelper = new JvxDialogHelper (this);
         synsHelper = new JvxSynonymsHelper (this);
-    
+        /*
         qualData = dlgLoader.loadQualData ();
         
         headers [0] = "Num";
         headers [1] = "Road";
         headers [2] = "Fast";
         headers [3] = "Smooth";
-
+        */
 		// help system
 		String workingDirectory = System.getProperty ("user.dir");
 		// System.out.println ("Current directory: "+workingDirectory);
@@ -239,6 +240,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 dialogTreeMouseReleased(evt);
+            }
+        });
+        dialogTree.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                dialogTreeKeyPressed(evt);
             }
         });
         dlgTreeScrollPane.setViewportView(dialogTree);
@@ -762,6 +768,41 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         if(!save()) return;
         this.dlgHelper.generateApp(this);
     }//GEN-LAST:event_btnRunActionPerformed
+
+    private void dialogTreeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dialogTreeKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_F3) {
+            TreePath path = dialogTree.getSelectionPath();
+            
+            DefaultMutableTreeNode node = null;
+            if (path != null) {
+                node = (DefaultMutableTreeNode)path.getLastPathComponent();
+            }
+            else {
+                node = (DefaultMutableTreeNode) dialogTree.getModel().getRoot();
+                node = !(node.isRoot() || node.isLeaf()) ? node.getNextNode() : node;
+                path = new TreePath(node);
+            }
+            if(node == null) return;
+            TreePath[] selectionPaths = dialogTree.getSelectionPaths();
+            //check if node was selected
+            boolean isSelected = false;
+            if (selectionPaths != null) {
+                for (TreePath selectionPath : selectionPaths) {
+                    if (selectionPath.equals(path)) {
+                        isSelected = true;
+                    }
+                }
+            }
+            //if clicked node was not selected, select it
+            if(!isSelected){
+                dialogTree.setSelectionPath(path);
+            }
+            
+            new DialogMenuAction().actionPerformed(
+                    new ActionEvent(dialogTree, ActionEvent.ACTION_PERFORMED, "Add"));
+        }
+    }//GEN-LAST:event_dialogTreeKeyPressed
     void registerF1Help() {
         JComponent cl[] = { cbFestival, dialogTree, appName, cbFreetts, grammarList,
                             btnRun,  cbGoogleRecognizer, osList, btnSave,

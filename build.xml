@@ -71,4 +71,48 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <property name="one-jar.dist.dir" value="one-jar/dist"/>
+    
+    <import file="${one-jar.dist.dir}/one-jar-ant-task.xml" optional="true" /> 
+    <target name="1-jar">
+        <echo>Create appmaker1.jar</echo>   
+        
+        <one-jar destfile="${pkjar.dist.dir}/appmaker1.jar" manifest="${manifest.file}">
+            <manifest>
+                <attribute name="One-Jar-Main-Class" value="com.jaivox.ui.gui.JvxMainFrame"/>
+                <attribute name="Class-Path" value="lib/alllibs.jar lib/commons.jar ${jar.classpath}"/>
+            </manifest>
+            
+            <main>
+            <fileset dir="${build.classes.dir}/"/>
+            </main>
+            
+            <lib>
+                <fileset dir="${dist.dir}/lib/" includes="*.jar"/>
+            </lib>
+        
+            <fileset dir="./">
+                <include name="work/apps/common/*.*"/>
+                <include name="work/data/**/*.*"/>
+                <include name="work/config/**/*.*"/>
+            </fileset>
+        </one-jar>
+    </target>
+    <target name="jar" depends="gui-impl.jar">
+        <property name="pkjar.dist.dir" value="${dist.dir}/"/>
+    
+        <echo>Creating appmaker.zip...</echo>
+        <mkdir dir="${pkjar.dist.dir}"/>
+        <zip destfile="${pkjar.dist.dir}/appmaker.zip">
+            <fileset dir="${dist.dir}/" includes="*.jar"/>
+            <fileset dir="${dist.dir}/" includes="lib/*.*"/>
+            <fileset dir="./">
+                <include name="work/apps/common/*.*"/>
+                <include name="work/data/**/*.*"/>
+                <include name="work/config/**/*.*"/>
+                <include name="work/apps/samples/**/*.*"/>
+            </fileset>
+        </zip>
+        <!-- <antcall target="1-jar"/> -->
+    </target>
 </project>

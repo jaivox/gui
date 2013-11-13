@@ -6,7 +6,10 @@ package com.jaivox.ui.gengram;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,6 +23,7 @@ public class SentenceX implements SelectionHandler {
     private ArrayList<ArrayList<Object>> tabModvalues = null;
     private ArrayList<String> excludes = new ArrayList<String>();
     public static Set<String> userWords = new TreeSet<String>();
+    public static Map<String, List<String>> usersyns = new HashMap();
     
     public void setTheSentence(sentence theSentence) {
         this.theSentence = theSentence;
@@ -123,7 +127,23 @@ public class SentenceX implements SelectionHandler {
         }
         return sb.toString();
     }
-
+    public void dumpSynonymExclusions(Properties p) {
+        int i = 0;
+        for(String x : excludes) {
+            p.put(getSentenceKey()+"@exludes." + i, x);
+            i++;
+        }
+    }
+    
+    public boolean readSyns(Properties p) {
+        for(int i = 0; i < 100; i++) {
+            String k = getSentenceKey()+"@exludes." + i;
+            String s = p.getProperty(k);
+            if(s == null) break;
+            excludes.add(s);
+        }
+        return (excludes.isEmpty());
+    }
     @Override
     public String[] filterUnSelected(String[] all) {
         if(all == null || all.length <=0) return all;
@@ -141,10 +161,21 @@ public class SentenceX implements SelectionHandler {
     public boolean skipPOSFormMatch(String word) {
         return userWords.contains(word);
     }
-    public void addUserWord(String s) {
+    public static void addUserWord(String s) {
         userWords.add(s);
     }
-    public void removeUserWord(String s) {
+    public static void removeUserWord(String s) {
         userWords.remove(s);
+    }
+    public static void addUserSynonym(String word, String tag, String syn) {
+        List<String> al = usersyns.get(word +"@"+ tag);
+        if(al == null) al = new ArrayList<String>();
+        if(!al.contains(syn)) al.add(syn);
+        usersyns.put(word +"@"+ tag, al);
+    }
+    public static void removeUserSynonym(String word, String tag, String syn) {
+        List<String> al = usersyns.get(word +"@"+ tag);
+        if(al == null) return;
+        al.remove(syn);
     }
 }

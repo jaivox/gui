@@ -83,7 +83,7 @@ public class guiprep {
 
             if(conf.getProperty("console", "false").equalsIgnoreCase("true")) {
                 StringBuffer code = new StringBuffer();
-                copyFile(cpsrc+ "/console.j", destination + "console.java");
+                copyFile(cpsrc+ "/console.java", destination + "console.java");
                 String clz = buildAppCode(code, "console", project);
                 PrintWriter out = new PrintWriter (new FileWriter (destination + clz + ".java"));
                 out.println(code.toString());
@@ -91,8 +91,17 @@ public class guiprep {
             }
             if(isRecognizerEnabled(conf, "google")) {
                 StringBuffer code = new StringBuffer();
-                copyFile(cpsrc +"/runapp.j", destination + "runapp.java");
+                copyFile(cpsrc +"/runapp.java", destination + "runapp.java");
                 String clz = buildAppCode(code, "runapp", project);
+                PrintWriter out = new PrintWriter (new FileWriter (destination + clz + ".java"));
+                out.println(code.toString());
+                out.close ();
+            }
+            if(isRecognizerEnabled(conf, "sphinx")) {
+                StringBuffer code = new StringBuffer();
+                copyFile(cpsrc +"/runapp.java", destination + "runapp.java");
+                copyFile(cpsrc +"/runappsphinx.java", destination + "runappsphinx.java");
+                String clz = buildAppCode(code, "runappsphinx", project);
                 PrintWriter out = new PrintWriter (new FileWriter (destination + clz + ".java"));
                 out.println(code.toString());
                 out.close ();

@@ -43,6 +43,7 @@ public class JvxDialogLoader {
         File dataFolder = new File (datadir);
         System.out.println ("datadir path: "+dataFolder.getAbsolutePath ());
         gen = new GrammarGenerator(datadir);
+        loadDoNotExpandwords();
         //gen.generate(filename);
         theFrame = frame;
     }
@@ -145,7 +146,20 @@ public class JvxDialogLoader {
         }
         return node[0];
     }
-
+    public void loadDoNotExpandwords() {
+        String f = JvxConfiguration.theConfig().getDoNotExpandWords();
+        try {
+            BufferedReader in = new BufferedReader (new FileReader (f));
+            String line;
+            while ((line = in.readLine ()) != null) {
+                sentence.basicVerbs.add(line.trim());
+            }
+            in.close ();
+        }
+        catch (Exception e) {
+            System.out.println("loadDoNotExpandwords: " + e.getMessage());
+        }
+    }
     public String [] loadGrammar () {
         ArrayList<String> lines = new ArrayList<String> ();
         try {
@@ -211,19 +225,22 @@ public class JvxDialogLoader {
                 List<String> tabs = dbInter.getSeletedTabs();
                 System.out.println("interfaceDialogs: done: tabs: "+ tabs.size());
                 dbInter.dispose();
-                List<List<String>> rows = dbInter.getDBMgr().queryTab(tabs.get(0));
-                Object vals[][] = new Object[rows.size()][];
-                int i = 0;
-                for(List row : rows) {
-                    vals[i++] = row.toArray();
-                }
-                try {
-                    this.theFrame.getQualdbTable().setModel(
-                            new javax.swing.table.DefaultTableModel(vals, 
-                                dbInter.getDBMgr().getTableFields(tabs.get(0)).toArray()) 
-                            );
-                } catch (SQLException ex) {
-                    Logger.getLogger(JvxDialogLoader.class.getName()).log(Level.SEVERE, null, ex);
+                if(tabs.size() > 0) {
+                    List<List<String>> rows = dbInter.getDBMgr().queryTab(tabs.get(0));
+
+                    Object vals[][] = new Object[rows.size()][];
+                    int i = 0;
+                    for(List row : rows) {
+                        vals[i++] = row.toArray();
+                    }
+                    try {
+                        this.theFrame.getQualdbTable().setModel(
+                                new javax.swing.table.DefaultTableModel(vals, 
+                                    dbInter.getDBMgr().getTableFields(tabs.get(0)).toArray()) 
+                                );
+                    } catch (SQLException ex) {
+                        Logger.getLogger(JvxDialogLoader.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
             dbInter = null;

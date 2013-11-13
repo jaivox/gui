@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.didion.jwnl.JWNL;
 
 import net.didion.jwnl.JWNLException;
@@ -82,7 +84,11 @@ public class WordnetUtils {
         }
         return ts;
     }
-    public static void initialize(String conffile) throws JWNLException, FileNotFoundException {
-        JWNL.initialize(new FileInputStream(conffile));
+    public static void initialize(String conffile) throws JWNLException {
+        try {
+            JWNL.initialize(new FileInputStream(conffile));
+        } catch (FileNotFoundException ex) {
+            JWNL.initialize(WordnetUtils.class.getClassLoader().getResourceAsStream(conffile));
+        }
     }
 }

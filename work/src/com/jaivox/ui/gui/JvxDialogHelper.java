@@ -10,13 +10,16 @@ import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.SentenceX;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Map.Entry;
+import java.util.Properties;
 import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -30,6 +33,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
+
 
 
 
@@ -235,8 +239,72 @@ public class JvxDialogHelper {
         c.go();
         return o;
     }
-}
 
+    void dumpSynonymSelections(String name) throws FileNotFoundException, IOException {
+        java.io.FileOutputStream out = new FileOutputStream(name + ".savx");
+        Properties p = new Properties();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode)theFrame.getDialogTree().getModel().getRoot();
+        for(Enumeration e = root.breadthFirstEnumeration(); e.hasMoreElements();) {
+            DefaultMutableTreeNode nd = (DefaultMutableTreeNode)e.nextElement();
+            Object sx = nd.getUserObject();
+            if(sx instanceof SentenceX) {
+                ((SentenceX)sx).dumpSynonymExclusions(p);
+            }
+        }
+        p.store(out, "---Saved user synonyms---");
+        out.close();
+    }
+    public static void dumpUserSynonyms(String name) throws FileNotFoundException, IOException {
+        java.io.FileOutputStream out = new FileOutputStream(name + ".savu");
+        Properties p = new Properties();
+        for(Entry e : SentenceX.usersyns.entrySet()) {
+            java.util.List<String> al = (java.util.List) e.getValue();
+            StringBuffer sb = new StringBuffer();
+            for(String s : al) {
+                sb.append(s).append(';');
+            }
+            p.put(e.getKey(), sb.toString());
+        }
+        p.store(out, "---Saved user synonyms---");
+        out.close();
+    }
+    void readUserSynonyms(String name) throws FileNotFoundException, IOException {
+        java.io.FileInputStream in = new FileInputStream(name + ".savu");
+        Properties p = new Properties();
+        p.load(in);
+        in.close();
+        for(Entry e : p.entrySet()) {
+            String s = (String) e.getKey();
+            String ws = (String) e.getValue();
+            String[] toks = ws.split(";");
+            SentenceX.usersyns.put(s, Arrays.asList(toks));
+            String keys[] = s.split("@");
+            for(String t : toks) {
+                theFrame.dlgLoader.gen.addSynonyms(keys[0], new String[] { t }, keys[1]);
+                SentenceX.addUserWord(t);
+            }
+        }
+    }
+    void readSynonymSelections(String name) throws FileNotFoundException, IOException {
+        java.io.FileInputStream in = new FileInputStream(name + ".savx");
+        Properties p = new Properties();
+        p.load(in);
+        in.close();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode)theFrame.getDialogTree().getModel().getRoot();
+        for(Enumeration e = root.breadthFirstEnumeration(); e.hasMoreElements();) {
+            DefaultMutableTreeNode nd = (DefaultMutableTreeNode)e.nextElement();
+            Object ox = nd.getUserObject();
+            if(ox instanceof SentenceX) {
+                SentenceX sx = (SentenceX) ox;
+                sx.readSyns(p);
+                
+                theFrame.dlgLoader.gen.generateAlts(sx.getSentenceKey());
+                sx.setTheSentence( theFrame.dlgLoader.gen.getSentence(sx.getSentenceKey()) );
+            }
+        }
+        
+    }
+}
 class DlgTreeModelListener implements TreeModelListener {
     JvxMainFrame theFrame = null;
     public DlgTreeModelListener(JvxMainFrame frame) {

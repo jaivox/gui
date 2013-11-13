@@ -160,13 +160,17 @@ public class sentence {
 					if (s == null) continue;
 					if (s.form == null) continue;
                                         
-                                        boolean skipPOSMatch = false;
-                                        if(selectionHandler != null) {
-                                            skipPOSMatch = selectionHandler.skipPOSFormMatch(w);
+                                        boolean posMatch = false;
+                                        posMatch = matches (s.form);
+                                        Debug (w +" --- "+ sb);
+                                        if(!posMatch) {
+                                            if(selectionHandler != null) {
+                                                posMatch = selectionHandler.skipPOSFormMatch(w);
+                                            }
                                         }
                         
-					if (skipPOSMatch || matches (s.form)) {
-						hold.add (w);
+					if (posMatch) {
+                                            hold.add (w);
 					}
 				}
 				int m = hold.size ();
@@ -257,6 +261,7 @@ public class sentence {
     
         static {
             basicVerbs.add("be");
+            basicVerbs.add("do");
         }
 }
 interface SelectionHandler {

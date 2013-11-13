@@ -28,6 +28,7 @@ class DialogMenuAction implements ActionListener {
         DefaultMutableTreeNode rightClickedNode = (DefaultMutableTreeNode) tpath.getLastPathComponent();
         String action = ae.getActionCommand();
         System.out.println("DialogMenuAction: " + action);
+        TreePath newpath = null;
         // TODO - may be a confirm action here
         if (action.equals("Add")) {
             
@@ -35,7 +36,7 @@ class DialogMenuAction implements ActionListener {
             rightClickedNode.add(anotherNode);
             model.reload(rightClickedNode);
             TreeNode[] nodes = model.getPathToRoot(anotherNode);
-            TreePath newpath = new TreePath(nodes);
+            newpath = new TreePath(nodes);
             //dialogTree.scrollPathToVisible(tpath);
             dialogTree.expandPath(newpath);
             dialogTree.setSelectionPath(newpath);
@@ -69,6 +70,7 @@ class DialogMenuAction implements ActionListener {
             }
         }
         model.reload(rightClickedNode);
+        if(newpath != null) dialogTree.startEditingAtPath(newpath);
     }
     
 }

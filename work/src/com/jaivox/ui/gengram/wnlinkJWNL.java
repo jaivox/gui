@@ -22,7 +22,7 @@ public class wnlinkJWNL implements wnlink {
             WordnetUtils.initialize(JvxConfiguration.WNconfig);
         } catch (JWNLException ex) {
             Logger.getLogger(wnlinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(wnlinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
