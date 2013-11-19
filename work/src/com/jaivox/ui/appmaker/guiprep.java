@@ -307,15 +307,5 @@ public class guiprep {
 			return false;
 		}
 	}
-
-        public static void usingJvGen(String conf) {
-            new Log ();
-            Log.setLevelByName ("FINEST");
-            Generator gen = new Generator (conf);
-            if (!gen.Valid) {
-                    System.out.println ("Invalid specifications, generation is incomplete.");
-                    return;
-            }
-        }
 }
 		
