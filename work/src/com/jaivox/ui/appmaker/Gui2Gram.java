@@ -6,8 +6,8 @@ import java.util.*;
 
 public class Gui2Gram {
 
-	static String gram = "data/road1.tree";
-	static String dlgtree = "data/dlgtree.tree";
+	static String gram = "";
+	static String dlgtree = "";
 	String keys [];
 	String questions [];
 	LinkedHashMap <String, ArrayList<String>> rules;

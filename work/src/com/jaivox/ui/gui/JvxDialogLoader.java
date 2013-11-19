@@ -33,8 +33,8 @@ import java.util.logging.Logger;
  */
 public class JvxDialogLoader {
     static String datadir = JvxConfiguration.datadir;
-    private String dlgfile = datadir + "road1.tree";
-    private String datfile = datadir + "road1.data";
+    private String dlgfile = "";    // tree file
+    private String datfile = "";
         
     private static GrammarGenerator gen = null;
     JvxMainFrame theFrame = null;
