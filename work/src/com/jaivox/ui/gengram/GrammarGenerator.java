@@ -6,6 +6,8 @@ package com.jaivox.ui.gengram;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -18,16 +20,23 @@ public class GrammarGenerator {
     public static String DLG_DLIM = "()\r\n";
     static parse P = null;;
     static wnlink W;
-
+    private static Map<String, wnlink> synRepos = null;
     static String tests [];
-
+    
     public GrammarGenerator(String dataFolder) {
         //W.synsfile = dataFolder + W.synsfile;
         parse.penntags = dataFolder + P.penntags;
-        
-        //W = new wnlinkDb ();
-        W = new wnlinkJWNL ();
-        W.createsyns ();
+        synRepos = new HashMap();
+    }
+    public void setWLink(String key) {
+        try {
+            wnlink wl = synRepos.get(key);
+            if(wl == null) {
+                wl = (wnlink) Class.forName(key).newInstance();
+            }
+            synRepos.put(key, wl);
+            W = wl;
+        } catch (Exception e) { e.printStackTrace(); }
     }
     public void load(String dlgFile, String datFile) {
         if(datFile != null) {
@@ -35,7 +44,7 @@ public class GrammarGenerator {
         }
         
         if(dlgFile != null)  {
-            P = new parse (dlgFile);
+            if(P == null) P = new parse (dlgFile);
             if (P.Valid) P.createsentences ();
         }
     }

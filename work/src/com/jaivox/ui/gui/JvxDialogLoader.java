@@ -36,18 +36,28 @@ public class JvxDialogLoader {
     private String dlgfile = datadir + "road1.tree";
     private String datfile = datadir + "road1.data";
         
-    public static GrammarGenerator gen = null;
+    private static GrammarGenerator gen = null;
     JvxMainFrame theFrame = null;
     
+    
+    public static synchronized GrammarGenerator getGrammarGenerator() {
+        if(gen == null) gen = new GrammarGenerator(datadir);
+        gen.setWLink( JvxMainFrame.getInstance().wordsToBeExpanded() ? 
+                        "com.jaivox.ui.gengram.wnlinkJWNL" : 
+                        "com.jaivox.ui.gengram.wnlinkBasic");   // TODO from a wlink factory
+        return gen;
+    }
     public JvxDialogLoader(JvxMainFrame frame) {
         File dataFolder = new File (datadir);
         System.out.println ("datadir path: "+dataFolder.getAbsolutePath ());
-        gen = new GrammarGenerator(datadir);
+        
         loadDoNotExpandwords();
         //gen.generate(filename);
         theFrame = frame;
     }
     public void reInit() {
+        getGrammarGenerator();
+        JvxMainFrame.getInstance().setDirtyFlag(false);
         datadir = JvxConfiguration.theConfig().getDataFolder();
         dlgfile = JvxConfiguration.theConfig().getDialogFile();
         datfile = JvxConfiguration.theConfig().getDataFile();
@@ -102,6 +112,7 @@ public class JvxDialogLoader {
         }
     }
     public DefaultMutableTreeNode readConversation(String filename, String rootName) {
+        getGrammarGenerator();
         BufferedReader in = null;
         int level = 0;
         DefaultMutableTreeNode node[] = new DefaultMutableTreeNode[10];

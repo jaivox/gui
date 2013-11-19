@@ -86,6 +86,10 @@ public class JvxConfiguration {
         targFolder.mkdirs();
         System.out.println("save: path: "+ targFolder.getAbsolutePath());
         
+        conf.put("common", datadir);
+        conf.put("source", "./");
+        conf.put("Base", "./");
+        
         setTargetSpec(theFrame);
         setMisc(theFrame);
         validatefields(theFrame);

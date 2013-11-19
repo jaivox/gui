@@ -19,6 +19,7 @@ public class wnlinkDb implements wnlink {
 	
 	public wnlinkDb () {
 		db = new javadb ("wordnet30");
+                createsyns ();
 	}
 	
 	void Debug (String s) {

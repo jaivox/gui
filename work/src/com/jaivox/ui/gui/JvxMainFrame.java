@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
 
 /**
@@ -29,6 +30,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     JvxDialogHelper dlgHelper = null;
     JvxSynonymsHelper synsHelper = null;
     
+    static boolean dirty_flag = false;
     static UndoManager undoManager_;
     static UndoableEditSupport undoSupport_;
   
@@ -120,7 +122,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     public JvxSynonymsHelper getSynsHelper() {
         return synsHelper;
     }
-
+    public void postUndoableEdit(UndoableEdit change) {
+        undoSupport_.postEdit(change);
+        dirty_flag = true;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -135,6 +140,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         langPanel = new javax.swing.JPanel();
         langCombo = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
+        expandYNButton = new javax.swing.JToggleButton();
         dgdPanel = new javax.swing.JPanel();
         primaryVSplitPane = new javax.swing.JSplitPane();
         dlgSynsHSplitPane = new javax.swing.JSplitPane();
@@ -186,8 +192,16 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         langCombo.setMaximumRowCount(100);
         langCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "English - US", "French", "Hindi", "Spanish" }));
         langCombo.setName("langCombo"); // NOI18N
+        langCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                langComboActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Select Language:");
+
+        expandYNButton.setSelected(true);
+        expandYNButton.setText("Expand Synonyms (Y/N)?");
 
         javax.swing.GroupLayout langPanelLayout = new javax.swing.GroupLayout(langPanel);
         langPanel.setLayout(langPanelLayout);
@@ -196,15 +210,18 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, langPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(langCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addGap(2, 2, 2)
+                .addComponent(langCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(expandYNButton)
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         langPanelLayout.setVerticalGroup(
             langPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(langPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel1)
-                .addComponent(langCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(langCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(expandYNButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         dgdPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "                   Dialogs                                                                          Synonyms                                                               Alt Sentence preview", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(151, 149, 198)));
@@ -803,6 +820,22 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                     new ActionEvent(dialogTree, ActionEvent.ACTION_PERFORMED, "Add"));
         }
     }//GEN-LAST:event_dialogTreeKeyPressed
+
+    private void langComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_langComboActionPerformed
+        // TODO add your handling code here:
+        String lang = (String) langCombo.getSelectedItem();
+        if(lang.equals("English - US")) {
+            this.expandYNButton.setEnabled(true);
+            expandYNButton.setSelected(true);
+        }
+        else {
+            this.expandYNButton.setEnabled(false);
+            expandYNButton.setSelected(false);
+        }
+    }//GEN-LAST:event_langComboActionPerformed
+    public boolean wordsToBeExpanded() {
+        return (this.expandYNButton.isEnabled() && expandYNButton.isSelected());
+    }
     void registerF1Help() {
         JComponent cl[] = { cbFestival, dialogTree, appName, cbFreetts, grammarList,
                             btnRun,  cbGoogleRecognizer, osList, btnSave,
@@ -925,6 +958,28 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             showHelp (urlPath);
         }
     }
+    public void setDirtyFlag(boolean flag) {
+        dirty_flag = flag;
+    }
+    private boolean confirmExit() {
+        if(dirty_flag) {
+            Object[] options = {"Yes, please",
+                                    "No, thanks"};
+            int n = JOptionPane.showOptionDialog(this,
+                            "Your unsaved changes will be lost on Exit!\n" +
+                            "Would you like to Save the Changes and Exit?",
+                            "Confirm Exit",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[0]);
+            if (n == JOptionPane.YES_OPTION) {
+                save();
+            }
+        }
+        return true;
+    }
     /**
      * @param args the command line arguments
      */
@@ -955,8 +1010,17 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                JvxMainFrame jf = new JvxMainFrame();
+                final JvxMainFrame jf = new JvxMainFrame();
                 JvxMainFrame.theApp = jf;
+                jf.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        try { 
+                            jf.confirmExit();
+                        } catch (Exception ex) { ex.printStackTrace(); }
+                        System.exit(0);
+                    }
+                });
                 jf.setVisible(true);
                 //jf.startWizard();
             }
@@ -979,6 +1043,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTree dialogTree;
     private javax.swing.JSplitPane dlgSynsHSplitPane;
     private javax.swing.JScrollPane dlgTreeScrollPane;
+    private javax.swing.JToggleButton expandYNButton;
     private javax.swing.JList grammarList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -1006,4 +1071,5 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTable synsTab;
     private javax.swing.JPanel targetSpecPanel;
     // End of variables declaration//GEN-END:variables
+
 }

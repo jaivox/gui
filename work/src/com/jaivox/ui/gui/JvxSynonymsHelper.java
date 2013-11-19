@@ -40,7 +40,7 @@ public class JvxSynonymsHelper {
             //String syns[] = JvxDialogLoader.gen.getSynonyms( words[words.length/2]);
             int i = 0;
             for(String word : words) {
-                String syns[] = JvxDialogLoader.gen.getSynonyms(word, sx.getTagFormAt(i) );
+                String syns[] = JvxDialogLoader.getGrammarGenerator().getSynonyms(word, sx.getTagFormAt(i) );
                 if(syns != null) {
                     JMenu syMenu = new JMenu(word);
                     for(String s : syns) {
@@ -257,7 +257,7 @@ class TableActionHandler  implements TableModelListener {
                 if(selected && word.length() > 0) {     // add, select
                     if(data.isUserWord()) {             // add
                         String tag = model.getSentenceX().getTagFormAt(col);
-                        regen = theFrame.dlgLoader.gen.addSynonyms(columnName, new String[] { word }, tag);
+                        regen = JvxDialogLoader.getGrammarGenerator().addSynonyms(columnName, new String[] { word }, tag);
                         model.getSentenceX().addUserWord(word);
                         model.getSentenceX().addUserSynonym(columnName, tag, word);
                     }
@@ -283,8 +283,8 @@ class TableActionHandler  implements TableModelListener {
             }
         }
         if(regen) {
-            theFrame.dlgLoader.gen.generateAlts(key);
-            model.getSentenceX().setTheSentence( theFrame.dlgLoader.gen.getSentence(key) );
+            JvxDialogLoader.getGrammarGenerator().generateAlts(key);
+            model.getSentenceX().setTheSentence( JvxDialogLoader.getGrammarGenerator().getSentence(key) );
             theFrame.getGrammarList().setListData(model.getSentenceX().getSentenceOptions());
         }
     }
@@ -353,7 +353,7 @@ class PopUpMenuAction implements ActionListener {
             int rowCount = model.getColumnCount ();
             model.insertRow(rowCount);
             UndoableEdit rowChange = new RowChange (model, rowCount);
-            JvxMainFrame.undoSupport_.postEdit (rowChange);
+            JvxMainFrame.getInstance().postUndoableEdit (rowChange);
         }
         else if(action.equals("Delete")) {
             int r = table.getSelectedRow();
@@ -364,7 +364,7 @@ class PopUpMenuAction implements ActionListener {
                 UndoableEdit change = new CellChange (model, new SynsData(sv.getSelected(), sv.getValue(), sv.isUserWord()), r, c);
             
                 model.deleteColumn(r, c);
-                JvxMainFrame.undoSupport_.postEdit (change);
+                JvxMainFrame.getInstance().postUndoableEdit (change);
             }
         }
         else if(action.equals("Edit")) {

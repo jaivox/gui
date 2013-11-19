@@ -6,7 +6,7 @@ import edu.cmu.sphinx.result.Result;
 import edu.cmu.sphinx.util.props.ConfigurationManager;
 
 public class runappsphinx extends runapp {
-        static String config = "batch.xml";
+        static String config = "live.xml";
         
 	public runappsphinx () {
 		super();

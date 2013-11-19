@@ -7,9 +7,14 @@ package com.jaivox.ui.gui;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -49,8 +54,13 @@ public class MenuUtils {
         menu.add(menuItem);
         menuItem = new JMenuItem(MenuAction.MA_DATA_FILE);
         menu.add(menuItem);
+        
+        RecentFileAction.MENU_RECENT.addMenuListener(RecentFileAction.MA_RECENT);
+        menu.add(RecentFileAction.MENU_RECENT);
+        
         menuItem = new JMenuItem(RealodAction.MA_RELOAD);
         menu.add(menuItem);
+        
         
         final JMenu edmenu = new JMenu("Edit");
         edmenu.setMnemonic(KeyEvent.VK_E);
@@ -118,11 +128,27 @@ public class MenuUtils {
         } 
         return loc;
     }
+    
+    public static JMenuItem[] addSubMenus(List subs, JMenu parent, ActionListener l) {
+        if(subs == null || subs.size() <= 0) return null;
+        JMenuItem[] mis = new JMenuItem[subs.size()];
+        int i = 0;
+        for(Object o : subs) {
+            if(o == null) continue;
+            String s = o.toString().trim();
+            if(s.length() <= 0) continue;
+            mis[i] = new JMenuItem(s);
+            mis[i].addActionListener(l);
+            parent.add(mis[i]);
+            i++;
+        }
+        return mis;
+    }
 }
 class MenuAction extends AbstractAction {
-    public static MenuAction MA_NEW = new MenuAction("New", KeyEvent.VK_T);
+    public static MenuAction MA_NEW = new MenuAction("New", KeyEvent.VK_N);
     public static MenuAction MA_DIALOG_TREE = new MenuAction("Open Dialog Tree", KeyEvent.VK_T);
-    public static MenuAction MA_DATA_FILE = new MenuAction("Open Data File", KeyEvent.VK_T);
+    public static MenuAction MA_DATA_FILE = new MenuAction("Open Data File", KeyEvent.VK_D);
     
     public MenuAction(String text, Integer mnemonic) {
         super(text);
@@ -137,11 +163,51 @@ class MenuAction extends AbstractAction {
         if(action.equals(MA_DIALOG_TREE.getValue(NAME))) {
             String s = MenuUtils.fileDialog(xframe, JFileChooser.FILES_ONLY, "", "Choose Dialog file");
             
-            if(s != null) xframe.dlgLoader.loadDialogFile(s);
+            if(s != null)  {
+                RecentFileHistory.getHistory().add(s);
+                xframe.dlgLoader.loadDialogFile(s);
+            }
         }
         else if (action.equals(MA_NEW.getValue(NAME))) {
             JvxMainFrame.getInstance().dlgHelper.newDialog();
         }
+    }
+}
+
+
+class RecentFileAction extends AbstractAction implements MenuListener {
+    public static RecentFileAction MA_RECENT = new RecentFileAction("Open Recent File", KeyEvent.VK_F);
+    public static JMenu MENU_RECENT = new JMenu(MA_RECENT);
+    
+    public RecentFileAction(String text, Integer mnemonic) {
+        super(text);
+        putValue(SHORT_DESCRIPTION, text);
+        putValue(MNEMONIC_KEY, mnemonic);
+    }
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
+        System.out.println("RecentFileAction: " + e.getActionCommand());
+        
+        JvxMainFrame xframe = JvxMainFrame.getInstance();
+        File hf = new File(action);
+        if(hf.exists()) {
+            RecentFileHistory.getHistory().add(action);
+            xframe.dlgLoader.loadDialogFile(action);
+        }
+    }
+
+    @Override
+    public void menuSelected(MenuEvent e) {
+        MENU_RECENT.removeAll();
+        List files = Arrays.asList(RecentFileHistory.getHistory().get());
+        Collections.reverse(files);
+        MenuUtils.addSubMenus( files, MENU_RECENT, MA_RECENT );
+    }
+    @Override
+    public void menuDeselected(MenuEvent e) {
+    }
+    @Override
+    public void menuCanceled(MenuEvent e) {
     }
 }
 
@@ -230,3 +296,21 @@ class UndoAdapter implements UndoableEditListener {
      	//refreshUndoRedo();
      }
   }
+
+class RecentFileHistory {
+    private static RecentFileHistory history = null;
+    
+    public static RecentFileHistory getHistory() {
+        if(history == null) history = new RecentFileHistory();
+        return history;
+    }
+    private Stack<String> files = new Stack<String>();
+    public void add(String f) { 
+        if(files.contains(f)) files.remove(f);
+        files.push(f);
+        if(files.size() > 5) files.setSize(5);
+    }
+    public String[] get() {
+        return files.toArray(new String[1]);
+    }
+}

@@ -206,8 +206,10 @@ public class JvxDialogHelper {
                 else if(sx.toString().trim().length() > 0) {
                     al = new ArrayList<String> ();
                     sx = JvxDialogHelper.createSentence(sx.toString().trim());
-                    if(sx != null) node.setUserObject(sx);
-                    ((SentenceX)sx).generateokays(al);
+                    if(sx != null) {
+                        node.setUserObject(sx);
+                        ((SentenceX)sx).generateokays(al);
+                    }
                 }
                 if(al != null) {
                     oks.addAll(al);
@@ -231,7 +233,7 @@ public class JvxDialogHelper {
         node = (DefaultMutableTreeNode) (node.isRoot() ? node.getChildAt(0) : node);
         UndoableEdit rowChange = new DialogTreeNodeUndoableInsert 
                                     (tree, node, (MutableTreeNode) node.getParent());
-        JvxMainFrame.undoSupport_.postEdit (rowChange);        
+        JvxMainFrame.getInstance().postUndoableEdit (rowChange);        
     }
     static Object createSentence(String text) {
         WaitCursor c = new WaitCursor();
@@ -280,7 +282,7 @@ public class JvxDialogHelper {
             SentenceX.usersyns.put(s, Arrays.asList(toks));
             String keys[] = s.split("@");
             for(String t : toks) {
-                theFrame.dlgLoader.gen.addSynonyms(keys[0], new String[] { t }, keys[1]);
+                JvxDialogLoader.getGrammarGenerator().addSynonyms(keys[0], new String[] { t }, keys[1]);
                 SentenceX.addUserWord(t);
             }
         }
@@ -298,8 +300,8 @@ public class JvxDialogHelper {
                 SentenceX sx = (SentenceX) ox;
                 sx.readSyns(p);
                 
-                theFrame.dlgLoader.gen.generateAlts(sx.getSentenceKey());
-                sx.setTheSentence( theFrame.dlgLoader.gen.getSentence(sx.getSentenceKey()) );
+                JvxDialogLoader.getGrammarGenerator().generateAlts(sx.getSentenceKey());
+                sx.setTheSentence( JvxDialogLoader.getGrammarGenerator().getSentence(sx.getSentenceKey()) );
             }
         }
         

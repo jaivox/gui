@@ -90,7 +90,7 @@ class SynsTabDNDHandler extends DragHandler {
                 UndoableEdit change = new CellChangeInsert(model, 
                         new SynsData(sv.getSelected(), sv.getValue(), sv.isUserWord()), 
                         row, col);
-                JvxMainFrame.undoSupport_.postEdit(change);
+                JvxMainFrame.getInstance().postUndoableEdit(change);
             }
             row++;
         }

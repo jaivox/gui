@@ -56,7 +56,7 @@ class DialogMenuAction implements ActionListener {
             } else {
                 model.removeNodeFromParent(rightClickedNode); // model calls nodesWereRemoved
             }
-            JvxMainFrame.undoSupport_.postEdit(rowChange);
+            JvxMainFrame.getInstance().postUndoableEdit(rowChange);
             // clear the right side table and list
             JvxMainFrame.getInstance().getGrammarList().setListData(new String[]{});
             JvxMainFrame.getInstance().getSynsHelper().populateSynonymsTab("");
