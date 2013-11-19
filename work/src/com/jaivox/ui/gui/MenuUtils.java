@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
@@ -303,6 +305,20 @@ class RecentFileHistory {
     public static RecentFileHistory getHistory() {
         if(history == null) history = new RecentFileHistory();
         return history;
+    }
+    public static void loadHistory() throws BackingStoreException {
+        Preferences rfh = Preferences.userNodeForPackage(RecentFileHistory.class);
+        for(String s : rfh.keys()) {
+            RecentFileHistory.getHistory().files.push(s);
+        }
+    }
+    public static void flush() throws BackingStoreException {
+        Preferences rfh = Preferences.userNodeForPackage(RecentFileHistory.class);
+        rfh.clear();
+        for(String s : RecentFileHistory.getHistory().files) {
+            rfh.put(s, s);
+        }
+        rfh.flush();
     }
     private Stack<String> files = new Stack<String>();
     public void add(String f) { 

@@ -15,6 +15,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
@@ -72,8 +75,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         setAllToolTip();
         registerF1Help();
         new MenuUtils().setMenuBarForFrame(this);
-        //dlgLoader.loadDialogs(dialogTree);
-        //dlgLoader.loadNGenGrammar(this);
+        
+        try {
+            RecentFileHistory.loadHistory();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(JvxMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
         model.addTreeModelListener(new DlgTreeModelListener(this));
@@ -962,6 +969,13 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         dirty_flag = flag;
     }
     private boolean confirmExit() {
+        
+        try {
+            RecentFileHistory.flush();
+        } catch (BackingStoreException ex) {
+            Logger.getLogger(JvxMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         if(dirty_flag) {
             Object[] options = {"Yes, please",
                                     "No, thanks"};
