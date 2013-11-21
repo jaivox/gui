@@ -19,25 +19,25 @@ import java.util.TreeSet;
  */
 public class SentenceX implements SelectionHandler {
 
-    private sentence theSentence = null;    // hasA for convinience, than isA
+    private Sentence theSentence = null;    // hasA for convinience, than isA
     private ArrayList<ArrayList<Object>> tabModvalues = null;
     private ArrayList<String> excludes = new ArrayList<String>();
     public static Set<String> userWords = new TreeSet<String>();
     public static Map<String, List<String>> usersyns = new HashMap();
     
-    public void setTheSentence(sentence theSentence) {
+    public void setTheSentence(Sentence theSentence) {
         this.theSentence = theSentence;
         this.theSentence.setSelectionhandler(this);
         tabModvalues = null;
     }
-    public SentenceX(sentence c)
+    public SentenceX(Sentence c)
     {
         setTheSentence(c);
     }
     public String getTagFormAt(int col) {
         return theSentence.forms[col];
     }
-    public sentence getSentence() {
+    public Sentence getSentence() {
         return theSentence;
     }
     public String getSentenceKey() {

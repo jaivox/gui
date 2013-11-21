@@ -13,22 +13,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.didion.jwnl.JWNLException;
 
-public class wnlinkJWNL implements wnlink {
+public class WnLinkJWNL implements WnLink {
     private static Map <String, String[]> syns = new TreeMap <String, String[]>();
     
-    public wnlinkJWNL () {
+    public WnLinkJWNL () {
         try {
             WordnetUtils.initialize(JvxConfiguration.WNconfig);
         } catch (JWNLException ex) {
-            Logger.getLogger(wnlinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WnLinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(wnlinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WnLinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     String findPOSTag(String form) {
         String pos = null;
         if(form != null) {
-            String f = parse.tags.get(form);
+            String f = Parse.tags.get(form);
             if(f != null) f = f.toLowerCase();
             pos = f != null ? f.contains("noun") ? "noun" : f.contains("verb") ? "verb" : 
                             f.contains("adjective") ? "adjective" : f.contains("adverb") ? "adverb" : null : null;
@@ -39,7 +39,7 @@ public class wnlinkJWNL implements wnlink {
         //POS type
         String pos = findPOSTag(form);
         if(pos == null) {
-//            System.out.println("synsget: " + word +"---"+form +"---"+ parse.tags.get(form));
+//            System.out.println("synsget: " + word +"---"+form +"---"+ Parse.tags.get(form));
 //            return null;  // trial - avoid Determiner, Preposition, conjunction etc.
         }
         return getsynonyms(word, pos);
@@ -76,7 +76,7 @@ public class wnlinkJWNL implements wnlink {
         try {
             ts =  WordnetUtils.getSynonyms(word, tag);
         } catch (JWNLException ex) {
-            Logger.getLogger(wnlinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WnLinkJWNL.class.getName()).log(Level.SEVERE, null, ex);
         }
         if(ts!= null && ts.length > 0) { 
             syns.put(word+"@"+tag, ts);
@@ -137,7 +137,7 @@ public class wnlinkJWNL implements wnlink {
     public void createsyns () { }
 
     public static void main(String[] args) {
-        new wnlinkJWNL().test("slow");
+        new WnLinkJWNL().test("slow");
     }
 }
 

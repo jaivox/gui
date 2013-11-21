@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 
-public class sentence {
+public class Sentence {
 
 	String orig;
 	String form;
@@ -24,7 +24,7 @@ public class sentence {
 	
 	boolean Valid = false;
 	
-	public sentence (String o, String f, String t) {
+	public Sentence (String o, String f, String t) {
 		try {
 			orig = o;
 			form = f;
@@ -62,7 +62,7 @@ public class sentence {
         
 	int maxlen = 4;
 	
-	void multiwordsubs (parse P, wnlink link) {
+	void multiwordsubs (Parse P, WnLink link) {
 		ArrayList <String> modwords = new ArrayList <String> ();
 		ArrayList <String> modforms = new ArrayList <String> ();
 		ArrayList <Integer> modlens = new ArrayList <Integer> ();
@@ -156,7 +156,7 @@ public class sentence {
                                             //sb.append(orig.charAt(orig.length()-1));
                                         }
 					String all = new String (sb).trim ();
-					sentence s = P.doparse (all);
+					Sentence s = P.doparse (all);
 					if (s == null) continue;
 					if (s.form == null) continue;
                                         

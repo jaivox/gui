@@ -10,7 +10,7 @@ import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.trees.Tree;
 
 
-public class parse {
+public class Parse {
 
 	static String penntags = "penntags.txt";
 
@@ -22,12 +22,12 @@ public class parse {
 	
 	boolean Valid = false;
 	
-	TreeMap <String, sentence> sentences;
+	TreeMap <String, Sentence> sentences;
 
-	public parse (String filename) {
+	public Parse (String filename) {
 		tags = new TreeMap <String, String> ();
 		statements = new ArrayList <String> ();
-		sentences = new TreeMap <String, sentence> ();
+		sentences = new TreeMap <String, Sentence> ();
 		boolean ok = loadtags ();
 		if (!ok) return;
 		ok = loadstatements (filename);
@@ -36,10 +36,10 @@ public class parse {
 		if (!ok) return;
 		Valid = true;
 	}
-        public parse () {
+        public Parse () {
 		tags = new TreeMap <String, String> ();
 		statements = new ArrayList <String> ();
-		sentences = new TreeMap <String, sentence> ();
+		sentences = new TreeMap <String, Sentence> ();
 		boolean ok = loadtags ();
 		if (!ok) return;
 		if(lp == null) ok = loadparser ();
@@ -120,7 +120,7 @@ public class parse {
 	boolean createsentences () {
 		try {
 			for (String statement: statements) {
-				sentence sent = doparse (statement);
+				Sentence sent = doparse (statement);
 				if (sent != null) sentences.put (sent.orig, sent);
 			}
 			return true;
@@ -131,7 +131,7 @@ public class parse {
 		}
 	}
 			
-	sentence doparse (String statement) {
+	Sentence doparse (String statement) {
 		try {
 			Tree ptree = lp.parse (statement);
 			if (ptree == null) return null;
@@ -141,7 +141,7 @@ public class parse {
 			String form = createform (filter);
 			// Debug (statement+":1 "+flat+":2 "+filter+":3 "+form);
 			if (form == null) return null;
-			sentence s = new sentence (statement, form, flat);
+			Sentence s = new Sentence (statement, form, flat);
 			if (!s.Valid) return null;
 			// Debug (statement+"\n"+form);
 			return s;

@@ -9,7 +9,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class javadb {
+public class JavaDb {
 
 	static String driver = "org.gjt.mm.mysql.Driver";	// mysql linux
 	// static String driver = "com.mysql.jdbc.Driver";	// works for windows
@@ -27,7 +27,7 @@ public class javadb {
 
 	boolean Valid = false;
 
-	public javadb (String dbname) {
+	public JavaDb (String dbname) {
 		try {
 			Class.forName (driver);
 			String dsn = dsnstub + dbname;
@@ -113,7 +113,7 @@ public class javadb {
 
 
 	public static void main (String args []) {
-		javadb j = new javadb (args [0]);
+		JavaDb j = new JavaDb (args [0]);
 		if (j.Valid) {
 			j.getClassInfo (args [1]);
 			j.execute (args [1]);

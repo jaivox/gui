@@ -11,14 +11,14 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-public class wnlinkDb implements wnlink {
+public class WnLinkDb implements WnLink {
 	
-	javadb db;
+	JavaDb db;
 	
 	static String synsfile = "synonyms.txt";
 	
-	public wnlinkDb () {
-		db = new javadb ("wordnet30");
+	public WnLinkDb () {
+		db = new JavaDb ("wordnet30");
                 createsyns ();
 	}
 	

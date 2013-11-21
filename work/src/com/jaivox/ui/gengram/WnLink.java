@@ -11,7 +11,7 @@ import java.util.TreeMap;
  *
  * @author rj
  */
-public interface wnlink {
+public interface WnLink {
     static Map <String, String[]> dbsyns = new TreeMap <String, String[]>();
     
     public String[] getsynonyms (String word);

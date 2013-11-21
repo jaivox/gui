@@ -18,21 +18,21 @@ import java.util.TreeMap;
  */
 public class GrammarGenerator {
     public static String DLG_DLIM = "()\r\n";
-    static parse P = null;;
-    static wnlink W;
-    private static Map<String, wnlink> synRepos = null;
+    static Parse P = null;;
+    static WnLink W;
+    private static Map<String, WnLink> synRepos = null;
     static String tests [];
     
     public GrammarGenerator(String dataFolder) {
         //W.synsfile = dataFolder + W.synsfile;
-        parse.penntags = dataFolder + P.penntags;
+        Parse.penntags = dataFolder + P.penntags;
         synRepos = new HashMap();
     }
     public void setWLink(String key) {
         try {
-            wnlink wl = synRepos.get(key);
+            WnLink wl = synRepos.get(key);
             if(wl == null) {
-                wl = (wnlink) Class.forName(key).newInstance();
+                wl = (WnLink) Class.forName(key).newInstance();
             }
             synRepos.put(key, wl);
             W = wl;
@@ -44,7 +44,7 @@ public class GrammarGenerator {
         }
         
         if(dlgFile != null)  {
-            if(P == null) P = new parse (dlgFile);
+            if(P == null) P = new Parse (dlgFile);
             if (P.Valid) P.createsentences ();
         }
     }
@@ -54,7 +54,7 @@ public class GrammarGenerator {
     public String[] getSynonyms(String word, String form) {
         return W.synsget (word, form);
     }
-    public sentence getSentence(String key) {
+    public Sentence getSentence(String key) {
         return P.sentences.get(key);
     }
     public ArrayList <String> getParsedStatements() {
@@ -62,13 +62,13 @@ public class GrammarGenerator {
     }
     public void generate (String filename) {
         if(P == null || !P.Valid) return;
-        TreeMap <String, sentence> sentences = P.sentences;
+        TreeMap <String, Sentence> sentences = P.sentences;
         Set <String> keys = sentences.keySet ();
         int n = keys.size ();
         tests = keys.toArray (new String [n]);
         for (int i=0; i<n; i++) {
             String key = tests [i];
-            sentence s = sentences.get (key);
+            Sentence s = sentences.get (key);
             // s.show (""+i+" ");
             // s.findmultiwords (W);
             s.multiwordsubs (P, W);
@@ -77,7 +77,7 @@ public class GrammarGenerator {
         // generate using okays instead of subs
         for (int i=0; i<n; i++) {
             String key = tests [i];
-            sentence s = sentences.get (key);
+            Sentence s = sentences.get (key);
             System.out.println ("Sentence "+i+" Generating okays for: "+key);
             s.generateokays ();
         }
@@ -129,11 +129,11 @@ public class GrammarGenerator {
         //W.dumpSynonyms();
         return news > 0;
     }
-    public sentence generateAlts(String key) {
-        TreeMap <String, sentence> sentences = P.sentences;
-        sentence old = sentences.get (key);
+    public Sentence generateAlts(String key) {
+        TreeMap <String, Sentence> sentences = P.sentences;
+        Sentence old = sentences.get (key);
         if(old == null) return null;
-        sentence sent = new sentence(old.orig, old.form, old.tree);
+        Sentence sent = new Sentence(old.orig, old.form, old.tree);
         sent.setSelectionhandler(old.getSelectionhandler());
         sent.multiwordsubs (P, W);
         sent.generateokays ();
@@ -141,8 +141,8 @@ public class GrammarGenerator {
         return sent;
     }
     public static SentenceX createSentence(String statement) {
-        if(P == null) P = new parse();
-        sentence sent = P.doparse (statement);
+        if(P == null) P = new Parse();
+        Sentence sent = P.doparse (statement);
         if (sent != null) {
             P.sentences.put (sent.orig, sent);
             sent.multiwordsubs (P, W);

@@ -5,7 +5,7 @@
 package com.jaivox.ui.gui;
 
 import bitpix.list.basicNode;
-import com.jaivox.ui.appmaker.guiprep;
+import com.jaivox.ui.appmaker.GuiPrep;
 import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.SentenceX;
 import javax.swing.*;
@@ -226,7 +226,7 @@ public class JvxDialogHelper {
     }
 
     void generateApp(JvxMainFrame ui) {
-        guiprep.generateApp(JvxConfiguration.theConfig().getConfFile());
+        GuiPrep.generateApp(JvxConfiguration.theConfig().getConfFile());
     }
     
     static void registerUndoAddNode(DefaultMutableTreeNode node, JTree tree) {

@@ -1,6 +1,6 @@
 package com.jaivox.ui.gengram;
 
-public class wnlinkBasic implements wnlink {
+public class WnLinkBasic implements WnLink {
 
     @Override
     public String[] getsynonyms(String word) {

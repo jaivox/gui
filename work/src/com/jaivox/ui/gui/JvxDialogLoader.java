@@ -12,7 +12,7 @@ import com.jaivox.tools.*;
 import com.jaivox.ui.db.JvxDBMgr;
 import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.SentenceX;
-import com.jaivox.ui.gengram.sentence;
+import com.jaivox.ui.gengram.Sentence;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,8 +43,8 @@ public class JvxDialogLoader {
     public static synchronized GrammarGenerator getGrammarGenerator() {
         if(gen == null) gen = new GrammarGenerator(datadir);
         gen.setWLink( JvxMainFrame.getInstance().wordsToBeExpanded() ? 
-                        "com.jaivox.ui.gengram.wnlinkJWNL" : 
-                        "com.jaivox.ui.gengram.wnlinkBasic");   // TODO from a wlink factory
+                        "com.jaivox.ui.gengram.WnLinkJWNL" : 
+                        "com.jaivox.ui.gengram.WnLinkBasic");   // TODO from a wlink factory
         return gen;
     }
     public JvxDialogLoader(JvxMainFrame frame) {
@@ -140,7 +140,7 @@ public class JvxDialogLoader {
                     if (!token.endsWith ("?") && !token.endsWith (".")) {
                             token = token + ".";
                     }
-                    sentence c = gen.getSentence(token);
+                    Sentence c = gen.getSentence(token);
                     SentenceX sx = c == null ? null : new SentenceX( c );
                     if(tn == null) tn = new DefaultMutableTreeNode(sx == null ? token : sx);
                         else tn.add(new DefaultMutableTreeNode(sx == null ? token : sx));
@@ -163,7 +163,7 @@ public class JvxDialogLoader {
             BufferedReader in = new BufferedReader (new FileReader (f));
             String line;
             while ((line = in.readLine ()) != null) {
-                sentence.basicVerbs.add(line.trim());
+                Sentence.basicVerbs.add(line.trim());
             }
             in.close ();
         }
