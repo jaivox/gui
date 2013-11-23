@@ -86,9 +86,14 @@ public class JvxConfiguration {
         targFolder.mkdirs();
         System.out.println("save: path: "+ targFolder.getAbsolutePath());
         
-        conf.put("common", datadir);
-        conf.put("source", "./");
-        conf.put("Base", "./");
+		File Datadir = new File (datadir);
+		String absolute = Datadir.getAbsolutePath ();
+        conf.put("common", absolute);
+        conf.put("source", getAppFolder ());
+		conf.put ("Base", getAppFolder ());
+		conf.put ("destination", getAppFolder ());
+		conf.put ("appfolder", getAppFolder ());
+		conf.put ("onedirectory", "yes");
         
         setTargetSpec(theFrame);
         setMisc(theFrame);
@@ -131,7 +136,7 @@ public class JvxConfiguration {
     }
 
     private void setMisc(JvxMainFrame theFrame) {
-        conf.put("destination", getAppFolder());
+        // conf.put("destination", getAppFolder());
         conf.put("cpsrc", datadir);
     }
 
@@ -142,14 +147,20 @@ public class JvxConfiguration {
         }
         String[] rs = theFrame.getRecognizers();
         for(String r : rs) {
-            conf.put("recognizer_"+r, "true");
+            // conf.put("recognizer_"+r, "true");
+			conf.put ("recognizer", r);
         }
         
         rs = theFrame.getSynthesizers();
         for(String r : rs) {
-            conf.put("synthesizer_"+r, "true");
+            // conf.put("synthesizer_"+r, "true");
+			conf.put ("synthesizer", r);
         }
-        conf.put("console", theFrame.getCbConsole() ? "true" : "false");
+        // conf.put("console", theFrame.getCbConsole() ? "true" : "false");
+		String asr = theFrame.getAsrLanguage ();
+		conf.put ("lang", asr);
+		String tts = theFrame.getTtsLanguage ();
+		conf.put ("ttslang", tts);
     }
 
     private boolean validatefields(JvxMainFrame theFrame) {

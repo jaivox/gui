@@ -75,58 +75,64 @@ public class GuiPrep {
 			conf.load (new FileInputStream (conffile));
 
 			String project = conf.getProperty ("project");
-			String destination = conf.getProperty ("destination");
+			String appfolder = conf.getProperty ("appfolder");
 			String cpsrc = conf.getProperty ("cpsrc");
 			String cfile = conf.getProperty ("common_words");
 			String efile = conf.getProperty ("error_dlg");
 
-			if (destination == null | cpsrc == null) {
+			if (appfolder == null | cpsrc == null) {
 			}
-			if (!destination.endsWith (File.separator)) {
-				destination += File.separator;
+			if (!appfolder.endsWith (File.separator)) {
+				appfolder += File.separator;
 			}
-			copyFile (cpsrc + "/" + cfile, destination + "/" + cfile);
-			copyFile (cpsrc + "/" + efile, destination + "/" + efile);
+			copyFile (cpsrc + "/" + cfile, appfolder + "/" + cfile);
+			copyFile (cpsrc + "/" + efile, appfolder + "/" + efile);
 
 			errors = cpsrc + "/" + "errors.txt";
-			outfile = destination + project + ".dlg";
-			questions = destination + project + ".quest";
-			Gui2Gram.dlgtree = destination + project + ".tree";
+			outfile = appfolder + project + ".dlg";
+			questions = appfolder + project + ".quest";
+			Gui2Gram.dlgtree = appfolder + project + ".tree";
 			Rule2Fsm.dir = "";
-			Rule2Fsm.name = destination + "dialog" + ".tree";
-			Gui2Gram.gram = destination + "dialog" + ".tree";
+			Rule2Fsm.name = appfolder + "dialog" + ".tree";
+			Gui2Gram.gram = appfolder + "dialog" + ".tree";
 			GuiPrep.generate ();
+			
+			// Generator gen = new Generator (conffile);
+			Generator gen = new Generator (conf);
+			gen.createQuestions ();
 
+			/*
 			if (conf.getProperty ("console", "false").equalsIgnoreCase ("true")) {
 				StringBuffer code = new StringBuffer ();
-				copyFile (cpsrc + "/console.java", destination + "console.java");
+				copyFile (cpsrc + "/console.java", appfolder + "console.java");
 				String clz = buildAppCode (code, "console", project);
-				PrintWriter out = new PrintWriter (new FileWriter (destination + clz + ".java"));
+				PrintWriter out = new PrintWriter (new FileWriter (appfolder + clz + ".java"));
 				out.println (code.toString ());
 				out.close ();
 			}
 			if (isRecognizerEnabled (conf, "google")) {
 				StringBuffer code = new StringBuffer ();
-				copyFile (cpsrc + "/runapp.java", destination + "runapp.java");
+				copyFile (cpsrc + "/runapp.java", appfolder + "runapp.java");
 				String clz = buildAppCode (code, "runapp", project);
-				PrintWriter out = new PrintWriter (new FileWriter (destination + clz + ".java"));
+				PrintWriter out = new PrintWriter (new FileWriter (appfolder + clz + ".java"));
 				out.println (code.toString ());
 				out.close ();
 			}
 			if (isRecognizerEnabled (conf, "sphinx")) {
 				StringBuffer code = new StringBuffer ();
 				doSphinxStuff (Gui2Gram.dlgtree, conf);
-				copyFile (cpsrc + "/runapp.java", destination + "runapp.java");
-				copyFile (cpsrc + "/runappsphinx.java", destination + "runappsphinx.java");
-				copyFile (cpsrc + "/ccs.ccs", destination + "/ccs.ccs");
+				copyFile (cpsrc + "/runapp.java", appfolder + "runapp.java");
+				copyFile (cpsrc + "/runappsphinx.java", appfolder + "runappsphinx.java");
+				copyFile (cpsrc + "/ccs.ccs", appfolder + "/ccs.ccs");
 				String clz = buildAppCode (code, "runappsphinx", project);
-				PrintWriter out = new PrintWriter (new FileWriter (destination + clz + ".java"));
+				PrintWriter out = new PrintWriter (new FileWriter (appfolder + clz + ".java"));
 				out.println (code.toString ());
 				out.close ();
 
 				//usingJvGen(conffile);
 			}
-			System.out.println ("Application Generated: Path: " + destination);
+			*/
+			System.out.println ("Application Generated: Path: " + appfolder);
 
 		} catch (Exception ex) {
 			ex.printStackTrace ();
@@ -168,7 +174,7 @@ public class GuiPrep {
 		new Log ();
 		Log.setLevelByName ("FINEST");
 		String project = conf.getProperty ("project");
-		String destination = conf.getProperty ("destination");
+		String appfolder = conf.getProperty ("appfolder");
 		String cpsrc = conf.getProperty ("cpsrc");
 
 		String sentfile = treefile.substring (0, treefile.lastIndexOf ('.')) + ".sent";
@@ -192,8 +198,8 @@ public class GuiPrep {
 		in.close ();
 		out.close ();
 
-		generateFile (conf, cpsrc, destination, "project.config.xml");
-		generateFile (conf, cpsrc, destination, "lmgen.sh");
+		generateFile (conf, cpsrc, appfolder, "project.config.xml");
+		generateFile (conf, cpsrc, appfolder, "lmgen.sh");
 	}
 
 	static boolean generateFile (Properties kv, String src, String dest, String name) {

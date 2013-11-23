@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -47,8 +48,30 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     StringSelection transferable;
     private String dlgFile;
     private String dataFile;
-    
-        
+	
+	ButtonGroup Recognizers;
+	ButtonGroup Synthesizers;
+	
+	static String Languages [] = {
+		"English-US",
+		"Catalan",
+		"Croatian",
+		"Dutch",
+		"French",
+		"German",
+		"Indonesian",
+		"Italian",
+		"Malay",
+		"Mandarin-China",
+		"Russian",
+		"Spanish-Mexico",
+		"Swedish",
+		"Turkish"
+	};
+	
+	static TreeMap <String, String> ttsCodes;
+	static TreeMap <String, String> asrCodes;
+	
     /**
      * Creates new form JvxMainFrame
      */
@@ -72,6 +95,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		urlDirectory = "file://" + workingDirectory + helpDirectory;
 
         initComponents();
+		expandYNButton.setSelected (false);
+		expandYNButton.setText ("Expand Synonyms");
+		
+		initLanguages ();
+		initLanguageCodes ();
+		createButtonGroups ();
         setAllToolTip();
         registerF1Help();
         new MenuUtils().setMenuBarForFrame(this);
@@ -103,6 +132,19 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         }
         return compList;
     }
+	
+	void createButtonGroups () {
+		Recognizers = new ButtonGroup ();
+		Synthesizers = new ButtonGroup ();
+		Recognizers.add (cbConsole);
+		Recognizers.add (cbGoogleRecognizer);
+		Recognizers.add (cbSphinx);
+		Synthesizers.add (cbFreetts);
+		Synthesizers.add (cbGoogletts);
+		Synthesizers.add (cbFestival);
+		Synthesizers.add (cbEspeak);
+	}
+	
     void setAllToolTip() {
         for (Component c : getAllComponents(this)) { 
             if(c instanceof JComponent) {
@@ -182,6 +224,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jLabel2 = new javax.swing.JLabel();
         osList = new javax.swing.JComboBox();
         cbConsole = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnRun = new javax.swing.JButton();
 
@@ -254,7 +297,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         dialogTree.setDropMode(javax.swing.DropMode.INSERT);
         dialogTree.setEditable(true);
         dialogTree.setName("dialogTree"); // NOI18N
-        dialogTree.setScrollsOnExpand(true);
         dialogTree.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dialogTreeMouseClicked(evt);
@@ -332,7 +374,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,10 +387,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         primaryVSplitPane.setTopComponent(dlgSynsHSplitPane);
 
-        jTabbedPane1.setBorder(null);
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-
-        jPanel1.setBorder(null);
 
         selectDbButton.setText("Select DB");
         selectDbButton.setName("selectDbButton"); // NOI18N
@@ -390,7 +429,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(selectDbButton)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(110, Short.MAX_VALUE))
             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -463,7 +502,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                         .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dgdPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(0, 5, Short.MAX_VALUE))
         );
 
         targetSpecPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Target Specification", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(210, 90, 90)));
@@ -574,16 +613,20 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
+        jButton1.setText("Generate");
+
         javax.swing.GroupLayout targetSpecPanelLayout = new javax.swing.GroupLayout(targetSpecPanel);
         targetSpecPanel.setLayout(targetSpecPanelLayout);
         targetSpecPanelLayout.setHorizontalGroup(
             targetSpecPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, targetSpecPanelLayout.createSequentialGroup()
-                .addGroup(targetSpecPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 5, Short.MAX_VALUE))
+            .addGroup(targetSpecPanelLayout.createSequentialGroup()
+                .addGroup(targetSpecPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(targetSpecPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         targetSpecPanelLayout.setVerticalGroup(
             targetSpecPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -593,6 +636,8 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
                 .addContainerGap())
         );
 
@@ -655,12 +700,81 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public void actionPerformed(java.awt.event.ActionEvent evt) {   
+ 
+	void initLanguages () {
+		langCombo.setModel (new javax.swing.DefaultComboBoxModel (Languages));
+	}
+	
+	void initLanguageCodes () {
+		ttsCodes = new TreeMap <String, String> ();
+		asrCodes = new TreeMap <String, String> ();
+
+		asrCodes.put ("English-US", "en-US");
+		ttsCodes.put ("English-US", "en");
+
+		asrCodes.put ("Catalan", "ca-ES");
+		ttsCodes.put ("Catalan", "ca");
+		
+		asrCodes.put ("Croatian", "hr_HR");
+		ttsCodes.put ("Croatian", "hr");
+		
+		asrCodes.put ("Dutch", "nl-NL");
+		ttsCodes.put ("Dutch", "nl");
+		
+		asrCodes.put ("French", "fr-FR");
+		ttsCodes.put ("French", "fr");
+		
+		asrCodes.put ("German", "de-DE");
+		ttsCodes.put ("German", "de");
+		
+		asrCodes.put ("Indonesian", "id-ID");
+		ttsCodes.put ("Indonesian", "id");
+		
+		asrCodes.put ("Italian", "it-IT");
+		ttsCodes.put ("Italian", "it");
+		
+		asrCodes.put ("Malay", "ms-MY");
+		ttsCodes.put ("Malay", "ms");
+		
+		asrCodes.put ("Mandarin-China", "cmn-Hans-CN");
+		ttsCodes.put ("Mandarin-China", "zh-CN");
+		
+		asrCodes.put ("Russian", "ru-RU");
+		ttsCodes.put ("Russian", "ru");
+		
+		asrCodes.put ("Spanish-Mexico", "es-MX");
+		ttsCodes.put ("Spanish-Mexico", "es");
+		
+		asrCodes.put ("Swedish", "sv-SE");
+		ttsCodes.put ("Swedish", "sv");
+		
+		asrCodes.put ("Turkish", "tr-TR");
+		ttsCodes.put ("Turkish", "tr");
+	}
+	
+	public String getAsrLanguage () {
+		int langid = langCombo.getSelectedIndex ();
+		String lang = Languages [langid];
+		String asr = asrCodes.get (lang);
+		if (asr != null) return asr;
+		else return "en-US";
+	}
+	
+	public String getTtsLanguage () {
+		int langid = langCombo.getSelectedIndex ();
+		String lang = Languages [langid];
+		String tts = ttsCodes.get (lang);
+		if (tts != null) return tts;
+		else return "en";
+		
+	}
+	
+	public void actionPerformed(java.awt.event.ActionEvent evt) {   
         if(evt.getActionCommand().equals("DBInterface")) {
             this.dlgLoader.interfaceDialogs(evt);
         }
@@ -883,13 +997,14 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     }
     public String[] getRecognizers() {
         List<String> r = new ArrayList<String>();
-        if(this.cbGoogleRecognizer.isSelected()) r.add("google");
+        if(this.cbGoogleRecognizer.isSelected()) r.add("web");
         if(this.cbSphinx.isSelected()) r.add("sphinx");
         return r.toArray(new String[r.size()]);
     }
     public String[] getSynthesizers() {
         List<String> r = new ArrayList<String>();
-        if(this.cbGoogletts.isSelected()) r.add("google");
+        if(this.cbFestival.isSelected()) r.add("festival");
+        if(this.cbGoogletts.isSelected()) r.add("web");
         if(this.cbFreetts.isSelected()) r.add("freetts");
         if(this.cbEspeak.isSelected()) r.add("espeak");
         return r.toArray(new String[r.size()]);
@@ -1059,6 +1174,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JScrollPane dlgTreeScrollPane;
     private javax.swing.JToggleButton expandYNButton;
     private javax.swing.JList grammarList;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
