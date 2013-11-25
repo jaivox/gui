@@ -14,25 +14,17 @@ import java.util.StringTokenizer;
 
 public class GuiPrep {
 
-	static String outfile = "test.dlg";
-	static String questions = "test.quest";
 	static String errors = "errors.txt";
 	static boolean overwrite = true;
 	static String patIndicator = "PAT";
 
-	public static void main (String args[]) {
-		generate ();
-	}
-
-	static void generate () {
-
-		Rule2Fsm rf = new Rule2Fsm ();
-		Gui2Gram gg = new Gui2Gram ();
+	static void generate (Rule2Fsm rf, Gui2Gram gg, String outfile, String questions) {
 		try {
 			PrintWriter out = new PrintWriter (new FileWriter (outfile));
 			rf.writeRules (out);
 			gg.writeRules (out);
 			out.close ();
+			
 			out = new PrintWriter (new FileWriter (questions));
 			BufferedReader in = new BufferedReader (new FileReader (errors));
 			String line;
@@ -45,6 +37,7 @@ public class GuiPrep {
 			}
 			gg.writeQuestions (out);
 			out.close ();
+			
 		} catch (Exception e) {
 			e.printStackTrace ();
 		}
@@ -89,13 +82,14 @@ public class GuiPrep {
 			copyFile (cpsrc + "/" + efile, appfolder + "/" + efile);
 
 			errors = cpsrc + "/" + "errors.txt";
-			outfile = appfolder + project + ".dlg";
-			questions = appfolder + project + ".quest";
-			Gui2Gram.dlgtree = appfolder + project + ".tree";
-			Rule2Fsm.dir = "";
-			Rule2Fsm.name = appfolder + "dialog" + ".tree";
-			Gui2Gram.gram = appfolder + "dialog" + ".tree";
-			GuiPrep.generate ();
+			String outfile = appfolder + project + ".dlg";
+			String questions = appfolder + project +".quest";
+			// Gui2Gram.dlgtree = appfolder + project + ".tree";
+			Rule2Fsm rf = new Rule2Fsm (appfolder, "dialog.tree");
+			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project+".tree");
+			// Rule2Fsm.name = appfolder + "dialog" + ".tree";
+			// Gui2Gram.gram = appfolder + "dialog" + ".tree";
+			GuiPrep.generate (rf, gg, outfile, questions);
 			
 			// Generator gen = new Generator (conffile);
 			Generator gen = new Generator (conf);
@@ -113,13 +107,17 @@ public class GuiPrep {
 		try {
 			Properties conf = new Properties ();
 			conf.load (new FileInputStream (conffile));
-			if (conf.getProperty ("console", "false").equalsIgnoreCase ("true")) {
+			String recognizer = conf.getProperty ("recognizer");
+			System.out.println ("runApp: recognizer is "+recognizer);
+			if (recognizer.equals ("console")) {
 				// pop up a console and run?
+				System.out.println ("Console option to be implemented");
 			}
-			if (isRecognizerEnabled (conf, "google")) {
+			if (recognizer.equals ("web")) {
+				System.out.println ("Going to google recognizer");
 				AppWeb app = new AppWeb (conf);
 			}
-			if (isRecognizerEnabled (conf, "sphinx")) {
+			if (recognizer.equals ("sphinx")) {
 				// make sure lmgen.sh is run on the sphinx destination
 				// before calling app
 				String result = generateLm (conf);
@@ -127,6 +125,7 @@ public class GuiPrep {
 					System.out.println ("Could not run lmgensh");
 					return;
 				}
+				System.out.println ("Going to the Sphinx recognizer");
 				AppSphinx app = new AppSphinx (conf);
 			}
 		}

@@ -20,8 +20,9 @@ public class AppWeb {
 	static int wait = 10; // maximum length of input in seconds
 
 	public AppWeb (Properties kv) {
-		Log.setLevelByName (kv.getProperty ("log_level"));
+		// Log.setLevelByName (kv.getProperty ("log_level"));
 		initializeInterpreter (kv);
+		System.out.println ("Interpreter initialized, starting recognition");
 		processSpeech ();
 	}
 
@@ -48,6 +49,7 @@ public class AppWeb {
 		int empty = 0;
 		int maxempty = 5;
 		while (true) {
+			System.out.println ("Speak, wait for 10 seconds for processing ...");
 			String flac = mike.nextsample (type, wait);
 			mike.showtime ("result is "+flac);
 			if (flac != null) {
