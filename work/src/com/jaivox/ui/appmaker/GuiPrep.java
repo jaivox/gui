@@ -101,37 +101,7 @@ public class GuiPrep {
 			Generator gen = new Generator (conf);
 			gen.createQuestions ();
 
-			/*
-			if (conf.getProperty ("console", "false").equalsIgnoreCase ("true")) {
-				StringBuffer code = new StringBuffer ();
-				copyFile (cpsrc + "/console.java", appfolder + "console.java");
-				String clz = buildAppCode (code, "console", project);
-				PrintWriter out = new PrintWriter (new FileWriter (appfolder + clz + ".java"));
-				out.println (code.toString ());
-				out.close ();
-			}
-			if (isRecognizerEnabled (conf, "google")) {
-				StringBuffer code = new StringBuffer ();
-				copyFile (cpsrc + "/runapp.java", appfolder + "runapp.java");
-				String clz = buildAppCode (code, "runapp", project);
-				PrintWriter out = new PrintWriter (new FileWriter (appfolder + clz + ".java"));
-				out.println (code.toString ());
-				out.close ();
-			}
-			if (isRecognizerEnabled (conf, "sphinx")) {
-				StringBuffer code = new StringBuffer ();
-				doSphinxStuff (Gui2Gram.dlgtree, conf);
-				copyFile (cpsrc + "/runapp.java", appfolder + "runapp.java");
-				copyFile (cpsrc + "/runappsphinx.java", appfolder + "runappsphinx.java");
-				copyFile (cpsrc + "/ccs.ccs", appfolder + "/ccs.ccs");
-				String clz = buildAppCode (code, "runappsphinx", project);
-				PrintWriter out = new PrintWriter (new FileWriter (appfolder + clz + ".java"));
-				out.println (code.toString ());
-				out.close ();
 
-				//usingJvGen(conffile);
-			}
-			*/
 			System.out.println ("Application Generated: Path: " + appfolder);
 
 		} catch (Exception ex) {
@@ -139,6 +109,68 @@ public class GuiPrep {
 		}
 	}
 
+	public static void runApp (String conffile) {
+		try {
+			Properties conf = new Properties ();
+			conf.load (new FileInputStream (conffile));
+			if (conf.getProperty ("console", "false").equalsIgnoreCase ("true")) {
+				// pop up a console and run?
+			}
+			if (isRecognizerEnabled (conf, "google")) {
+				AppWeb app = new AppWeb (conf);
+			}
+			if (isRecognizerEnabled (conf, "sphinx")) {
+				// make sure lmgen.sh is run on the sphinx destination
+				// before calling app
+				String result = generateLm (conf);
+				if (result == null) {
+					System.out.println ("Could not run lmgensh");
+					return;
+				}
+				AppSphinx app = new AppSphinx (conf);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace ();
+		}
+	}
+
+	static String generateLm (Properties conf) {
+		try {
+			String appDir = conf.getProperty ("destination");
+			String Sep = System.getProperty ("file.separator");
+			if (!appDir.endsWith (Sep)) appDir = appDir + Sep;
+			String shellScript = appDir + "lmgen.sh";
+			String result = runcommand (shellScript);
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace ();
+			return null;
+		}
+
+	}
+	static String runcommand (String input) {
+		try {
+			Process p = Runtime.getRuntime ().exec (input);
+			StringBuffer buffer = new StringBuffer ();
+			InputStream in = p.getInputStream ();
+			BufferedInputStream d = new BufferedInputStream (in);
+			do {
+				int ch = d.read ();
+				if (ch == -1)
+					break;
+				buffer.append ((char) ch);
+			} while (true);
+			in.close ();
+			String temp = new String (buffer);
+			return temp;
+		} catch (Exception e) {
+			e.printStackTrace ();
+			return null;
+		}
+	}
+
+	
 	//temp code
 	static String buildAppCode (StringBuffer code, String type, String appname) {
 		String clz = Character.toUpperCase (appname.charAt (0)) + appname.substring (1)

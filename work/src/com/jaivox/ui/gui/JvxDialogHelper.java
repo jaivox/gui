@@ -228,6 +228,10 @@ public class JvxDialogHelper {
     void generateApp(JvxMainFrame ui) {
         GuiPrep.generateApp(JvxConfiguration.theConfig().getConfFile());
     }
+	
+	void runApp (JvxMainFrame ui) {
+       GuiPrep.runApp(JvxConfiguration.theConfig().getConfFile());
+	}
     
     static void registerUndoAddNode(DefaultMutableTreeNode node, JTree tree) {
         node = (DefaultMutableTreeNode) (node.isRoot() ? node.getChildAt(0) : node);
