@@ -35,6 +35,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     JvxSynonymsHelper synsHelper = null;
     
     static boolean dirty_flag = false;
+	static boolean generated_flag = false;
     static UndoManager undoManager_;
     static UndoableEditSupport undoSupport_;
   
@@ -909,7 +910,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
         // TODO add your handling code here:
         if(!save()) return;
-        this.dlgHelper.generateApp(this);
+		if (dirty_flag) generated_flag = false;
+		if (!generated_flag) {
+	        this.dlgHelper.generateApp(this);
+			generated_flag = true;
+		}
 		this.dlgHelper.runApp (this);
     }//GEN-LAST:event_btnRunActionPerformed
 
@@ -965,7 +970,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         // TODO add your handling code here:
         // TODO add your handling code here:
         if(!save()) return;
-        this.dlgHelper.generateApp(this);
+		if (dirty_flag) generated_flag = false;
+		if (!generated_flag) {
+	        this.dlgHelper.generateApp(this);
+			generated_flag = true;
+		}
     }//GEN-LAST:event_btnGenerateActionPerformed
 
 	public boolean wordsToBeExpanded() {
