@@ -19,7 +19,9 @@ public class Rule2Fsm {
 	static basicNode casedefaultnode;
 	Vector <String> store;
 
-	public Rule2Fsm () {
+	public Rule2Fsm (String loc, String info) {
+		dir = loc;
+		name = info;
 		String filename = dir + name;
 		startState = startState;
 		tree = new basicTree (filename);
@@ -36,9 +38,10 @@ public class Rule2Fsm {
 		}
 		int pos = filename.lastIndexOf (".");
 		String outfile = filename.substring (0, pos+1) + "dlg";
+		Debug ("outfile "+outfile+" store has "+store.size ()+" things");
 		// writefile (outfile, store);
 	}
-
+	
 	void Debug (String s) {
 		System.out.println ("[Rule2Fsm]" + s);
 	}

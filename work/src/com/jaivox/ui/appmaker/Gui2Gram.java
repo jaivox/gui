@@ -6,25 +6,26 @@ import java.util.*;
 
 public class Gui2Gram {
 
-	static String gram = "";
-	static String dlgtree = "";
 	String keys [];
 	String questions [];
 	LinkedHashMap <String, ArrayList<String>> rules;
 	static String terms = " \t\r\n~`!@#$%^&*()+={}[]|\\:;<>,.?/\"\'";
 	
-	public Gui2Gram () {
-		loadGram ();
-		loadDlg ();
+	public Gui2Gram (String dir, String g, String t) {
+		String gramfile = dir + g;
+		String treefile = dir + t;
+		loadGram (gramfile);
+		loadDlg (treefile);
+		Debug ("Rules has "+rules.size ()+" items");
 	}
 	
 	void Debug (String s) {
 		System.out.println ("[Gui2Gram]" + s);
 	}
 	
-	void loadGram () {
+	void loadGram (String gramfile) {
 		try {
-			BufferedReader in = new BufferedReader (new FileReader (gram));
+			BufferedReader in = new BufferedReader (new FileReader (gramfile));
 			// no recursion needed here, just get the strings in ()
 			rules = new LinkedHashMap <String, ArrayList<String>> ();
 			String line;
@@ -67,9 +68,9 @@ public class Gui2Gram {
 		}
 	}
 	
-	void loadDlg () {
+	void loadDlg (String treefile) {
 		try {
-			BufferedReader in = new BufferedReader (new FileReader (dlgtree));
+			BufferedReader in = new BufferedReader (new FileReader (treefile));
 			String line;
 			int now = 0;
 			int n = keys.length;
