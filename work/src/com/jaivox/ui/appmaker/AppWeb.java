@@ -48,7 +48,7 @@ public class AppWeb {
 		Mike mike = new Mike (project, type);
 		int empty = 0;
 		int maxempty = 5;
-		while (true) {
+		while (GuiPrep.Running) {
 			System.out.println ("Speak, wait for 10 seconds for processing ...");
 			String flac = mike.nextsample (type, wait);
 			mike.showtime ("result is "+flac);

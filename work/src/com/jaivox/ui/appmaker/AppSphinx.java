@@ -22,7 +22,7 @@ public class AppSphinx extends Thread {
 	Synthesizer speaker;
 
 	public AppSphinx (Properties kv) {
-		Log.setLevelByName (kv.getProperty ("log_level"));
+		// Log.setLevelByName (kv.getProperty ("log_level"));
 		initializeInterpreter (kv);
 		if (!asrLang.equals ("en-US")) {
 			Log.severe ("Sphinx recognizer implemented only for English-US");
@@ -71,7 +71,7 @@ public class AppSphinx extends Thread {
 
 		try {
 			// loop the recognition until the programm exits.
-			while (true) {
+			while (GuiPrep.Running) {
 				System.out.println ("Start speaking. Press Ctrl-C to quit.\n");
 
 				Result result = recognizer.recognize ();
