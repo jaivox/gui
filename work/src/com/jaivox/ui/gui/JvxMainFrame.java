@@ -4,6 +4,7 @@
  */
 package com.jaivox.ui.gui;
 
+import com.jaivox.ui.appmaker.GuiPrep;
 import java.awt.Component;
 import java.awt.Container;
 import javax.swing.*;
@@ -909,6 +910,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
     private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
         // TODO add your handling code here:
+		if (GuiPrep.Running) {
+			GuiPrep.stopRunning ();
+			return;
+		}
         if(!save()) return;
 		if (dirty_flag) generated_flag = false;
 		if (!generated_flag) {

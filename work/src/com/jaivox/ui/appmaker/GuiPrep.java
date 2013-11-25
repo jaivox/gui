@@ -17,6 +17,7 @@ public class GuiPrep {
 	static String errors = "errors.txt";
 	static boolean overwrite = true;
 	static String patIndicator = "PAT";
+	public static boolean Running = false;
 
 	static void generate (Rule2Fsm rf, Gui2Gram gg, String outfile, String questions) {
 		try {
@@ -102,7 +103,7 @@ public class GuiPrep {
 			ex.printStackTrace ();
 		}
 	}
-
+	
 	public static void runApp (String conffile) {
 		try {
 			Properties conf = new Properties ();
@@ -115,6 +116,7 @@ public class GuiPrep {
 			}
 			if (recognizer.equals ("web")) {
 				System.out.println ("Going to google recognizer");
+				Running = true;
 				AppWeb app = new AppWeb (conf);
 			}
 			if (recognizer.equals ("sphinx")) {
@@ -126,12 +128,17 @@ public class GuiPrep {
 					return;
 				}
 				System.out.println ("Going to the Sphinx recognizer");
+				Running = true;
 				AppSphinx app = new AppSphinx (conf);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace ();
 		}
+	}
+
+	public static void stopRunning () {
+		Running = false;
 	}
 
 	static String generateLm (Properties conf) {
