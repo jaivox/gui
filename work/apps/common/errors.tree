@@ -771,8 +771,9 @@ forinstance
 	one such example is
 
 command
-	list
-	cat
+	request
+	question
+	query
 
 system
 	pc
