@@ -910,19 +910,25 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
     private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
         // TODO add your handling code here:
-		if (GuiPrep.Running) {
-			GuiPrep.stopRunning ();
-			return;
-		}
-        if(!save()) return;
-		if (dirty_flag) generated_flag = false;
-		if (!generated_flag) {
-	        this.dlgHelper.generateApp(this);
-			generated_flag = true;
-		}
-		this.dlgHelper.runApp (this);
+        if (dirty_flag) generated_flag = false;
+        
+        if (GuiPrep.Running) {
+                GuiPrep.stopRunning ();
+                //return;
+        }
+        if(!generated_flag) if(!save()) return;
+        
+        if (!generated_flag) {
+            this.dlgHelper.generateApp(this);
+            generated_flag = true;
+        }
+        this.dlgHelper.runApp (this);
+        
+        setRunEnabled(false);
     }//GEN-LAST:event_btnRunActionPerformed
-
+    void setRunEnabled(boolean b) {
+        btnRun.setEnabled(b);
+    }
     private void dialogTreeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dialogTreeKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_F3) {
@@ -1229,5 +1235,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTable synsTab;
     private javax.swing.JPanel targetSpecPanel;
     // End of variables declaration//GEN-END:variables
+
 
 }

@@ -5,20 +5,77 @@
 
 package com.jaivox.ui.gui;
 
+import com.jaivox.ui.appmaker.AppSphinx;
+import com.jaivox.ui.appmaker.AppWeb;
+import com.jaivox.ui.appmaker.JvxRunnableApp;
+import com.jaivox.ui.appmaker.RecordTask;
+import java.awt.Frame;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.FileInputStream;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Timer;
+
 /**
  *
  * @author dev
  */
-public class RunDialog extends javax.swing.JDialog {
-
-	/**
-	 * Creates new form RunDialog
-	 */
-	public RunDialog (java.awt.Frame parent, boolean modal) {
-		super (parent, modal);
-		initComponents ();
-	}
-
+public class RunDialog extends javax.swing.JDialog 
+                       implements PropertyChangeListener, ActionListener {
+    
+        String configFile = null;
+        Properties conf = null;
+        
+        RecordTask recorder = null;
+        Timer timer;
+        static int delay = 10000; // in milliseconds
+        
+        String recognizer = null;
+        String speechfile = null;
+        int curSpeech = 0;
+        
+        JvxRunnableApp app = null;    
+        
+	public void setConfigFile(String f) {
+            configFile = f;
+        }
+	public RunDialog (String file, java.awt.Frame parent, boolean modal) {
+            super (parent, modal);
+            new com.jaivox.util.Log();
+            this.setConfigFile(file);
+            initComponents ();
+            
+            conf = new Properties ();
+            try {
+                conf.load (new FileInputStream (configFile));
+            } catch (Exception ex) {
+                Logger.getLogger(RunDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            recognizer = conf.getProperty ("recognizer");
+			
+            timer = new Timer(delay, this);
+            
+        }
+        public JvxRunnableApp getJvxApp(String recognizer) {
+            //String clz = conf.getProperty(recognizer + ".class");
+            //Class.forName(clz).newInstance();
+            JvxRunnableApp jap = null;
+            
+            if (recognizer.equals ("web")) {
+                jap = new AppWeb(conf);
+            }
+            else if (recognizer.equals ("sphinx")) {
+                jap = new AppSphinx(conf);
+            }
+            if(jap != null) jap.addPropertyChangeListener(this);
+            return jap;
+        }
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,78 +89,225 @@ public class RunDialog extends javax.swing.JDialog {
         queryArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         answerArea = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        speakButton = new javax.swing.JButton();
+        sendButton = new javax.swing.JButton();
+        quitButton = new javax.swing.JButton();
+        playButton = new javax.swing.JButton();
+        voiceCheckBox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Test Dialog");
 
         queryArea.setColumns(20);
+        queryArea.setLineWrap(true);
         queryArea.setRows(5);
+        queryArea.setWrapStyleWord(true);
         jScrollPane1.setViewportView(queryArea);
 
         answerArea.setColumns(20);
         answerArea.setRows(5);
         jScrollPane2.setViewportView(answerArea);
 
-        jButton1.setText("Speak");
+        speakButton.setText("Speak");
+        speakButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                speakButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Send");
+        sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Quit");
+        quitButton.setText("Quit");
+        quitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("Test Dialog");
+        playButton.setText("Play");
+        playButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                playButtonActionPerformed(evt);
+            }
+        });
+
+        voiceCheckBox.setText("Voice directions");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(speakButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(voiceCheckBox)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(89, 89, 89)
-                                .addComponent(jLabel1)))))
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addContainerGap(23, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2))
+                        .addGap(18, 18, 18)
+                        .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(jButton1))))
+                        .addGap(24, 24, 24)
+                        .addComponent(speakButton))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jButton2)))
-                .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(voiceCheckBox))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(sendButton)))
+                .addGap(0, 0, 0)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(quitButton)
+                    .addComponent(playButton))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-	/**
+    private void speakButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speakButtonActionPerformed
+        // TODO add your handling code here:
+        //setInfoText("Speak, click on Send or wait for 10 seconds for processing ...");
+        String sf = getNextSpeechFile();
+        
+        recorder = new RecordTask();
+        recorder.addPropertyChangeListener(this);
+        recorder.setSampleFile( app == null ? "test.wav" : sf);
+        
+        conf.put("speech_file", sf);
+        app = getJvxApp(recognizer);
+        
+        recorder.execute();
+        timer.start();
+        speakButton.setEnabled(false);
+    }//GEN-LAST:event_speakButtonActionPerformed
+
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        // TODO add your handling code here:
+        stopRecording();    // stop capture
+        
+        if(app != null) app.execute();
+    }//GEN-LAST:event_sendButtonActionPerformed
+    boolean isAppRunning() {
+        return app == null ? false : !app.isDone();
+    }
+    boolean isRecorderRunning() {
+        return recorder == null ? false : !recorder.isDone();
+    }
+    private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
+        // TODO add your handling code here:
+        setInfoText("Closing App...");
+        stopRecording();
+        stopJvxApp();
+        try {
+            while( isAppRunning() || isRecorderRunning() ) {
+                setInfoText("Waiting for Thread to close...");
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(RunDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.dispose();
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_quitButtonActionPerformed
+
+    private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
+        // TODO add your handling code here:
+        stopRecording();
+        String sf = getSpeechFile();
+        RecordTask.play(sf == null ? "test.wav" : sf);
+    }//GEN-LAST:event_playButtonActionPerformed
+
+    public void setInfoText(String info) {
+        String s = queryArea.getText();
+        if(s.length() > 0) s = s + "\n";
+        s = s + info;
+        queryArea.setText(s);
+        
+        if(voiceCheckBox.isSelected()) app.speak(info);
+    }
+    public void setResultText(String result) {
+        String s = answerArea.getText();
+        if(s.length() > 0) s = s + "\n";
+        s = s + result;
+        answerArea.setText(s);
+        
+        if(voiceCheckBox.isSelected()) app.speak(result);
+    }
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("propertyChange: " + evt.getPropertyName() +" "+ evt.getNewValue());
+        if ("info".equals(evt.getPropertyName())) {
+            setInfoText((String) evt.getNewValue());
+        }
+        if ("result".equals(evt.getPropertyName())) {
+            setResultText((String) evt.getNewValue());
+        }
+    }
+    public void actionPerformed (ActionEvent e) {   // timer
+        stopRecording();
+    }
+    void stopRecording() {
+        if(recorder != null) {
+            recorder.cancel(true);
+            timer.stop();
+            speakButton.setEnabled(true);
+        }
+    }
+    void stopJvxApp() {
+        if(app != null) {
+            app.cancel(true);
+        }
+    }
+    public String getNextSpeechFile() {
+        curSpeech++;
+        return "test_" + curSpeech + ".wav";
+    }
+    public String getSpeechFile() {
+        return curSpeech == 0 ? null : ("test_" + curSpeech + ".wav");
+    }
+    public static void runDialog(final String conf, final Frame parent) {
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater (new Runnable () {
+                public void run () {
+                        RunDialog dialog = new RunDialog (conf, (Frame) parent, true);
+
+                        //dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                        dialog.addWindowListener (new java.awt.event.WindowAdapter () {
+                                @Override
+                                public void windowClosing (java.awt.event.WindowEvent e) {
+                                    JvxMainFrame.getInstance().setRunEnabled(true);
+                                        //System.exit (0);
+                                }
+                        });
+                        dialog.setVisible (true);
+                }
+        });
+    }
+    /**
 	 * @param args the command line arguments
 	 */
 	public static void main (String args[]) {
@@ -133,7 +337,8 @@ public class RunDialog extends javax.swing.JDialog {
 		/* Create and display the dialog */
 		java.awt.EventQueue.invokeLater (new Runnable () {
 			public void run () {
-				RunDialog dialog = new RunDialog (new javax.swing.JFrame (), true);
+				RunDialog dialog = new RunDialog ("", new javax.swing.JFrame (), true);
+                                //dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				dialog.addWindowListener (new java.awt.event.WindowAdapter () {
 					@Override
 					public void windowClosing (java.awt.event.WindowEvent e) {
@@ -144,14 +349,16 @@ public class RunDialog extends javax.swing.JDialog {
 			}
 		});
 	}
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea answerArea;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton playButton;
     private javax.swing.JTextArea queryArea;
+    private javax.swing.JButton quitButton;
+    private javax.swing.JButton sendButton;
+    private javax.swing.JButton speakButton;
+    private javax.swing.JCheckBox voiceCheckBox;
     // End of variables declaration//GEN-END:variables
 }

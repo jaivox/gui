@@ -20,6 +20,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -43,21 +45,29 @@ public class JvxConfiguration {
     }
     
     private JvxConfiguration() {
+        final String pat= "(\\{[a-zA-Z0-9]*\\})";
+        final Pattern pattern = Pattern.compile(pat);
+                        
         conf = new Properties() {
             @Override
             public Object put(Object key, Object value) {
-                Object o = null;
-                String s = (String)value;
-                if(s != null && s.trim().startsWith("{") /*&& s.trim().endsWith("}")*/) {
-                    int len = s.indexOf('}', 1);
-                    s = s.substring(1, len);
-                    if(s.length() > 0) o = get(s);
-                    if(o != null && ((String)o).trim().length() > 0) {
-                        String v = (String)value;
-                        v = v.replace("{"+s+"}", appName);
-                        value = v;
+                String o = null;
+                String v = (String)value;
+                
+                
+                Matcher matcher = pattern.matcher(v);
+                // check all occurance
+                while (matcher.find()) {
+                    String t = matcher.group();
+                    String st = t.substring(1, t.length() - 1);
+                    
+                    if(st.trim().length() > 0) o = (String) get(st);
+                    if(o != null && o.trim().length() > 0) {
+                        v = v.replace(t, o);
                     }
                 }
+                value = v;
+                
                 return super.put(key, value);
             }
         };
@@ -267,5 +277,23 @@ public class JvxConfiguration {
             }
         }
         return locale.getLanguage() +"/"+ hfile;
+    }
+    
+    public static void main(String[] args) {
+        String pat= "(\\{[a-zA-Z0-9]*\\})";
+        String s = "{appfolder}{project}.sent";
+        //s = s.replaceAll(pat, "test");
+        System.out.println(s);
+        
+        Pattern pattern = Pattern.compile(pat);
+        Matcher matcher = pattern.matcher(s);
+        // check all occurance
+        while (matcher.find()) {
+          System.out.print("Start index: " + matcher.start());
+          System.out.print(" End index: " + matcher.end() + " ");
+          System.out.println(matcher.group());
+        }
+        
+        
     }
 }
