@@ -195,7 +195,7 @@ public class RunDialog extends javax.swing.JDialog
         
         recorder = new RecordTask();
         recorder.addPropertyChangeListener(this);
-        recorder.setSampleFile( app == null ? "test.wav" : sf);
+        recorder.setSampleFile(sf);
         
         conf.put("speech_file", sf);
         app = getJvxApp(recognizer);
@@ -284,10 +284,12 @@ public class RunDialog extends javax.swing.JDialog
     }
     public String getNextSpeechFile() {
         curSpeech++;
-        return "test_" + curSpeech + ".wav";
+        String base = conf.getProperty("appfolder");
+        return base + "test_" + curSpeech + ".wav";
     }
     public String getSpeechFile() {
-        return curSpeech == 0 ? null : ("test_" + curSpeech + ".wav");
+        String base = conf.getProperty("appfolder");
+        return curSpeech == 0 ? null : (base + "test_" + curSpeech + ".wav");
     }
     public static void runDialog(final String conf, final Frame parent) {
         /* Create and display the dialog */
