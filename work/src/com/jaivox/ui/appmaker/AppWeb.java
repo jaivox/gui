@@ -6,10 +6,9 @@ import com.jaivox.interpreter.Interact;
 import com.jaivox.recognizer.web.SpeechInput;
 import com.jaivox.recognizer.web.Mike;
 import com.jaivox.synthesizer.web.Synthesizer;
-import com.jaivox.util.Log;
 import java.util.Properties;
 
-public class AppWeb {
+public class AppWeb extends JvxRunnableApp {
 
 	String project = "test";
 	String basedir = "./";
@@ -18,12 +17,13 @@ public class AppWeb {
 	Synthesizer speaker;
 	String asrLang = "en-US";
 	static int wait = 10; // maximum length of input in seconds
+        private String speechFile;
 
 	public AppWeb (Properties kv) {
 		// Log.setLevelByName (kv.getProperty ("log_level"));
 		initializeInterpreter (kv);
 		System.out.println ("Interpreter initialized, starting recognition");
-		processSpeech ();
+		//processSpeech ();
 	}
 
 	void initializeInterpreter (Properties kv) {
@@ -37,6 +37,7 @@ public class AppWeb {
 		basedir = kv.getProperty ("Base");
 		project = kv.getProperty ("project");
 		asrLang = kv.getProperty ("lang");
+                speechFile = kv.getProperty("speech_file");
 		// speaker will get ttsLang = kv.getProperty ("ttslang");
 		Command cmd = new Command ();
 		inter = new Interact (basedir, kv, cmd);
@@ -75,5 +76,48 @@ public class AppWeb {
 			}
 		}
 	}
+    protected void processSpeech (String speech) {
+        speech = RecordTask.wavToflac(speech);
+        SpeechInput R = new SpeechInput ();
+        int empty = 0;
+        int maxempty = 5;
+        if (speech != null) {
+            firePropertyChange("result", "", "sending: " + speech +" ...");
+            String result = R.recognize (speech, asrLang);
+            System.out.println ("Recognized: " + result);
+            firePropertyChange("result", "", "recognized: " + result);
+            
+            if(isCancelled()) return;
+            
+            String response = "";
+            if (result != null) {
+                    if (result.trim ().equals ("")) {
+                            empty++;
+                            if (empty >= maxempty) return;
+                    }
+                    
+                    response = inter.execute (result);
+                    
+                    System.out.println ("Reply: " + response);
+                    firePropertyChange("result", "", "reply: " + response);
+            }
+            if(isCancelled()) return;
+            
+            try {
+                Thread.sleep (4000);
+                // can't always play flac
+               // speaker.speak (response);
+            } catch (Exception e) {
+                    e.printStackTrace ();
+                    return;
+            }
+        }
+    }
+    public void speak(String speech) {
+        speaker.speak(speech);
+    }
+    protected String getSpeechFile() {
+        return speechFile;
+    }
 }
 

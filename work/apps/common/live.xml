@@ -156,7 +156,7 @@
 
     <component name="trigramModel"
      type="edu.cmu.sphinx.linguist.language.ngram.large.LargeNGramModel">
-		<property name="location" value="file:./PATproject.arpabo.DMP"/>
+		<property name="location" value="file:PATlm_dump_file"/>
         <property name="logMath" value="logMath"/>
         <property name="dictionary" value="dictionary"/>
         <property name="maxDepth" value="3"/>
@@ -303,6 +303,7 @@
         <property name="showConfig" value="false"/>
     </component>
 
+    <component name="audioFileDataSource" type="edu.cmu.sphinx.frontend.util.AudioFileDataSource"/>
 
     <!-- ******************************************************* -->
     <!--  Miscellaneous components                               -->

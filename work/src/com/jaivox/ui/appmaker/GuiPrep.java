@@ -3,6 +3,8 @@ package com.jaivox.ui.appmaker;
 
 import com.jaivox.interpreter.Utils;
 import com.jaivox.tools.Generator;
+import com.jaivox.ui.gui.JvxMainFrame;
+import com.jaivox.ui.gui.RunDialog;
 import com.jaivox.util.Log;
 import java.awt.Point;
 import java.io.*;
@@ -11,6 +13,8 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GuiPrep {
 
@@ -117,7 +121,8 @@ public class GuiPrep {
 			if (recognizer.equals ("web")) {
 				System.out.println ("Going to google recognizer");
 				Running = true;
-				AppWeb app = new AppWeb (conf);
+				//AppWeb app = new AppWeb (conf);
+                                
 			}
 			if (recognizer.equals ("sphinx")) {
 				// make sure lmgen.sh is run on the sphinx destination
@@ -131,6 +136,7 @@ public class GuiPrep {
 				Running = true;
 				AppSphinx app = new AppSphinx (conf);
 			}
+                        RunDialog.runDialog(conffile, JvxMainFrame.getInstance());
 		}
 		catch (Exception e) {
 			e.printStackTrace ();
@@ -147,7 +153,9 @@ public class GuiPrep {
 			String Sep = System.getProperty ("file.separator");
 			if (!appDir.endsWith (Sep)) appDir = appDir + Sep;
 			String shellScript = appDir + "lmgen.sh";
-			String result = runcommand (shellScript);
+			
+                        fixperms(shellScript, "rxw");
+                        String result = runcommand (shellScript);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace ();
@@ -155,6 +163,9 @@ public class GuiPrep {
 		}
 
 	}
+        static void fixperms(String file, String perms) {
+            runcommand("chmod u=" + perms +" "+ file);
+        }
 	static String runcommand (String input) {
 		try {
 			Process p = Runtime.getRuntime ().exec (input);
