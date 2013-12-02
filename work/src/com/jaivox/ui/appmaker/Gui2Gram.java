@@ -143,6 +143,7 @@ public class Gui2Gram {
 				String head = it.next ();
 				String filt = filter (head);
 				String key = filt.replaceAll (" ", ".");
+                                if (key.indexOf (".") == -1) key = "_"+key;
 				out.println ("{");
 				out.println (key);
 				out.println ("\t"+filt+" ;");
