@@ -171,6 +171,9 @@ public class JvxConfiguration {
 		conf.put ("lang", asr);
 		String tts = theFrame.getTtsLanguage ();
 		conf.put ("ttslang", tts);
+        
+        if(theFrame.getCbConsole()) conf.put("input", "console");
+        if(!theFrame.getCbSphinx()) conf.remove("lm_training_file");
     }
 
     private boolean validatefields(JvxMainFrame theFrame) {
