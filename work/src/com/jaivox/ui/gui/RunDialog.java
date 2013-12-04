@@ -257,7 +257,8 @@ public class RunDialog extends javax.swing.JDialog
                 int lineStart = el.getStartOffset();
                 int lineEnd = el.getEndOffset();
                 text = doc.getText(lineStart, lineEnd - lineStart);
-                if(text.trim().length() <=0) numLines--;
+                text = text.trim();
+                if(text.length() <=0) numLines--;
                 else break;
             }
             if(customizedTA && text != null && text.charAt(0) == '>') text = text.substring(1);
