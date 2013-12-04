@@ -155,23 +155,18 @@ public class JvxConfiguration {
         for(Object k : conf.keySet()) {
             conf.put(k, conf.get(k));       // easy way for now...
         }
-        String[] rs = theFrame.getRecognizers();
-        for(String r : rs) {
-            // conf.put("recognizer_"+r, "true");
-			conf.put ("recognizer", r);
-        }
         
-        rs = theFrame.getSynthesizers();
-        for(String r : rs) {
-            // conf.put("synthesizer_"+r, "true");
-			conf.put ("synthesizer", r);
-        }
-        // conf.put("console", theFrame.getCbConsole() ? "true" : "false");
-		String asr = theFrame.getAsrLanguage ();
-		conf.put ("lang", asr);
-		String tts = theFrame.getTtsLanguage ();
-		conf.put ("ttslang", tts);
+        String rs = theFrame.getRecognizer();
+        if(rs != null) conf.put ("recognizer", rs);
         
+        rs = theFrame.getSynthesizer();
+        if(rs != null) conf.put ("synthesizer", rs);
+
+        String asr = theFrame.getAsrLanguage ();
+        conf.put ("lang", asr);
+        String tts = theFrame.getTtsLanguage ();
+        conf.put ("ttslang", tts);
+
         if(theFrame.getCbConsole()) conf.put("input", "console");
         if(!theFrame.getCbSphinx()) conf.remove("lm_training_file");
     }

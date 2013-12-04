@@ -36,7 +36,8 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     JvxSynonymsHelper synsHelper = null;
     
     static boolean dirty_flag = false;
-	static boolean generated_flag = false;
+    static boolean generated_flag = false;
+    static String recognizer = null;
     static UndoManager undoManager_;
     static UndoableEditSupport undoSupport_;
   
@@ -911,6 +912,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
         // TODO add your handling code here:
         if (dirty_flag) generated_flag = false;
+        checkTargetOptions();
         
         if (GuiPrep.Running) {
                 GuiPrep.stopRunning ();
@@ -928,6 +930,14 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_btnRunActionPerformed
     void setRunEnabled(boolean b) {
         btnRun.setEnabled(b);
+    }
+    void checkTargetOptions() {
+        if(generated_flag && (recognizer != null)) {
+            if( !recognizer.equals( this.getRecognizer() ) ) {
+                generated_flag = false;     // regenerate for the selection
+            }
+        }
+        recognizer = this.getRecognizer();
     }
     private void dialogTreeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dialogTreeKeyPressed
         // TODO add your handling code here:
@@ -1029,19 +1039,18 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     public JTable getQualdbTable() {
         return qualdbTable;
     }
-    public String[] getRecognizers() {
-        List<String> r = new ArrayList<String>();
-        if(this.cbGoogleRecognizer.isSelected()) r.add("web");
-        if(this.cbSphinx.isSelected()) r.add("sphinx");
-        return r.toArray(new String[r.size()]);
+    public String getRecognizer() {
+        if(this.cbGoogleRecognizer.isSelected()) return "web";
+        if(this.cbSphinx.isSelected()) return "sphinx";
+        if(this.cbConsole.isSelected()) return "console";
+        return null;
     }
-    public String[] getSynthesizers() {
-        List<String> r = new ArrayList<String>();
-        if(this.cbFestival.isSelected()) r.add("festival");
-        if(this.cbGoogletts.isSelected()) r.add("web");
-        if(this.cbFreetts.isSelected()) r.add("freetts");
-        if(this.cbEspeak.isSelected()) r.add("espeak");
-        return r.toArray(new String[r.size()]);
+    public String getSynthesizer() {
+        if(this.cbFestival.isSelected()) return "festival";
+        if(this.cbGoogletts.isSelected()) return "web";
+        if(this.cbFreetts.isSelected()) return "freetts";
+        if(this.cbEspeak.isSelected()) return "espeak";
+        return null;
     }
 
     public boolean getCbConsole() {

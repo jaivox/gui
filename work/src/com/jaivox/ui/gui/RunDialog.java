@@ -5,6 +5,7 @@
 
 package com.jaivox.ui.gui;
 
+import com.jaivox.ui.appmaker.AppConsole;
 import com.jaivox.ui.appmaker.AppSphinx;
 import com.jaivox.ui.appmaker.AppWeb;
 import com.jaivox.ui.appmaker.JvxRunnableApp;
@@ -21,6 +22,12 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.Element;
 
 /**
  *
@@ -40,7 +47,10 @@ public class RunDialog extends javax.swing.JDialog
         String speechfile = null;
         int curSpeech = 0;
         
-        JvxRunnableApp app = null;    
+        JvxRunnableApp app = null;
+        
+        final boolean customizedTA = false;
+        DocumentFilter docl = new LineFilter();
         
 	public void setConfigFile(String f) {
             configFile = f;
@@ -51,6 +61,8 @@ public class RunDialog extends javax.swing.JDialog
             this.setConfigFile(file);
             initComponents ();
             
+            ((AbstractDocument)this.queryArea.getDocument()).setDocumentFilter(null);
+            
             conf = new Properties ();
             try {
                 conf.load (new FileInputStream (configFile));
@@ -58,6 +70,14 @@ public class RunDialog extends javax.swing.JDialog
                 Logger.getLogger(RunDialog.class.getName()).log(Level.SEVERE, null, ex);
             }
             recognizer = conf.getProperty ("recognizer");
+            
+            if (recognizer.equals ("console")) {
+                this.speakButton.setEnabled(false);
+                
+                if(customizedTA) {
+                    ((AbstractDocument)this.queryArea.getDocument()).setDocumentFilter(docl);
+                }
+            }
 			
             timer = new Timer(delay, this);
             
@@ -72,6 +92,10 @@ public class RunDialog extends javax.swing.JDialog
             }
             else if (recognizer.equals ("sphinx")) {
                 jap = new AppSphinx(conf);
+            }
+            else if (recognizer.equals ("console")) {
+                this.speakButton.setEnabled(false);
+                jap = new AppConsole(conf);
             }
             if(jap != null) jap.addPropertyChangeListener(this);
             return jap;
@@ -143,46 +167,44 @@ public class RunDialog extends javax.swing.JDialog
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(speakButton, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83)
+                .addComponent(voiceCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(speakButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(voiceCheckBox)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
                             .addComponent(jScrollPane2))
-                        .addGap(18, 18, 18)
-                        .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(speakButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(voiceCheckBox))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(sendButton)))
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sendButton)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(speakButton)
+                        .addComponent(voiceCheckBox)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(quitButton)
-                    .addComponent(playButton))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(playButton)
+                    .addComponent(quitButton)))
         );
 
         pack();
@@ -207,10 +229,44 @@ public class RunDialog extends javax.swing.JDialog
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         // TODO add your handling code here:
+        if(!customizedTA && recognizer.equals ("console")) 
+        if(evt.getActionCommand().equals("Clear")) {
+            this.queryArea.setText("");
+            this.sendButton.setText("Send");
+            return;
+        }
+        else this.sendButton.setText("Clear");
+        
         stopRecording();    // stop capture
         
+        if (recognizer.equals ("console")) {
+            conf.put("speech_file", getConsoleQuery());
+            app = getJvxApp(recognizer);
+        }
         if(app != null) app.execute();
+        
     }//GEN-LAST:event_sendButtonActionPerformed
+    String getConsoleQuery() {
+        String text = null;
+        try {
+            Document doc = this.queryArea.getDocument();
+            Element root = doc.getDefaultRootElement();
+            int numLines = root.getElementCount() - 1;
+            while(numLines >= 0) {
+                Element el = root.getElement(numLines);
+                int lineStart = el.getStartOffset();
+                int lineEnd = el.getEndOffset();
+                text = doc.getText(lineStart, lineEnd - lineStart);
+                if(text.trim().length() <=0) numLines--;
+                else break;
+            }
+            if(customizedTA && text != null && text.charAt(0) == '>') text = text.substring(1);
+            
+        } catch (BadLocationException ex) {
+            Logger.getLogger(LineFilter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return text;
+    }
     boolean isAppRunning() {
         return app == null ? false : !app.isDone();
     }
@@ -363,4 +419,61 @@ public class RunDialog extends javax.swing.JDialog
     private javax.swing.JButton speakButton;
     private javax.swing.JCheckBox voiceCheckBox;
     // End of variables declaration//GEN-END:variables
+
+    
+}
+
+class LineFilter extends DocumentFilter {
+    public void insertString(final FilterBypass fb, final int offset, final String string, final AttributeSet attr)
+            throws BadLocationException {
+        //if ( canEdit(fb, offset) ) {
+            super.insertString(fb, offset, string, attr);
+        //}
+    }
+
+    public void remove(final FilterBypass fb, final int offset, final int length) throws BadLocationException {
+        
+        if ( canEdit(fb, offset) ) {
+            super.remove(fb, offset, length);
+        }
+    }
+
+    public void replace(final FilterBypass fb, final int offset, final int length, final String text, final AttributeSet attrs)
+            throws BadLocationException {
+        if ( canEdit(fb, offset) ) {
+            String s = addCmdChar(fb, offset, text);
+            super.replace(fb, offset, length, s, attrs);
+        }
+    }
+    private String addCmdChar(final FilterBypass fb, int offset, String text) {
+        Document doc = fb.getDocument();
+        Element root = doc.getDefaultRootElement();
+        int numLines = root.getElementCount();
+        Element el = root.getElement(numLines - 1);
+        int lineStart = el.getStartOffset();
+        int lineEnd = el.getEndOffset();
+        if(offset > lineStart) return text;
+        if((lineEnd - lineStart) > 1) return text;
+        return ">" + text;
+    }
+    private boolean canEdit(final FilterBypass fb, int offset) {
+        try {
+            Document doc = fb.getDocument();
+            Element root = doc.getDefaultRootElement();
+            int index = root.getElementIndex(offset);
+            int numLines = root.getElementCount() - 1;
+            while(numLines > 0) {
+                Element el = root.getElement(numLines);
+                int lineStart = el.getStartOffset();
+                int lineEnd = el.getEndOffset();
+                String s = doc.getText(lineStart, lineEnd - lineStart);
+                if(s.trim().length() <=0) numLines--;
+                else break;
+            }
+            return index >= numLines;
+        } catch (BadLocationException ex) {
+            Logger.getLogger(LineFilter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
 }
