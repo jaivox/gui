@@ -115,9 +115,6 @@ public class GuiPrep {
 			String recognizer = conf.getProperty ("recognizer");
 			System.out.println ("runApp: recognizer is "+recognizer);
 			if (recognizer.equals ("console")) {
-				// pop up a console and run?
-				System.out.println ("Console option to be implemented");
-                                return;
 			}
 			if (recognizer.equals ("web")) {
 				System.out.println ("Going to google recognizer");
