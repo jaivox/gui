@@ -80,7 +80,7 @@ public class RunDialog extends javax.swing.JDialog
             }
 			
             timer = new Timer(delay, this);
-            
+            app = getJvxApp(recognizer);
         }
         public JvxRunnableApp getJvxApp(String recognizer) {
             //String clz = conf.getProperty(recognizer + ".class");
@@ -97,7 +97,7 @@ public class RunDialog extends javax.swing.JDialog
                 this.speakButton.setEnabled(false);
                 jap = new AppConsole(conf);
             }
-            if(jap != null) jap.addPropertyChangeListener(this);
+            if(jap != null) jap.setPropertyChangeListener(this);
             return jap;
         }
 	/**
@@ -218,10 +218,7 @@ public class RunDialog extends javax.swing.JDialog
         recorder = new RecordTask();
         recorder.addPropertyChangeListener(this);
         recorder.setSampleFile(sf);
-        
-        conf.put("speech_file", sf);
-        app = getJvxApp(recognizer);
-        
+               
         recorder.execute();
         timer.start();
         speakButton.setEnabled(false);
@@ -229,9 +226,11 @@ public class RunDialog extends javax.swing.JDialog
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         // TODO add your handling code here:
+        String speech = null;
         if(!customizedTA && recognizer.equals ("console")) 
         if(evt.getActionCommand().equals("Clear")) {
             this.queryArea.setText("");
+            this.queryArea.requestFocusInWindow();
             this.sendButton.setText("Send");
             return;
         }
@@ -240,10 +239,12 @@ public class RunDialog extends javax.swing.JDialog
         stopRecording();    // stop capture
         
         if (recognizer.equals ("console")) {
-            conf.put("speech_file", getConsoleQuery());
-            app = getJvxApp(recognizer);
+            speech = getConsoleQuery();
         }
-        if(app != null) app.execute();
+        else {
+            speech = getSpeechFile();
+        }
+        if(speech != null && speech.length() > 0 && app != null) app.process(speech);
         
     }//GEN-LAST:event_sendButtonActionPerformed
     String getConsoleQuery() {
@@ -276,19 +277,21 @@ public class RunDialog extends javax.swing.JDialog
     }
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         // TODO add your handling code here:
-        setInfoText("Closing App...");
-        stopRecording();
-        stopJvxApp();
         try {
+            setInfoText("Closing App...");
+            stopRecording();
+            stopJvxApp();
             while( isAppRunning() || isRecorderRunning() ) {
                 setInfoText("Waiting for Thread to close...");
                 Thread.sleep(100);
             }
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(RunDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.dispose();
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        finally {
+            this.dispose();
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
     }//GEN-LAST:event_quitButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed

@@ -108,81 +108,69 @@ public class GuiPrep {
 		}
 	}
 	
-	public static void runApp (String conffile) {
-		try {
-			Properties conf = new Properties ();
-			conf.load (new FileInputStream (conffile));
-			String recognizer = conf.getProperty ("recognizer");
-			System.out.println ("runApp: recognizer is "+recognizer);
-			if (recognizer.equals ("console")) {
-			}
-			if (recognizer.equals ("web")) {
-				System.out.println ("Going to google recognizer");
-				Running = true;
-				//AppWeb app = new AppWeb (conf);
-                                
-			}
-			if (recognizer.equals ("sphinx")) {
-				// make sure lmgen.sh is run on the sphinx destination
-				// before calling app
-				String result = generateLm (conf);
-				if (result == null) {
-					System.out.println ("Could not run lmgensh");
-					return;
-				}
-				System.out.println ("Going to the Sphinx recognizer");
-				Running = true;
-				AppSphinx app = new AppSphinx (conf);
-			}
-                        RunDialog.runDialog(conffile, JvxMainFrame.getInstance());
-		}
-		catch (Exception e) {
-			e.printStackTrace ();
-		}
+	public static void runApp (String conffile) throws FileNotFoundException, IOException {
+                Properties conf = new Properties ();
+                conf.load (new FileInputStream (conffile));
+                String recognizer = conf.getProperty ("recognizer");
+                System.out.println ("runApp: recognizer is "+recognizer);
+                if (recognizer.equals ("console")) {
+                }
+                if (recognizer.equals ("web")) {
+                        System.out.println ("Going to google recognizer");
+                        Running = true;
+                        //AppWeb app = new AppWeb (conf);
+
+                }
+                if (recognizer.equals ("sphinx")) {
+                        // make sure lmgen.sh is run on the sphinx destination
+                        // before calling app
+                        String result = generateLm (conf);
+                        if (result == null) {
+                                System.out.println ("Could not run lmgensh");
+                                return;
+                        }
+                        System.out.println ("Going to the Sphinx recognizer");
+                        Running = true;
+                        AppSphinx app = new AppSphinx (conf);
+                }
+                RunDialog.runDialog(conffile, JvxMainFrame.getInstance());
 	}
 
 	public static void stopRunning () {
 		Running = false;
 	}
 
-	static String generateLm (Properties conf) {
-		try {
-			String appDir = conf.getProperty ("destination");
-			String Sep = System.getProperty ("file.separator");
-			if (!appDir.endsWith (Sep)) appDir = appDir + Sep;
-			String shellScript = appDir + "lmgen.sh";
-			
-                        fixperms(shellScript, "rxw");
-                        String result = runcommand (shellScript);
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace ();
-			return null;
-		}
+	static String generateLm (Properties conf) throws IOException {
+		String appDir = conf.getProperty ("destination");
+                String Sep = System.getProperty ("file.separator");
+                if (!appDir.endsWith (Sep)) appDir = appDir + Sep;
+                String shellScript = appDir + "lmgen.sh";
 
+                fixperms(shellScript, "rxw");
+                String result = runcommand (shellScript);
+                return result;
 	}
         static void fixperms(String file, String perms) {
-            runcommand("chmod u=" + perms +" "+ file);
+            try {
+                runcommand("chmod u=" + perms +" "+ file);
+            } catch (IOException ex) {
+                Logger.getLogger(GuiPrep.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-	static String runcommand (String input) {
-		try {
-			Process p = Runtime.getRuntime ().exec (input);
-			StringBuffer buffer = new StringBuffer ();
-			InputStream in = p.getInputStream ();
-			BufferedInputStream d = new BufferedInputStream (in);
-			do {
-				int ch = d.read ();
-				if (ch == -1)
-					break;
-				buffer.append ((char) ch);
-			} while (true);
-			in.close ();
-			String temp = new String (buffer);
-			return temp;
-		} catch (Exception e) {
-			e.printStackTrace ();
-			return null;
-		}
+	static String runcommand (String input) throws IOException {
+                Process p = Runtime.getRuntime ().exec (input);
+                StringBuffer buffer = new StringBuffer ();
+                InputStream in = p.getInputStream ();
+                BufferedInputStream d = new BufferedInputStream (in);
+                do {
+                        int ch = d.read ();
+                        if (ch == -1)
+                                break;
+                        buffer.append ((char) ch);
+                } while (true);
+                in.close ();
+                String temp = new String (buffer);
+                return temp;
 	}
 
 	
