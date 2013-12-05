@@ -114,7 +114,7 @@ public class AppSphinx extends JvxApp {
         try {
             cm = new ConfigurationManager (new File(config).toURI().toURL());
         // allocate the recognizer
-            audioURL = new File("test.wav").toURI().toURL();
+            audioURL = new File(speech).toURI().toURL();
         } catch (MalformedURLException ex) {
             Logger.getLogger(AppSphinx.class.getName()).log(Level.SEVERE, null, ex);
             return;

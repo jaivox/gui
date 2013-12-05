@@ -100,6 +100,7 @@ public class Gui2Gram {
 				}
 				if (starts [i] == 0) {
 					Debug ("No location found for keys "+i+": "+keys [i]);
+					continue outer;
 				}
 			}
 			starts [n] = m;
@@ -109,6 +110,7 @@ public class Gui2Gram {
 
 			for (int i=0; i<n-1; i++) {
 				String key = keys [i];
+				if (starts [i] == 0 && i != 0) continue;
 				int start = starts [i];
 				int end = starts [i+1];
 				hold = new ArrayList <String> ();
@@ -138,25 +140,29 @@ public class Gui2Gram {
 	
 	void writeRules (PrintWriter out) {
 		try {
-			Set <String> heads = rules.keySet ();
-			for (Iterator<String> it = heads.iterator (); it.hasNext (); ) {
+			Set<String> heads = rules.keySet ();
+			for (Iterator<String> it = heads.iterator (); it.hasNext ();) {
 				String head = it.next ();
 				String filt = filter (head);
 				String key = filt.replaceAll (" ", ".");
-                                if (key.indexOf (".") == -1) key = "_"+key;
+				if (key.indexOf (".") == -1) {
+					key = "_" + key;
+				}
+				ArrayList<String> vals = rules.get (head);
+				if (vals.size () < 2) continue;
 				out.println ("{");
 				out.println (key);
-				out.println ("\t"+filt+" ;");
-				ArrayList <String> vals = rules.get (head);
+				out.println ("\t" + filt + " ;");
 				int n = vals.size ();
-				for (String val: vals) {
-					if (val.startsWith ("*")) continue;
-					out.println ("\t"+val+" ;");
+				for (String val : vals) {
+					if (val.startsWith ("*")) {
+						continue;
+					}
+					out.println ("\t" + val + " ;");
 				}
 				out.println ("}\n");
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace ();
 		}
 	}
