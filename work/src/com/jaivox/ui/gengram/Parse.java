@@ -9,10 +9,13 @@ import java.util.TreeMap;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.trees.Tree;
 
+import com.jaivox.util.Log;
+
 
 public class Parse {
 
 	static String penntags = "penn.txt";
+	static String breaks = "~`!@#$%^&*()_+={}[]|\\:;\"<>,.?/ \t\r\n";
 
 	static TreeMap <String, String> tags;
 	ArrayList <String> statements;
@@ -29,25 +32,42 @@ public class Parse {
 		statements = new ArrayList <String> ();
 		sentences = new TreeMap <String, Sentence> ();
 		boolean ok = loadtags ();
-		if (!ok) return;
+		if (!ok) {
+			Debug ("Could not load tags");
+			return;
+		}
 		ok = loadstatements (filename);
+		if (!ok) {
+			Debug ("Could not load statements");
+			return;
+		}
+		if(lp == null) {
+			ok = loadparser ();
+			if (!ok) Debug ("Could not load parser");
+		}
 		if (!ok) return;
-		if(lp == null) ok = loadparser ();
-		if (!ok) return;
+		Debug ("Parser is valid");
 		Valid = true;
 	}
-        public Parse () {
+    
+	public Parse () {
 		tags = new TreeMap <String, String> ();
 		statements = new ArrayList <String> ();
 		sentences = new TreeMap <String, Sentence> ();
 		boolean ok = loadtags ();
-		if (!ok) return;
-		if(lp == null) ok = loadparser ();
+		if (!ok) {
+			Debug ("Could not load tags");
+			return;
+		}
+		if(lp == null) {
+			ok = loadparser ();
+			if (!ok) Debug ("Could not load parser");
+		}
 		if (!ok) return;
 		Valid = true;
 	}
 	void Debug (String s) {
-		System.out.println ("[parse]" + s);
+		Log.finest ("[parse]" + s);
 	}
 
 	boolean loadtags () {
@@ -136,68 +156,87 @@ public class Parse {
 			Tree ptree = lp.parse (statement);
 			if (ptree == null) return null;
 			String flat = ptree.toString ();
-			// Debug (statement+":"+flat);
-			String filter = filtertags (flat);
-			String form = createform (filter);
-			// Debug (statement+":1 "+flat+":2 "+filter+":3 "+form);
-			if (form == null) return null;
-			Sentence s = new Sentence (statement, form, flat);
-			if (!s.Valid) return null;
-			// Debug (statement+"\n"+form);
-			return s;
+			StringTokenizer st = new StringTokenizer (statement, breaks);
+			int n = st.countTokens ();
+			String words [] = new String [n];
+			for (int i=0; i<n; i++) {
+				words [i] = st.nextToken ();
+			}
+			// find the tag-word pairs
+			String pairs [] = getPairs (flat);
+			if (pairs == null) {
+				Debug ("Could not get pairs from "+flat);
+				return null;
+			}
+			int m = pairs.length;
+			
+			// split the pairs
+			String vpairs [][] = new String [m][];
+			for (int i=0; i<m; i++) {
+				vpairs [i] = pairs [i].split (" ");
+				if (vpairs [i].length != 2) {
+					Debug ("Pair "+pairs [i]+" does not have two tokens");
+					return null;
+				}
+			}
+
+			StringBuffer sb = new StringBuffer ();
+			int ip = -1;
+			outer: for (int i=0; i<n; i++) {
+				String word = words [i];
+				// find pair ending with word
+				for (int j=ip+1; j<m; j++) {
+					String [] vpair = vpairs [j];
+					if (vpair [1].equals (word)) {
+						sb.append (vpair [0]+" ");
+						ip = j;
+						continue outer;
+					}
+				}
+				sb.append ("XX ");
+			}
+			String all = new String (sb).trim ();
+			Sentence S = new Sentence (statement, all, flat);
+			Debug (statement+"\n"+flat+"\n"+all);		
+			return S;
 		}
 		catch (Exception e) {
 			e.printStackTrace ();
 			return null;
 		}
 	}
-
-	String filtertags (String parse) {
+	
+	String [] getPairs (String flat) {
+		ArrayList <String> hold = new ArrayList <String> ();
 		StringBuffer sb = new StringBuffer ();
-		StringTokenizer st = new StringTokenizer (parse, "() \t\r\n");
-		while (st.hasMoreTokens ()) {
-			String token = st.nextToken ().trim ();
-			if (token.length () == 0) continue;
-			sb.append (token + " ");
-		}
-		String all = new String (sb).trim ();
-		return all;
-	}
-
-	String createform (String filtered) {
-		if (filtered == null) return null;
-		if (filtered.trim ().length () == 0) return null;
-		
-		StringTokenizer st = new StringTokenizer (filtered);
-		int n = st.countTokens ();
-		String toks [] = new String [n];
+		char chars [] = flat.toCharArray ();
+		int n = chars.length;
+		int left = -1;
 		for (int i=0; i<n; i++) {
-			toks [i] = st.nextToken ();
-		}
-		StringBuffer sb = new StringBuffer ();
-		for (int i=0; i<n-1; i++) {
-			String before = toks [i];
-			String after = toks [i+1];
-			if (!allcaps (before)) continue;
-			if (!allcaps (after)) {
-				sb.append (before);
-				sb.append (' ');
+			char c = chars [i];
+			if (c == '(') {
+				left = i;
+				continue;
+			}
+			if (c == ')') {
+				if (left != -1) {
+					String s = flat.substring (left+1, i);
+					hold.add (s);
+					sb.append (s);
+					sb.append (" | ");
+					left = -1;
+					continue;
+				}
+				
 			}
 		}
-
-		String form = new String (sb).trim ();
-		return form;
+		int m = hold.size ();
+		String pairs [] = hold.toArray (new String [m]);
+		String all = new String (sb);
+		Debug ("pairs: "+all);
+		return pairs;
 	}
 	
-	boolean allcaps (String word) {
-		for (int i=0; i<word.length (); i++) {
-			char c = (char)word.charAt (i);
-			if (c < 'A' || c > 'Z') return false;
-		}
-		return true;
-	}
-
-
 }
 
 
