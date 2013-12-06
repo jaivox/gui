@@ -229,7 +229,7 @@ public class JvxDialogHelper {
         GuiPrep.generateApp(JvxConfiguration.theConfig().getConfFile());
     }
 	
-    void runApp (JvxMainFrame ui) {
+    void runApp (JvxMainFrame ui) throws FileNotFoundException, IOException {
         GuiPrep.runApp(JvxConfiguration.theConfig().getConfFile());
     }
     

@@ -911,22 +911,31 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
     private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
         // TODO add your handling code here:
-        if (dirty_flag) generated_flag = false;
-        checkTargetOptions();
-        
-        if (GuiPrep.Running) {
-                GuiPrep.stopRunning ();
-                //return;
+        try {
+            if (dirty_flag) generated_flag = false;
+            checkTargetOptions();
+
+            if (GuiPrep.Running) {
+                    GuiPrep.stopRunning ();
+                    //return;
+            }
+            if(!generated_flag) if(!save()) return;
+
+            if (!generated_flag) {
+                this.dlgHelper.generateApp(this);
+                generated_flag = true;
+            }
+
+            if (generated_flag) {
+                this.dlgHelper.runApp (this);
+                setRunEnabled(false);
+            }
+        } catch (Exception e) {
+            generated_flag = false;
+            setRunEnabled(true);
+            e.printStackTrace();
+            return;
         }
-        if(!generated_flag) if(!save()) return;
-        
-        if (!generated_flag) {
-            this.dlgHelper.generateApp(this);
-            generated_flag = true;
-        }
-        this.dlgHelper.runApp (this);
-        
-        setRunEnabled(false);
     }//GEN-LAST:event_btnRunActionPerformed
     void setRunEnabled(boolean b) {
         btnRun.setEnabled(b);

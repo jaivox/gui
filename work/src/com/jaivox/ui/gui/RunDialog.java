@@ -13,7 +13,6 @@ import com.jaivox.ui.appmaker.RecordTask;
 import java.awt.Frame;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -21,7 +20,6 @@ import java.io.FileInputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Timer;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -34,14 +32,12 @@ import javax.swing.text.Element;
  * @author dev
  */
 public class RunDialog extends javax.swing.JDialog 
-                       implements PropertyChangeListener, ActionListener {
+                       implements PropertyChangeListener {
     
         String configFile = null;
         Properties conf = null;
         
         RecordTask recorder = null;
-        Timer timer;
-        static int delay = 10000; // in milliseconds
         
         String recognizer = null;
         String speechfile = null;
@@ -78,9 +74,12 @@ public class RunDialog extends javax.swing.JDialog
                     ((AbstractDocument)this.queryArea.getDocument()).setDocumentFilter(docl);
                 }
             }
-			
-            timer = new Timer(delay, this);
+            else {
+                recorder = new RecordTask(10000);
+                recorder.setPropertyChangeListener(this);
+            }
             
+            app = getJvxApp(recognizer);
         }
         public JvxRunnableApp getJvxApp(String recognizer) {
             //String clz = conf.getProperty(recognizer + ".class");
@@ -95,9 +94,10 @@ public class RunDialog extends javax.swing.JDialog
             }
             else if (recognizer.equals ("console")) {
                 this.speakButton.setEnabled(false);
+                this.playButton.setEnabled(false);
                 jap = new AppConsole(conf);
             }
-            if(jap != null) jap.addPropertyChangeListener(this);
+            if(jap != null) jap.setPropertyChangeListener(this);
             return jap;
         }
 	/**
@@ -209,29 +209,38 @@ public class RunDialog extends javax.swing.JDialog
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    public void sleepWait(long milli) {
+            try {
+                Thread.sleep(milli);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RunDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
     private void speakButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speakButtonActionPerformed
         // TODO add your handling code here:
         //setInfoText("Speak, click on Send or wait for 10 seconds for processing ...");
+        if(evt.getActionCommand().equals("Cancel")) {
+            setInfoText("Recording cancelled...");
+            stopRecording();
+            return;
+        }
+        else this.speakButton.setText("Cancel");
+        
+        if(isAppRunning()) sleepWait(1000);
+        
         String sf = getNextSpeechFile();
-        
-        recorder = new RecordTask();
-        recorder.addPropertyChangeListener(this);
-        recorder.setSampleFile(sf);
-        
-        conf.put("speech_file", sf);
-        app = getJvxApp(recognizer);
-        
-        recorder.execute();
-        timer.start();
-        speakButton.setEnabled(false);
+               
+        recorder.record(sf);
+        //speakButton.setEnabled(false);
     }//GEN-LAST:event_speakButtonActionPerformed
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         // TODO add your handling code here:
+        String speech = null;
         if(!customizedTA && recognizer.equals ("console")) 
         if(evt.getActionCommand().equals("Clear")) {
             this.queryArea.setText("");
+            this.queryArea.requestFocusInWindow();
             this.sendButton.setText("Send");
             return;
         }
@@ -240,10 +249,12 @@ public class RunDialog extends javax.swing.JDialog
         stopRecording();    // stop capture
         
         if (recognizer.equals ("console")) {
-            conf.put("speech_file", getConsoleQuery());
-            app = getJvxApp(recognizer);
+            speech = getConsoleQuery();
         }
-        if(app != null) app.execute();
+        else {
+            speech = getSpeechFile();
+        }
+        if(speech != null && speech.length() > 0 && app != null) app.process(speech);
         
     }//GEN-LAST:event_sendButtonActionPerformed
     String getConsoleQuery() {
@@ -257,7 +268,8 @@ public class RunDialog extends javax.swing.JDialog
                 int lineStart = el.getStartOffset();
                 int lineEnd = el.getEndOffset();
                 text = doc.getText(lineStart, lineEnd - lineStart);
-                if(text.trim().length() <=0) numLines--;
+                text = text.trim();
+                if(text.length() <=0) numLines--;
                 else break;
             }
             if(customizedTA && text != null && text.charAt(0) == '>') text = text.substring(1);
@@ -275,19 +287,21 @@ public class RunDialog extends javax.swing.JDialog
     }
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         // TODO add your handling code here:
-        setInfoText("Closing App...");
-        stopRecording();
-        stopJvxApp();
         try {
+            setInfoText("Closing App...");
+            stopRecording();
+            stopJvxApp();
             while( isAppRunning() || isRecorderRunning() ) {
                 setInfoText("Waiting for Thread to close...");
                 Thread.sleep(100);
             }
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(RunDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.dispose();
-        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        finally {
+            this.dispose();
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
     }//GEN-LAST:event_quitButtonActionPerformed
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
@@ -327,9 +341,9 @@ public class RunDialog extends javax.swing.JDialog
         stopRecording();
     }
     void stopRecording() {
+        this.speakButton.setText("Speak");
         if(recorder != null) {
-            recorder.cancel(true);
-            timer.stop();
+            recorder.stopRecording();
             speakButton.setEnabled(true);
         }
     }
@@ -352,7 +366,7 @@ public class RunDialog extends javax.swing.JDialog
         java.awt.EventQueue.invokeLater (new Runnable () {
                 public void run () {
                         RunDialog dialog = new RunDialog (conf, (Frame) parent, true);
-
+                        dialog.setLocationRelativeTo(parent);
                         //dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
                         dialog.addWindowListener (new java.awt.event.WindowAdapter () {
                                 @Override

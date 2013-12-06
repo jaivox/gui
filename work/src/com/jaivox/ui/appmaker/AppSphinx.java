@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class AppSphinx extends JvxRunnableApp  {
+public class AppSphinx extends JvxApp {
 
 	String project = "test";
 	String basedir = "./";
@@ -26,8 +26,7 @@ public class AppSphinx extends JvxRunnableApp  {
 	static String config = "live.xml";
 	Interact inter;
 	Synthesizer speaker;
-        private String speechFile;
-
+        
 
 	public AppSphinx (Properties kv) {
 		// Log.setLevelByName (kv.getProperty ("log_level"));
@@ -108,19 +107,19 @@ public class AppSphinx extends JvxRunnableApp  {
 		}
 	}
     
-    protected void processSpeech (String speech) {
+    public void processSpeech (String speech) {
         ConfigurationManager cm = null;
         Log.info ("Loading...");
         URL audioURL = null;
         try {
             cm = new ConfigurationManager (new File(config).toURI().toURL());
         // allocate the recognizer
-            audioURL = new File("test.wav").toURI().toURL();
+            audioURL = new File(speech).toURI().toURL();
         } catch (MalformedURLException ex) {
             Logger.getLogger(AppSphinx.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        firePropertyChange("info", "", "initializing Sphinx...");
+        firePropertyChange("info", "initializing Sphinx...");
             
         Recognizer recognizer = null;
         try {
@@ -137,7 +136,7 @@ public class AppSphinx extends JvxRunnableApp  {
         System.out.println ("Sample questions are in lm_training_file");
 
         try {
-            firePropertyChange("result", "", "sending: " + speech +" ...");
+            firePropertyChange("result", "sending: " + speech +" ...");
             
             Result result = recognizer.recognize ();
             String recognized = null;
@@ -145,20 +144,20 @@ public class AppSphinx extends JvxRunnableApp  {
 
             if (result != null) {
                     recognized = result.getBestResultNoFiller ();
-                    firePropertyChange("result", "", "recognized: " + recognized);
+                    firePropertyChange("result", "recognized: " + recognized);
                     
                     System.out.println ("You said: " + recognized + '\n');
             } else {
                     System.out.println ("I can't hear what you said.");
-                    firePropertyChange("result", "", "I can't hear what you said.");
+                    firePropertyChange("result", "I can't hear what you said.");
             }
             if (recognized != null) {
                     response = inter.execute (recognized);
-                    firePropertyChange("result", "", "reply: " + response);
+                    firePropertyChange("result", "reply: " + response);
                     
                     System.out.println ("Reply: " + response);
                     Thread.sleep (4000);
-                    //speaker.speak (response);
+                    speaker.speak (response);
             }
         } catch (Exception e) {
                 e.printStackTrace ();
@@ -166,8 +165,5 @@ public class AppSphinx extends JvxRunnableApp  {
     }
     public void speak(String speech) {
         speaker.speak(speech);
-    }
-    protected String getSpeechFile() {
-        return speechFile;
     }
 }

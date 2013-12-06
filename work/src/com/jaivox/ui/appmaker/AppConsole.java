@@ -27,11 +27,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-public class AppConsole extends JvxRunnableApp {
+public class AppConsole extends JvxApp {
 
 	static String basedir = "./";
 	Interact inter;
-        String speechText;
         
 	public AppConsole (Properties kv) {
 		Log log = new Log ();
@@ -42,7 +41,6 @@ public class AppConsole extends JvxRunnableApp {
 
 	void initializeInterpreter (Properties kv) {
                 basedir = kv.getProperty ("Base");
-		speechText = kv.getProperty("speech_file");
 		Command cmd = new Command ();
 		inter = new Interact (basedir, kv, cmd);
 	}
@@ -62,14 +60,11 @@ public class AppConsole extends JvxRunnableApp {
 			return;
 		}
 	}
-        protected void processSpeech (String speech) {
+        public void processSpeech (String speech) {
             System.out.println("processSpeech: " + speech);
             String response = inter.execute (speech);
-            firePropertyChange("result", "", "reply: " + response);
+            firePropertyChange("result", "reply: " + response);
         }
         public void speak(String speech) {
-        }
-        protected String getSpeechFile() {
-            return speechText;
         }
 }
