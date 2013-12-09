@@ -24,6 +24,8 @@ import javax.swing.undo.UndoableEdit;
 public class JvxSynonymsHelper {
     static String datadir = JvxConfiguration.datadir;
     JvxMainFrame theFrame = null;
+	
+	static int defaultMaxSyns = 3;
     
      
     public JvxSynonymsHelper (JvxMainFrame frame) {
@@ -80,11 +82,20 @@ public class JvxSynonymsHelper {
                     JMenu syMenu = new JMenu(word);
                     final PopUpMenuAction menuAction = new PopUpMenuAction(theFrame, word);
         
+					int count = 0;
                     for(String s : syns) {
                         if(word.equals(s)) continue;
                         //JCheckBoxMenuItem menuItem = new StayOpenCheckBoxMenuItem(s, true);
                         JCheckBox menuItem = new JCheckBox(s);
-                        menuItem.setSelected( !sx.isExcluded(s) );
+						if (count < defaultMaxSyns) {
+							boolean excluded = sx.isExcluded (s);
+							// if (!excluded) count++;
+							count++;
+	                        menuItem.setSelected( !excluded );
+						}
+						else {
+							menuItem.setSelected (false);
+						}
                         menuItem.addActionListener(menuAction);
                         syMenu.add(menuItem);
                     }

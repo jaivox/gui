@@ -149,7 +149,7 @@ public class Gui2Gram {
 					key = "_" + key;
 				}
 				ArrayList<String> vals = rules.get (head);
-				if (vals.size () < 2) continue;
+				// if (vals.size () < 2) continue;
 				out.println ("{");
 				out.println (key);
 				out.println ("\t" + filt + " ;");

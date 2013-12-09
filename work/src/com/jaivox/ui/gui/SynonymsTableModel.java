@@ -184,6 +184,7 @@ class SynonymsTableModel extends AbstractTableModel {
         if(rows != null) {
             values = new ArrayList<ArrayList<Object>>();
         
+			int rowcount = 0;
             for(Object[] row : rows) {
                 ArrayList<Object> rd = new ArrayList();
                 int col = 0;
@@ -195,7 +196,11 @@ class SynonymsTableModel extends AbstractTableModel {
                     else {
                         if(!names.get(col).equals(v)) {
                             boolean f = theSentence.isExcluded(cell.toString()) ? false : true;
-                            rd.add(new SynsData(f, (String) cell));
+                            if (rowcount >= JvxSynonymsHelper.defaultMaxSyns) {
+								f = false;
+								System.out.println ("Selection false for "+(String)cell);
+							}
+							rd.add(new SynsData(f, (String) cell));
                             colSelected.set(col, f);
                         }
                         else rd.add(defaultValue(0, 0));
@@ -203,6 +208,7 @@ class SynonymsTableModel extends AbstractTableModel {
                     col++;
                 }
                 values.add(rd);
+				rowcount++;
             }
             for(Iterator<ArrayList<Object>> it = values.iterator(); it.hasNext();) {
                 boolean empty = true;
