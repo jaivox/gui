@@ -32,7 +32,7 @@ public class JvxSynonymsHelper {
         super ();
         theFrame = frame;
     }
-	
+    
     public JMenu createSynonymsMenu(Object ox) {
         JMenu submenu = new JMenu("Synonyms");
         
@@ -63,6 +63,34 @@ public class JvxSynonymsHelper {
         if(ox instanceof SentenceX) {
             SentenceX sx = (SentenceX)ox;
             String words[] = sx.getWords();
+            SynonymsTableModel model = (SynonymsTableModel)theFrame.getSynsTab().getModel();
+            int j = 0;
+            for(String word : words) {
+                int rows = model.getRowCount();
+                JMenu syMenu = new JMenu(word);
+                final PopUpMenuAction menuAction = new PopUpMenuAction(theFrame, word);
+    
+                for(int i = 0; i < rows; i++) {
+                    Object v = model.getValueAt(i, j);
+                    if(v instanceof SynsData) {
+                        SynsData d = (SynsData)v;
+                        String s = d.getValue();
+                        if(s== null || s.length() <=0 || word.equals(s)) continue;
+                        
+                        JCheckBox menuItem = new JCheckBox(s);
+                        menuItem.setSelected( d.getSelected() && !sx.isExcluded(s) );
+                        menuItem.addActionListener(menuAction);
+                        syMenu.add(menuItem);
+                    }
+                }
+                j++;
+                submenu.add(syMenu);
+            }
+            return submenu;
+        }
+        if(ox instanceof SentenceX) {
+            SentenceX sx = (SentenceX)ox;
+            String words[] = sx.getWords();
             String[][] okwords = sx.getOkayWords();
             for(String word : words) {
                 String[] syns = null;
@@ -82,20 +110,11 @@ public class JvxSynonymsHelper {
                     JMenu syMenu = new JMenu(word);
                     final PopUpMenuAction menuAction = new PopUpMenuAction(theFrame, word);
         
-					int count = 0;
                     for(String s : syns) {
                         if(word.equals(s)) continue;
                         //JCheckBoxMenuItem menuItem = new StayOpenCheckBoxMenuItem(s, true);
                         JCheckBox menuItem = new JCheckBox(s);
-						if (count < defaultMaxSyns) {
-							boolean excluded = sx.isExcluded (s);
-							// if (!excluded) count++;
-							count++;
-	                        menuItem.setSelected( !excluded );
-						}
-						else {
-							menuItem.setSelected (false);
-						}
+                        menuItem.setSelected( !sx.isExcluded(s) );
                         menuItem.addActionListener(menuAction);
                         syMenu.add(menuItem);
                     }
@@ -133,6 +152,7 @@ public class JvxSynonymsHelper {
                 model.setDataVector(null, sx.getWords());
             }
             else {
+                model.setMaxSynSelections(defaultMaxSyns);
                 model.setDataVector(sx.getWordOptions(), sx.getWords());
                 sx.setTabModvalues(model.getValues());
             }

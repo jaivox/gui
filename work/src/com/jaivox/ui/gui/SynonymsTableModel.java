@@ -28,6 +28,10 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 
+
+
+
+
 /**
  *
  * @author rj
@@ -39,6 +43,7 @@ class SynonymsTableModel extends AbstractTableModel {
     private ArrayList<String> names = null;
     private ArrayList<ArrayList<Object>> values;
     private ArrayList<Boolean> colSelected = null;
+    private int maxSynSelections = -1;
     
     TableModelListener tabListener = null;
 
@@ -49,7 +54,14 @@ class SynonymsTableModel extends AbstractTableModel {
     public void setTabListener(TableModelListener tabListener) {
         this.tabListener = tabListener;
     }
-    
+
+    public int getMaxSynSelections() {
+        return maxSynSelections;
+    }
+
+    public void setMaxSynSelections(int maxSynSelections) {
+        this.maxSynSelections = maxSynSelections;
+    }
 
     public SynonymsTableModel() {
         init();
@@ -184,7 +196,7 @@ class SynonymsTableModel extends AbstractTableModel {
         if(rows != null) {
             values = new ArrayList<ArrayList<Object>>();
         
-			int rowcount = 0;
+            int rowcount = 0;
             for(Object[] row : rows) {
                 ArrayList<Object> rd = new ArrayList();
                 int col = 0;
@@ -196,11 +208,11 @@ class SynonymsTableModel extends AbstractTableModel {
                     else {
                         if(!names.get(col).equals(v)) {
                             boolean f = theSentence.isExcluded(cell.toString()) ? false : true;
-                            if (rowcount >= JvxSynonymsHelper.defaultMaxSyns) {
-								f = false;
-								System.out.println ("Selection false for "+(String)cell);
-							}
-							rd.add(new SynsData(f, (String) cell));
+                            if (maxSynSelections >= 0 && rowcount >= maxSynSelections) {
+                                f = false;
+				System.out.println ("Selection false for "+(String)cell);
+                            }
+                            rd.add(new SynsData(f, (String) cell));
                             colSelected.set(col, f);
                         }
                         else rd.add(defaultValue(0, 0));
@@ -208,7 +220,7 @@ class SynonymsTableModel extends AbstractTableModel {
                     col++;
                 }
                 values.add(rd);
-				rowcount++;
+		rowcount++;
             }
             for(Iterator<ArrayList<Object>> it = values.iterator(); it.hasNext();) {
                 boolean empty = true;
@@ -223,6 +235,7 @@ class SynonymsTableModel extends AbstractTableModel {
                 empty = true;
             }
         }
+        maxSynSelections = -1;
         this.fireTableStructureChanged();
     }
 
@@ -266,7 +279,16 @@ class SynonymsTableModel extends AbstractTableModel {
     boolean isInColumn(String line, int col) {
         return findRow(col, line) != -1;
     }
-
+    
+    @Override
+    public int findColumn(String columnName) {
+        for (int i = 0; i < getColumnCount(); i++) {
+            if (columnName.equals(names.get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
     int findRow(int col, String syn) {
         int i = 0;
         for(ArrayList cells : values) {

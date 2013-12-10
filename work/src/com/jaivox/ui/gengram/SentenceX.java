@@ -28,7 +28,7 @@ public class SentenceX implements SelectionHandler {
     public void setTheSentence(Sentence theSentence) {
         this.theSentence = theSentence;
         this.theSentence.setSelectionhandler(this);
-        tabModvalues = null;
+        //tabModvalues = null;
     }
     public SentenceX(Sentence c)
     {
