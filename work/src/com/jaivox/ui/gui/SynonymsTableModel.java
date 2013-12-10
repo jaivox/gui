@@ -207,10 +207,11 @@ class SynonymsTableModel extends AbstractTableModel {
                     }
                     else {
                         if(!names.get(col).equals(v)) {
-                            boolean f = theSentence.isExcluded(cell.toString()) ? false : true;
+                            boolean f = theSentence.isExcluded(v) ? false : true;
                             if (maxSynSelections >= 0 && rowcount >= maxSynSelections) {
                                 f = false;
-				System.out.println ("Selection false for "+(String)cell);
+                                theSentence.addExclusion(v);
+				System.out.println ("Selection false for "+ v);
                             }
                             rd.add(new SynsData(f, (String) cell));
                             colSelected.set(col, f);

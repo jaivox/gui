@@ -1145,18 +1145,22 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         
         if(dirty_flag) {
             Object[] options = {"Yes, please",
-                                    "No, thanks"};
+                                    "No, thanks",
+                                        "Cancel"};
             int n = JOptionPane.showOptionDialog(this,
                             "Your unsaved changes will be lost on Exit!\n" +
                             "Would you like to Save the Changes and Exit?",
                             "Confirm Exit",
-                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.YES_NO_CANCEL_OPTION,
                             JOptionPane.QUESTION_MESSAGE,
                             null,
                             options,
                             options[0]);
             if (n == JOptionPane.YES_OPTION) {
                 save();
+            }
+            else if (n == JOptionPane.CANCEL_OPTION) {
+                return false;
             }
         }
         return true;
@@ -1197,11 +1201,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         try { 
-                            jf.confirmExit();
+                            if( !jf.confirmExit() ) return;
                         } catch (Exception ex) { ex.printStackTrace(); }
                         System.exit(0);
                     }
                 });
+                jf.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
                 jf.setVisible(true);
                 //jf.startWizard();
             }

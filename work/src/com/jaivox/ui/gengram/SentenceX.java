@@ -53,9 +53,11 @@ public class SentenceX implements SelectionHandler {
         return this.theSentence.orig;
     }
     public void generateokays (ArrayList <String> oks) {
-        if(tabModvalues == null)
+        theSentence.setSelectionhandler(this);
+        if(tabModvalues == null || theSentence.alts == null) {
             theSentence.generateokays();
-        oks.addAll(theSentence.alts);
+        }
+        if(theSentence.alts != null) oks.addAll(theSentence.alts);
     }
     public Object[] getSentenceOptions () {
         return theSentence.alts.toArray();

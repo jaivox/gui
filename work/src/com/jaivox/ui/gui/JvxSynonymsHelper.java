@@ -4,15 +4,12 @@
  */
 package com.jaivox.ui.gui;
 
-import com.jaivox.ui.db.JvxDBMetas;
-import com.jaivox.ui.db.JvxDBMgr;
 import com.jaivox.ui.gengram.SentenceX;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Map;
 import javax.swing.JPopupMenu;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -70,7 +67,7 @@ public class JvxSynonymsHelper {
             int j = 0;
             for(String word : words) {
                 int rows = model.getRowCount();
-                JMenu syMenu = new JMenu(word);
+                JMenu syMenu = null;
                 final PopUpMenuAction menuAction = new PopUpMenuAction(theFrame, word);
     
                 for(int i = 0; i < rows; i++) {
@@ -79,7 +76,7 @@ public class JvxSynonymsHelper {
                         SynsData d = (SynsData)v;
                         String s = d.getValue();
                         if(s== null || s.length() <=0 || word.equals(s)) continue;
-                        
+                        if(syMenu == null) syMenu = new JMenu(word);
                         JCheckBox menuItem = new JCheckBox(s);
                         menuItem.setSelected( d.getSelected() && !sx.isExcluded(s) );
                         menuItem.addActionListener(menuAction);
@@ -87,11 +84,11 @@ public class JvxSynonymsHelper {
                     }
                 }
                 j++;
-                submenu.add(syMenu);
+                if(syMenu != null) submenu.add(syMenu);
             }
             return submenu;
         }
-        if(ox instanceof SentenceX) {
+        if(ox instanceof SentenceX) {   // to be removed
             SentenceX sx = (SentenceX)ox;
             String words[] = sx.getWords();
             String[][] okwords = sx.getOkayWords();
@@ -382,6 +379,8 @@ class PopUpMenuAction implements ActionListener {
             SentenceX sx = (SentenceX) theFrame.getSelectedNode().getUserObject();
             if(!cb.isSelected()) {
                 sx.addExclusion(syn);
+            }
+            {
                 int col = model.findColumn(word);
                 int row = model.findRow(col, syn);
                 model.updateValue(row, col, cb.isSelected());

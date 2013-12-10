@@ -248,6 +248,9 @@ public class Sentence {
 				blank[stage] = words[stage];
 				generateokay (blank, stage + 1);
 			} else {
+                                if (selectionHandler != null) {
+                                    sub = selectionHandler.filterUnSelected (sub);
+                                }
 				for (int i = 0; i < sub.length; i++) {
 					blank[stage] = sub[i];
 					generateokay (blank, stage + 1);

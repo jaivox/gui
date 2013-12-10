@@ -142,13 +142,15 @@ public class GrammarGenerator {
     }
     public static SentenceX createSentence(String statement) {
         if(P == null) P = new Parse();
+        SentenceX sx = null;
         Sentence sent = P.doparse (statement);
         if (sent != null) {
+            sx = sent == null ? null : new SentenceX( sent );
             P.sentences.put (sent.orig, sent);
             sent.multiwordsubs (P, W);
-            sent.generateokays ();
+            //sent.generateokays ();
         }
-        SentenceX sx = sent == null ? null : new SentenceX( sent );
+        
         return sx;
     }
     public static void removeSentence(Object key) {

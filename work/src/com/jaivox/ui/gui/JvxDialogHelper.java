@@ -112,6 +112,7 @@ public class JvxDialogHelper {
             //if clicked node was not selected, select it
             if(!isSelected){
                 tree.setSelectionPath(path);
+                dialogTreeMouseClicked(evt);    // update the tab and list
             }
             //if(rightClickedNode.isLeaf()){
                 JPopupMenu popup = createPopup(rightClickedNode);
@@ -199,24 +200,23 @@ public class JvxDialogHelper {
                 
                 ArrayList<String> al = null;
                 Object sx = node.getUserObject();
-                if(sx instanceof SentenceX) {
-                    al = new ArrayList<String> ();
-                    ((SentenceX)sx).generateokays(al);
-                }
-                else if(sx.toString().trim().length() > 0) {
+                
+                if(sx instanceof String && sx.toString().trim().length() > 0) {
                     al = new ArrayList<String> ();
                     sx = JvxDialogHelper.createSentence(sx.toString().trim());
                     if(sx != null) {
                         node.setUserObject(sx);
-                        ((SentenceX)sx).generateokays(al);
                     }
                 }
-                if(al != null) {
+                theFrame.getSynsHelper().populateSynonymsTab(node.getUserObject());
+                
+                al = new ArrayList<String> ();
+                if(sx != null) {
+                    ((SentenceX)sx).generateokays(al);
                     oks.addAll(al);
                 }
                 
                 theFrame.getGrammarList().setListData(oks.toArray());
-                theFrame.getSynsHelper().populateSynonymsTab(node.getUserObject());
                 JvxMainFrame.undoManager_.discardAllEdits();
             }
             else {
