@@ -140,7 +140,7 @@ public class GrammarGenerator {
         sentences.put(key, sent);
         return sent;
     }
-    public static SentenceX createSentence(String statement) {
+    public SentenceX createSentence(String statement) {
         if(P == null) P = new Parse();
         SentenceX sx = null;
         Sentence sent = P.doparse (statement);

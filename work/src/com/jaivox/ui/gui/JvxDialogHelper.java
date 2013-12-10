@@ -211,7 +211,7 @@ public class JvxDialogHelper {
                 theFrame.getSynsHelper().populateSynonymsTab(node.getUserObject());
                 
                 al = new ArrayList<String> ();
-                if(sx != null) {
+                if(sx != null && sx instanceof SentenceX) {
                     ((SentenceX)sx).generateokays(al);
                     oks.addAll(al);
                 }
@@ -241,7 +241,7 @@ public class JvxDialogHelper {
     }
     static Object createSentence(String text) {
         WaitCursor c = new WaitCursor();
-        Object o = GrammarGenerator.createSentence(text);
+        Object o = JvxDialogLoader.getGrammarGenerator().createSentence(text);
         c.go();
         return o;
     }
@@ -329,10 +329,7 @@ class DlgTreeModelListener implements TreeModelListener {
                 if(node.isRoot() || node.getLevel() <= 1) continue;
                 
                 String s = (String) node.getUserObject();
-                Cursor cr = JvxMainFrame.getInstance().getCursor();
-                JvxMainFrame.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 Object sx = JvxDialogHelper.createSentence(s.trim());
-                JvxMainFrame.getInstance().setCursor(cr);
                 
                 if(sx != null) node.setUserObject(sx);
             }
