@@ -54,8 +54,8 @@ public class MenuUtils {
         menu.add(menuItem);
         menuItem = new JMenuItem(MenuAction.MA_DIALOG_TREE);
         menu.add(menuItem);
-        menuItem = new JMenuItem(MenuAction.MA_DATA_FILE);
-        menu.add(menuItem);
+        // menuItem = new JMenuItem(MenuAction.MA_DATA_FILE);
+        // menu.add(menuItem);
         
         RecentFileAction.MENU_RECENT.addMenuListener(RecentFileAction.MA_RECENT);
         menu.add(RecentFileAction.MENU_RECENT);
@@ -150,7 +150,7 @@ public class MenuUtils {
 class MenuAction extends AbstractAction {
     public static MenuAction MA_NEW = new MenuAction("New", KeyEvent.VK_N);
     public static MenuAction MA_DIALOG_TREE = new MenuAction("Open Dialog Tree", KeyEvent.VK_T);
-    public static MenuAction MA_DATA_FILE = new MenuAction("Open Data File", KeyEvent.VK_D);
+   //  public static MenuAction MA_DATA_FILE = new MenuAction("Open Data File", KeyEvent.VK_D);
     
     public MenuAction(String text, Integer mnemonic) {
         super(text);

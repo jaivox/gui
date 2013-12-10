@@ -4,12 +4,15 @@
  */
 package com.jaivox.ui.gui;
 
+import com.jaivox.ui.db.JvxDBMetas;
+import com.jaivox.ui.db.JvxDBMgr;
 import com.jaivox.ui.gengram.SentenceX;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Map;
 import javax.swing.JPopupMenu;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -215,8 +218,9 @@ public class JvxSynonymsHelper {
             JMenuItem addMenuItem = new JMenuItem("Add Row");
             JMenuItem delMenuItem = new JMenuItem("Delete");
             JMenuItem editMenuItem = new JMenuItem("Edit Row");
-            
-            selectMenuItem.addActionListener(menuAction);
+			JMenuItem dbLinkMenuItem = null;
+			
+	        selectMenuItem.addActionListener(menuAction);
             addMenuItem.addActionListener(menuAction);
             delMenuItem.addActionListener(menuAction);
             editMenuItem.addActionListener(menuAction);
@@ -225,6 +229,15 @@ public class JvxSynonymsHelper {
             popup.add(addMenuItem);
             popup.add(delMenuItem);
             popup.add(editMenuItem);
+			
+    		// add a message about dragging and dropping database entries
+			boolean dataLoaded = JvxDialogLoader.isDataLoaded ();
+			if (dataLoaded) {
+				// System.out.println ("dataLoaded is true");
+				dbLinkMenuItem = new JMenuItem ("Add from database");
+				dbLinkMenuItem.addActionListener (menuAction);
+				popup.add (dbLinkMenuItem);
+			}
             
             MenuUtils.addUndoRedoMenus(popup);
             
@@ -403,5 +416,8 @@ class PopUpMenuAction implements ActionListener {
         else if(action.equals("(Un)Select All")) {
             model.selectAll(table.getSelectedColumn());
         }
+		else if (action.equals ("Add from database")) {
+			JOptionPane.showMessageDialog(theFrame, "Drag and drop from data into synonyms table.");
+		}
     }
 }

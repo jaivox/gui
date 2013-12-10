@@ -41,7 +41,7 @@ public class JvxDBMetas {
     
     boolean valid = false;
     Map<String, List<String>> tabNCols = null;
-    
+
     static {
         try {
             dbGlobals.load(new FileInputStream(JvxConfiguration.datadir + "dbglobals.properties"));
@@ -232,7 +232,8 @@ public class JvxDBMetas {
                 return null;
         }
     }
-    public static void main (String args []) {
+
+	public static void main (String args []) {
         try {
             JvxDBMetas j = new JvxDBMetas ("mysqlX");
             if (j.valid) {

@@ -230,6 +230,12 @@ public class JvxDialogLoader {
         }
     }
     private static JvxDBMgr dbInter = null;
+	private static boolean dataLoaded = false;
+
+	public static boolean isDataLoaded () {
+		return dataLoaded;
+	}
+
     public void interfaceDialogs(ActionEvent evt) {
         if(evt.getActionCommand().equals("DBInterface")) {
             if(dbInter != null) {
@@ -243,6 +249,7 @@ public class JvxDialogLoader {
                     int i = 0;
                     for(List row : rows) {
                         vals[i++] = row.toArray();
+						if (!dataLoaded) dataLoaded = true;
                     }
                     try {
                         this.theFrame.getQualdbTable().setModel(
