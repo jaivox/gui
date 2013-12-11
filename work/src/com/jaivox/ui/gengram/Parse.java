@@ -10,12 +10,15 @@ import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.trees.Tree;
 
 import com.jaivox.util.Log;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Parse {
 
 	static String penntags = "penn.txt";
-	static String breaks = "~`!@#$%^&*()_+={}[]|\\:;\"<>,.?/ \t\r\n";
+	// note underline symbol is not a break, as in Java or C
+	static String breaks = "~`!@#$%^&*()+={}[]|\\:;\'\"<>,.?/ \t\r\n";
 
 	static TreeMap <String, String> tags;
 	ArrayList <String> statements;
@@ -96,6 +99,8 @@ public class Parse {
 	}
 	
 	boolean loadstatements (String filename) {
+		String quoted = "([^\"]\\S*|\".+?\")\\s*";
+		Pattern P = Pattern.compile (quoted);
 		try {
 			BufferedReader in = new BufferedReader (new FileReader (filename));
 			String line;
@@ -109,8 +114,9 @@ public class Parse {
 					if (!token.endsWith ("?") && !token.endsWith (".")) {
 						token = token + ".";
 					}
-					Debug ("Adding statement: "+token);
-					statements.add (token);
+					String fixed = padQuotes (P, token);
+					System.out.println ("Adding statement: "+fixed);
+					statements.add (fixed);
 				}
 			}
 			in.close ();
@@ -120,6 +126,30 @@ public class Parse {
 			e.printStackTrace ();
 			return false;
 		}
+	}
+	// assume that syntax requires double quoted multiline units
+	public static String padQuotes (Pattern P, String s) {
+		if (s.indexOf ("\"") == -1) return s;
+		ArrayList <String> list = new ArrayList <String> ();
+		Matcher M = P.matcher (s);
+		while (M.find ()) {
+			list.add (M.group ());
+		}
+		int n = list.size ();
+		String words [] = list.toArray (new String [n]);
+		StringBuffer sb = new StringBuffer ();
+		for (int i=0; i<n; i++) {
+			String word = words [i];
+			if (word.indexOf ("\"") != -1) {
+				String noquote = word.replaceAll ("\"","").trim ();
+				String padded = noquote.replaceAll (" ", "_");
+				sb.append (padded);
+			}
+			else sb.append (word);
+			if (i < n-1) sb.append (' ');
+		}
+		String all = new String (sb);
+		return all;
 	}
 	
 	boolean loadparser () {

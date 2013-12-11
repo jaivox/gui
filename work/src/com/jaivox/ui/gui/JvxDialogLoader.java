@@ -11,6 +11,7 @@ import javax.swing.JTree;
 import com.jaivox.tools.*;
 import com.jaivox.ui.db.JvxDBMgr;
 import com.jaivox.ui.gengram.GrammarGenerator;
+import com.jaivox.ui.gengram.Parse;
 import com.jaivox.ui.gengram.SentenceX;
 import com.jaivox.ui.gengram.Sentence;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -117,6 +119,8 @@ public class JvxDialogLoader {
         int level = 0;
         DefaultMutableTreeNode node[] = new DefaultMutableTreeNode[10];
         node[0] = new DefaultMutableTreeNode(rootName);
+		String quoted = "([^\"]\\S*|\".+?\")\\s*";
+		Pattern P = Pattern.compile (quoted);
         
         try {
             in = new BufferedReader (new FileReader (filename));
@@ -124,7 +128,8 @@ public class JvxDialogLoader {
             boolean skip = false;
             
             while ((line = in.readLine ()) != null) {
-                String tabline = line;
+                line = Parse.padQuotes (P, line);
+				String tabline = line;
                 line = line.trim();
                 if(line.length() <= 0) continue;
                 if(line.startsWith("{")) skip = true;
@@ -157,6 +162,8 @@ public class JvxDialogLoader {
         }
         return node[0];
     }
+	
+	
     public void loadDoNotExpandwords() {
         String f = JvxConfiguration.theConfig().getDoNotExpandWords();
         try {

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,6 +42,8 @@ public class JvxDBMetas {
     
     boolean valid = false;
     Map<String, List<String>> tabNCols = null;
+	// note underline symbol is not a break, as in Java or C
+	static String breaks = "~`!@#$%^&*()+={}[]|\\:;\'\"<>,.?/ \t\r\n";
 
     static {
         try {
@@ -208,7 +211,8 @@ public class JvxDBMetas {
     String buildSelectQuery(String s) {
         return "SELECT * FROM " + s +";";
     }
-    public List<List<String>> queryTab (String tab) {
+
+	public List<List<String>> queryTab (String tab) {
         try {
             if(!valid) return null;
         
@@ -221,7 +225,9 @@ public class JvxDBMetas {
                 ArrayList <String> results = new ArrayList <String> ();
                 for(int i = 0; i < flds.size(); i++) {
                     String s = rs.getString( flds.get(i) );
-                    results.add (s == null ? "" : s);
+					String padded = padMultiWords (s);
+					results.add (padded);
+                    // results.add (s == null ? "" : s);
                 }
                 rows.add(results);
             }
@@ -232,6 +238,26 @@ public class JvxDBMetas {
                 return null;
         }
     }
+	
+	String padMultiWords (String s) {
+		if (s == null) return "";
+		// if (s.indexOf ("\"") == -1 && s.indexOf ("\'") == -1) return s;
+		StringTokenizer st = new StringTokenizer (s, breaks);
+		int n = st.countTokens ();
+		if (n == 0) return "";
+		if (n == 1) {
+			String stripped = st.nextToken ();
+			return stripped;
+		}
+		StringBuffer sb = new StringBuffer ();
+		while (st.hasMoreTokens ()) {
+			sb.append (st.nextToken ());
+			if (st.hasMoreTokens ()) sb.append ('_');
+		}
+		String padded = new String (sb);
+		System.out.println ("Padded: "+padded);
+		return padded;
+	}
 
 	public static void main (String args []) {
         try {
