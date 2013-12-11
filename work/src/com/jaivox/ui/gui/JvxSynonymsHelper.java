@@ -311,6 +311,7 @@ class TableActionHandler  implements TableModelListener {
                         String tag = model.getSentenceX().getTagFormAt(col);
                         model.getSentenceX().removeUserWord(word);
                         model.getSentenceX().removeUserSynonym(columnName, tag, word);
+                        JvxDialogLoader.getGrammarGenerator().removeSynonym(columnName, word, tag);
                     }
                     else {
                         model.getSentenceX().addExclusion(word); 

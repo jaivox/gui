@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -22,6 +23,9 @@ public class GrammarGenerator {
     static WnLink W;
     private static Map<String, WnLink> synRepos = null;
     static String tests [];
+    
+    public static final String quoted = "([^\"]\\S*|\".+?\")\\s*";
+    public static final Pattern regxQuoted = Pattern.compile (quoted);
     
     public GrammarGenerator(String dataFolder) {
         //W.synsfile = dataFolder + W.synsfile;
@@ -143,6 +147,7 @@ public class GrammarGenerator {
     public SentenceX createSentence(String statement) {
         if(P == null) P = new Parse();
         SentenceX sx = null;
+        statement = Parse.padQuotes (GrammarGenerator.regxQuoted, statement);
         Sentence sent = P.doparse (statement);
         if (sent != null) {
             sx = sent == null ? null : new SentenceX( sent );
@@ -155,5 +160,17 @@ public class GrammarGenerator {
     }
     public static void removeSentence(Object key) {
         P.sentences.remove(key);
+    }
+
+    public void removeSynonym(String word, String syn, String tag) {
+        W.synsremove(word, syn, word);
+
+        String[] ar = W.dbsyns.get(word);
+        if(ar == null) return;
+        ArrayList<String> arl = new ArrayList<String>();
+        arl.addAll(Arrays.asList(ar));
+        arl.remove(syn);
+        ar = arl.toArray(new String[0]);
+        W.dbsyns.put(word, ar);
     }
 }

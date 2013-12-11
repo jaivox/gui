@@ -6,7 +6,6 @@ package com.jaivox.ui.gui;
 
 import bitpix.list.basicNode;
 import com.jaivox.ui.appmaker.GuiPrep;
-import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.SentenceX;
 import javax.swing.*;
 import java.awt.*;

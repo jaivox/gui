@@ -119,16 +119,14 @@ public class JvxDialogLoader {
         int level = 0;
         DefaultMutableTreeNode node[] = new DefaultMutableTreeNode[10];
         node[0] = new DefaultMutableTreeNode(rootName);
-		String quoted = "([^\"]\\S*|\".+?\")\\s*";
-		Pattern P = Pattern.compile (quoted);
-        
+	
         try {
             in = new BufferedReader (new FileReader (filename));
             String line;
             boolean skip = false;
             
             while ((line = in.readLine ()) != null) {
-                line = Parse.padQuotes (P, line);
+                line = Parse.padQuotes (GrammarGenerator.regxQuoted, line);
 				String tabline = line;
                 line = line.trim();
                 if(line.length() <= 0) continue;

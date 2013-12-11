@@ -161,6 +161,11 @@ public class WnLinkDb implements WnLink {
         syns.put(word, words);
     }
     public void dumpSynonyms() { }
+
+    @Override
+    public void synsremove(String word, String syn, String form) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
 
 		

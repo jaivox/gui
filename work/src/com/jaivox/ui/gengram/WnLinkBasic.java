@@ -31,6 +31,11 @@ public class WnLinkBasic implements WnLink {
     public void createsyns() {
         
     }
+
+    @Override
+    public void synsremove(String word, String syn, String form) {
+        
+    }
     
     
 }

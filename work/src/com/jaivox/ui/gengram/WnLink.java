@@ -17,6 +17,7 @@ public interface WnLink {
     public String[] getsynonyms (String word);
     public String[] synsget(String word, String form);
     public void synsput(String word, String[] words, String form);
+    public void synsremove(String word, String syn, String form);
     public void addtablecolumn (String filename, String sep, int columns, int column);
     public void dumpSynonyms();
     public void createsyns ();

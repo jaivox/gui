@@ -52,6 +52,20 @@ public class WnLinkJWNL implements WnLink {
             syns.put(word+"@"+pos, words);
         }
     }
+    public void synsremove(String word, String syn, String form) {
+        //POS type
+         String pos = findPOSTag(form);
+        
+        String[] ts = getsynonyms(word, pos);
+        if(ts != null) {
+            List<String> al = Arrays.asList(ts);
+            al.remove(syn);
+            if(al.size() > 0) { 
+                syns.put(word+"@"+pos, al.toArray(new String[al.size()]));
+            }
+            else syns.remove(word+"@"+pos);
+        }
+    }
     public void addSynonym(String word, String[] newsyns) {
         String[] ts = syns.get(word);
         if(ts != null) {
