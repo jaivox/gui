@@ -116,7 +116,12 @@ public class RecordTask implements ActionListener{
 		else return "error";
 	}
 
-    static String runcommand (String input) {
+/**
+ * Run a command in the current operating system using the Runtime class.
+ * @param input
+ * @return 
+ */
+    public static String runcommand (String input) {
 		try {
 			Process p = Runtime.getRuntime ().exec (input);
 			StringBuffer buffer = new StringBuffer ();

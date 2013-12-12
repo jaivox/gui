@@ -4,7 +4,11 @@
  */
 package com.jaivox.ui.gui;
 
+import com.jaivox.synthesizer.web.Synthesizer;
+import com.jaivox.ui.appmaker.AppSphinx;
+import com.jaivox.ui.appmaker.AppWeb;
 import com.jaivox.ui.appmaker.GuiPrep;
+import com.jaivox.ui.appmaker.RecordTask;
 import java.awt.Component;
 import java.awt.Container;
 import javax.swing.*;
@@ -14,6 +18,8 @@ import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -101,6 +107,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		expandYNButton.setSelected (false);
 		expandYNButton.setText ("Expand Synonyms");
 		
+		checkInstalled ();
 		initLanguages ();
 		initLanguageCodes ();
 		createButtonGroups ();
@@ -714,6 +721,83 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
  
+/**
+ * Check whether a program is installed by running the program with -h
+ * option. Also check if the result is longer than 100 characters, since
+ * the help obtained is usually much longer.
+ * @param application
+ * @return 
+ */
+	public static boolean installed (String application) {
+		String command = application + " -h";
+		String result = RecordTask.runcommand (command);
+		if (result == null) return false;
+		if (result.toLowerCase ().trim ().endsWith ("not found...")) return false;
+		if (result.length () < 100) return false;
+		// System.out.println (result.substring (0, 100));
+		System.out.println (application+" is installed");
+		return true;
+	}
+	
+	public static boolean checkNetAccess (String url, int port) {
+		try {
+			InetSocketAddress address = new InetSocketAddress (url, port);
+			SocketChannel channel = SocketChannel.open ();
+			channel.configureBlocking (false);
+			boolean ok = channel.connect (address);
+			if (ok) {
+				if (channel.isOpen ()) channel.close ();
+				return ok;
+			}
+			else {
+				return false;
+			}
+		}
+		catch (Exception e) {
+			System.out.println ("checkNetAccess: "+e.toString ());
+			return false;
+		}
+	}
+	
+/**
+ * Check for jar file in class path
+ * @param content
+ * @return 
+ */
+	public static boolean checkClasspath (String content) {
+		String classpath = System.getProperty("java.class.path");
+		System.out.println ("classpath="+classpath);
+		int pos = classpath.indexOf (content);
+		if (pos != -1) {
+			System.out.println (content+" is in the classpath");
+			return true;
+		}
+		else {
+			System.out.println (content+" is not in the classpath");
+			return false;
+		}
+	}
+	
+	void checkInstalled () {
+		cbEspeak.setEnabled (installed ("espeak"));
+		cbFestival.setEnabled (installed ("festival"));
+		cbGoogleRecognizer.setEnabled (installed ("sox"));
+		cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
+		cbGoogleRecognizer.setEnabled (AppWeb.testSpeech ("work/apps/common/test.flac"));
+		// cbSphinx.setEnabled (AppSphinx.testSpeech ("work/apps/common/test.wav"));
+		Synthesizer speaker = new Synthesizer ();
+		cbGoogletts.setEnabled (speaker.speak ("testing google text to speech"));
+		// check some urls, does not seem to work right
+		/*
+		boolean okwebasr = 
+		checkNetAccess ("http://www.google.com/speech-api/v1/recognize?lang=en-US&client=chromium", 80);
+		cbGoogleRecognizer.setEnabled (okwebasr);
+		boolean okwebtts =
+		checkNetAccess ("http://translate.google.com/translate_tts?tl=en&&ie=UTF-8&q=test", 80);
+		cbGoogletts.setEnabled (okwebtts);
+		*/
+	}
+	
 	void initLanguages () {
 		langCombo.setModel (new javax.swing.DefaultComboBoxModel (Languages));
 	}

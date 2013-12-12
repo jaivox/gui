@@ -24,6 +24,7 @@ public class AppSphinx extends JvxApp {
 	String basedir = "./";
 	String asrLang = "en-US";
 	static String config = "live.xml";
+	static String altconfig = "work/apps/common/live.xml";
 	Interact inter;
 	Synthesizer speaker;
         
@@ -163,6 +164,55 @@ public class AppSphinx extends JvxApp {
                 e.printStackTrace ();
         }
     }
+	
+    public static boolean testSpeech (String speech) {
+        ConfigurationManager cm = null;
+        Log.info ("Loading...");
+        URL audioURL = null;
+        try {
+            cm = new ConfigurationManager (new File(altconfig).toURI().toURL());
+        // allocate the recognizer
+            audioURL = new File(speech).toURI().toURL();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(AppSphinx.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+		Recognizer recognizer = null;
+        try {
+            recognizer = (Recognizer) cm.lookup ("recognizer");
+            recognizer.allocate ();
+        
+            AudioFileDataSource dataSource = (AudioFileDataSource) cm.lookup("audioFileDataSource");
+            dataSource.setAudioFile(audioURL, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            System.out.println ("sending: " + speech +" ...");
+            
+            Result result = recognizer.recognize ();
+            String recognized = null;
+            String response = null;
+
+            if (result != null) {
+                    recognized = result.getBestResultNoFiller ();
+                    System.out.println ("Test result: " + recognized + '\n');
+					return true;
+            } else {
+                    System.out.println ("I can't hear what you said.");
+					return false;
+            }
+        } catch (Exception e) {
+                System.out.println ("testing sphinx: "+e.toString ());
+				return false;
+        }
+    }
+	
+	
+	
     public void speak(String speech) {
         speaker.speak(speech);
     }

@@ -112,7 +112,23 @@ public class AppWeb extends JvxApp {
             }
         }
     }
-    public void speak(String speech) {
+
+    public static boolean testSpeech (String speech) {
+        speech = RecordTask.wavToflac(speech);
+        SpeechInput R = new SpeechInput ();
+        int empty = 0;
+        int maxempty = 5;
+        if (speech != null) {
+            String result = R.recognize (speech, "en-US");
+            System.out.println ("result:" + result);
+            if (result.trim ().length () > 0) return true;
+			else return false;
+        }
+		else return false;
+    }
+
+	
+	public void speak(String speech) {
         speaker.speak(speech);
     }
 }
