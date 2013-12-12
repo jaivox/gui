@@ -784,7 +784,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		cbGoogleRecognizer.setEnabled (installed ("sox"));
 		cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
 		cbGoogleRecognizer.setEnabled (AppWeb.testSpeech ("work/apps/common/test.flac"));
-		// cbSphinx.setEnabled (AppSphinx.testSpeech ("work/apps/common/test.wav"));
+		cbSphinx.setEnabled (AppSphinx.testSpeech ("work/apps/common/test.wav"));
 		Synthesizer speaker = new Synthesizer ();
 		cbGoogletts.setEnabled (speaker.speak ("testing google text to speech"));
 		// check some urls, does not seem to work right

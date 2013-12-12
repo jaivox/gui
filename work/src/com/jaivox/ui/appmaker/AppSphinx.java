@@ -24,7 +24,8 @@ public class AppSphinx extends JvxApp {
 	String basedir = "./";
 	String asrLang = "en-US";
 	static String config = "live.xml";
-	static String altconfig = "work/apps/common/live.xml";
+	static String batch = "batch.xml";
+	static String altconfig = "work/apps/common/test.xml";
 	Interact inter;
 	Synthesizer speaker;
         
@@ -113,7 +114,7 @@ public class AppSphinx extends JvxApp {
         Log.info ("Loading...");
         URL audioURL = null;
         try {
-            cm = new ConfigurationManager (new File(config).toURI().toURL());
+            cm = new ConfigurationManager (new File(batch).toURI().toURL());
         // allocate the recognizer
             audioURL = new File(speech).toURI().toURL();
         } catch (MalformedURLException ex) {
