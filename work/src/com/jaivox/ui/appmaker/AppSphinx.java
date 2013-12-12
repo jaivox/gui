@@ -136,7 +136,7 @@ public class AppSphinx extends JvxApp {
         System.out.println ("Sample questions are in lm_training_file");
 
         try {
-            firePropertyChange("result", "sending: " + speech +" ...");
+            firePropertyChange("info", "sending: " + speech +" ...");
             
             Result result = recognizer.recognize ();
             String recognized = null;
@@ -144,7 +144,7 @@ public class AppSphinx extends JvxApp {
 
             if (result != null) {
                     recognized = result.getBestResultNoFiller ();
-                    firePropertyChange("result", "recognized: " + recognized);
+                    firePropertyChange("info", "recognized: " + recognized);
                     
                     System.out.println ("You said: " + recognized + '\n');
             } else {
@@ -153,11 +153,11 @@ public class AppSphinx extends JvxApp {
             }
             if (recognized != null) {
                     response = inter.execute (recognized);
-                    firePropertyChange("result", "reply: " + response);
+                    firePropertyChange("result", response);
                     
                     System.out.println ("Reply: " + response);
-                    Thread.sleep (4000);
-                    speaker.speak (response);
+                    // Thread.sleep (4000);
+                    // speaker.speak (response);
             }
         } catch (Exception e) {
                 e.printStackTrace ();

@@ -81,10 +81,10 @@ public class AppWeb extends JvxApp {
         int empty = 0;
         int maxempty = 5;
         if (speech != null) {
-            firePropertyChange("result", "sending: " + speech +" ...");
+            firePropertyChange("info", "sending: " + speech +" ...");
             String result = R.recognize (speech, asrLang);
-            System.out.println ("Recognized: " + result);
-            firePropertyChange("result", "recognized: " + result);
+            System.out.println ("result:" + result);
+            firePropertyChange("info", "recognized: " + result);
             
             if(isCancelled()) return;
             
@@ -98,14 +98,14 @@ public class AppWeb extends JvxApp {
                     response = inter.execute (result);
                     
                     System.out.println ("Reply: " + response);
-                    firePropertyChange("result", "reply: " + response);
+                    firePropertyChange("result", response);
             }
             if(isCancelled()) return;
             
             try {
                 Thread.sleep (4000);
                 // can't always play flac
-                speaker.speak (response);
+                // speaker.speak (response);
             } catch (Exception e) {
                     e.printStackTrace ();
                     return;

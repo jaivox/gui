@@ -9,7 +9,8 @@ public class Gui2Gram {
 	String keys [];
 	String questions [];
 	LinkedHashMap <String, ArrayList<String>> rules;
-	static String terms = " \t\r\n~`!@#$%^&*()+={}[]|\\:;<>,.?/\"\'";
+	// note terms here include underline symbol to filter out _ between words
+	static String terms = " \t\r\n~`!@#$%^&*()_+={}[]|\\:;<>,.?/\"\'";
 	
 	public Gui2Gram (String dir, String g, String t) {
 		String gramfile = dir + g;
@@ -150,15 +151,20 @@ public class Gui2Gram {
 				}
 				ArrayList<String> vals = rules.get (head);
 				// if (vals.size () < 2) continue;
+				ArrayList<String> written = new ArrayList <String> ();
 				out.println ("{");
 				out.println (key);
 				out.println ("\t" + filt + " ;");
+				written.add (filt);
 				int n = vals.size ();
 				for (String val : vals) {
 					if (val.startsWith ("*")) {
 						continue;
 					}
-					out.println ("\t" + val + " ;");
+					if (!written.contains (val)) {
+						out.println ("\t" + val + " ;");
+						written.add (val);
+					}
 				}
 				out.println ("}\n");
 			}

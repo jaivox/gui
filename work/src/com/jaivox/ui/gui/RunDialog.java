@@ -325,7 +325,9 @@ public class RunDialog extends javax.swing.JDialog
         s = s + result;
         answerArea.setText(s);
         
-        if(voiceCheckBox.isSelected()) app.speak(result);
+		// always speak results
+        // if(voiceCheckBox.isSelected())
+			app.speak(result);
     }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

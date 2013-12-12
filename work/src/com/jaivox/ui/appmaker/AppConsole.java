@@ -63,7 +63,7 @@ public class AppConsole extends JvxApp {
         public void processSpeech (String speech) {
             System.out.println("processSpeech: " + speech);
             String response = inter.execute (speech);
-            firePropertyChange("result", "reply: " + response);
+            firePropertyChange("info", "reply: " + response);
         }
         public void speak(String speech) {
         }
