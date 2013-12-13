@@ -115,7 +115,7 @@ public class AppSphinx extends JvxApp {
 		System.out.println ("processing file " + speech);
 		// speech = "/home/dev/wk/nb/gui/work/apps/common/test.wav";
 		try {
-			cm = new ConfigurationManager (new File (altconfig).toURI ().toURL ());
+			cm = new ConfigurationManager (new File (batch).toURI ().toURL ());
 			// allocate the recognizer
 			audioURL = new File (speech).toURI ().toURL ();
 			System.out.println ("initialized cm and audioURL");
