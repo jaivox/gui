@@ -106,8 +106,8 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         initComponents();
 		expandYNButton.setSelected (false);
 		expandYNButton.setText ("Expand Synonyms");
-		
-		checkInstalled ();
+		// turn off while testing
+		// checkInstalled ();
 		initLanguages ();
 		initLanguageCodes ();
 		createButtonGroups ();

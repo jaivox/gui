@@ -37,11 +37,11 @@ public class AppSphinx extends JvxApp {
 			Log.severe ("Sphinx recognizer implemented only for English-US");
 			return;
 		}
-                speechFile = kv.getProperty("speech_file");
+        speechFile = kv.getProperty("speech_file");
 	
 		//processSpeech ();
 	}
-
+	
 	void initializeInterpreter (Properties kv) {
 		/*
 		Properties kv = new Properties ();
@@ -56,13 +56,13 @@ public class AppSphinx extends JvxApp {
 		project = kv.getProperty ("project");
 		asrLang = kv.getProperty ("lang");
 		config = kv.getProperty ("recognizer_config_file");
-                config = kv.getProperty("appfolder") + config;
+        config = kv.getProperty("appfolder") + config;
 		// speaker will get ttsLang = kv.getProperty ("ttslang");
 		Command cmd = new Command ();
 		inter = new Interact (basedir, kv, cmd);
 		speaker = new Synthesizer (kv);
 	}
-
+	
 	void processSpeech () {
 		ConfigurationManager cm = new ConfigurationManager (
 				AppSphinx.class.getResource (config));
@@ -113,11 +113,16 @@ public class AppSphinx extends JvxApp {
         ConfigurationManager cm = null;
         Log.info ("Loading...");
         URL audioURL = null;
-        try {
-            cm = new ConfigurationManager (new File(batch).toURI().toURL());
+		// testing
+		System.out.println ("processing file "+speech);
+ 		speech = "/home/dev/wk/nb/gui/work/apps/common/test.wav";
+       try {
+            cm = new ConfigurationManager (new File(altconfig).toURI().toURL());
         // allocate the recognizer
             audioURL = new File(speech).toURI().toURL();
+			System.out.println ("initialized cm and audioURL");
         } catch (MalformedURLException ex) {
+			System.out.println ("Malformed exception in processSpeech");
             Logger.getLogger(AppSphinx.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }

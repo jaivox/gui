@@ -29,7 +29,7 @@ public class GuiPrep {
 			rf.writeRules (out);
 			gg.writeRules (out);
 			out.close ();
-			
+
 			out = new PrintWriter (new FileWriter (questions));
 			BufferedReader in = new BufferedReader (new FileReader (errors));
 			String line;
@@ -42,7 +42,7 @@ public class GuiPrep {
 			}
 			gg.writeQuestions (out);
 			out.close ();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace ();
 		}
@@ -88,18 +88,31 @@ public class GuiPrep {
 
 			errors = cpsrc + "/" + "errors.txt";
 			String outfile = appfolder + project + ".dlg";
-			String questions = appfolder + project +".quest";
+			String questions = appfolder + project + ".quest";
 			// Gui2Gram.dlgtree = appfolder + project + ".tree";
 			Rule2Fsm rf = new Rule2Fsm (appfolder, "dialog.tree");
-			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project+".tree");
+			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project + ".tree");
 			// Rule2Fsm.name = appfolder + "dialog" + ".tree";
 			// Gui2Gram.gram = appfolder + "dialog" + ".tree";
 			GuiPrep.generate (rf, gg, outfile, questions);
-			
+
 			// Generator gen = new Generator (conffile);
+			// batch version used from Gui console
 			Generator gen = new Generator (conf);
 			gen.createQuestions ();
-
+			String asr = conf.getProperty ("recognizer");
+			if (asr.equals ("sphinx")) {
+				// change to create live version also
+				conf.setProperty ("input", "live");
+				conf.setProperty ("live", project);
+				File cf = new File (appfolder + "live.conf");
+				cf.createNewFile ();
+				BufferedWriter bf = new BufferedWriter (new FileWriter (cf));
+				conf.store (bf, "Live version");
+				// Generator gen2 = new Generator (conf);
+				// gen2.createQuestions ();
+				System.out.println ("live.conf generated for live sphinx version");
+			}
 
 			System.out.println ("Application Generated: Path: " + appfolder);
 
@@ -107,33 +120,35 @@ public class GuiPrep {
 			ex.printStackTrace ();
 		}
 	}
-	
-	public static void runApp (String conffile) throws FileNotFoundException, IOException {
-                Properties conf = new Properties ();
-                conf.load (new FileInputStream (conffile));
-                String recognizer = conf.getProperty ("recognizer");
-                System.out.println ("runApp: recognizer is "+recognizer);
-                if (recognizer.equals ("console")) {
-                }
-                if (recognizer.equals ("web")) {
-                        System.out.println ("Going to google recognizer");
-                        Running = true;
-                        //AppWeb app = new AppWeb (conf);
 
-                }
-                if (recognizer.equals ("sphinx")) {
-                        // make sure lmgen.sh is run on the sphinx destination
-                        // before calling app
-                        String result = generateLm (conf);
-                        if (result == null) {
-                                System.out.println ("Could not run lmgensh");
-                                return;
-                        }
-                        System.out.println ("Going to the Sphinx recognizer");
-                        Running = true;
-                        AppSphinx app = new AppSphinx (conf);
-                }
-                RunDialog.runDialog(conffile, JvxMainFrame.getInstance());
+	public static void runApp (String conffile) throws FileNotFoundException, IOException {
+		new Log ();
+		Log.setLevelByName ("FINEST");
+		Properties conf = new Properties ();
+		conf.load (new FileInputStream (conffile));
+		String recognizer = conf.getProperty ("recognizer");
+		System.out.println ("runApp: recognizer is " + recognizer);
+		if (recognizer.equals ("console")) {
+		}
+		if (recognizer.equals ("web")) {
+			System.out.println ("Going to google recognizer");
+			Running = true;
+			//AppWeb app = new AppWeb (conf);
+
+		}
+		if (recognizer.equals ("sphinx")) {
+			// make sure lmgen.sh is run on the sphinx destination
+			// before calling app
+			String result = generateLm (conf);
+			if (result == null) {
+				System.out.println ("Could not run lmgensh");
+				return;
+			}
+			System.out.println ("Going to the Sphinx recognizer");
+			Running = true;
+			AppSphinx app = new AppSphinx (conf);
+		}
+		RunDialog.runDialog (conffile, JvxMainFrame.getInstance ());
 	}
 
 	public static void stopRunning () {
@@ -142,38 +157,43 @@ public class GuiPrep {
 
 	static String generateLm (Properties conf) throws IOException {
 		String appDir = conf.getProperty ("destination");
-                String Sep = System.getProperty ("file.separator");
-                if (!appDir.endsWith (Sep)) appDir = appDir + Sep;
-                String shellScript = appDir + "lmgen.sh";
+		String Sep = System.getProperty ("file.separator");
+		if (!appDir.endsWith (Sep)) {
+			appDir = appDir + Sep;
+		}
+		String shellScript = appDir + "lmgen.sh";
 
-                fixperms(shellScript, "rxw");
-                String result = runcommand (shellScript);
-                return result;
+		fixperms (shellScript, "rxw");
+		System.out.println ("running " + shellScript);
+		String result = runcommand (shellScript);
+		return result;
 	}
-        static void fixperms(String file, String perms) {
-            try {
-                runcommand("chmod u=" + perms +" "+ file);
-            } catch (IOException ex) {
-                Logger.getLogger(GuiPrep.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+
+	static void fixperms (String file, String perms) {
+		try {
+			runcommand ("chmod u=" + perms + " " + file);
+		} catch (IOException ex) {
+			Logger.getLogger (GuiPrep.class.getName ()).log (Level.SEVERE, null, ex);
+		}
+	}
+
 	static String runcommand (String input) throws IOException {
-                Process p = Runtime.getRuntime ().exec (input);
-                StringBuffer buffer = new StringBuffer ();
-                InputStream in = p.getInputStream ();
-                BufferedInputStream d = new BufferedInputStream (in);
-                do {
-                        int ch = d.read ();
-                        if (ch == -1)
-                                break;
-                        buffer.append ((char) ch);
-                } while (true);
-                in.close ();
-                String temp = new String (buffer);
-                return temp;
+		Process p = Runtime.getRuntime ().exec (input);
+		StringBuffer buffer = new StringBuffer ();
+		InputStream in = p.getInputStream ();
+		BufferedInputStream d = new BufferedInputStream (in);
+		do {
+			int ch = d.read ();
+			if (ch == -1) {
+				break;
+			}
+			buffer.append ((char) ch);
+		} while (true);
+		in.close ();
+		String temp = new String (buffer);
+		return temp;
 	}
 
-	
 	//temp code
 	static String buildAppCode (StringBuffer code, String type, String appname) {
 		String clz = Character.toUpperCase (appname.charAt (0)) + appname.substring (1)
@@ -206,8 +226,6 @@ public class GuiPrep {
 	}
 
 	static void doSphinxStuff (String treefile, Properties conf) throws FileNotFoundException, IOException {
-		new Log ();
-		Log.setLevelByName ("FINEST");
 		String project = conf.getProperty ("project");
 		String appfolder = conf.getProperty ("appfolder");
 		String cpsrc = conf.getProperty ("cpsrc");
