@@ -7,7 +7,17 @@ import com.jaivox.ui.gui.JvxMainFrame;
 import com.jaivox.ui.gui.RunDialog;
 import com.jaivox.util.Log;
 import java.awt.Point;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.Properties;
@@ -123,7 +133,7 @@ public class GuiPrep {
 
 	public static void runApp (String conffile) throws FileNotFoundException, IOException {
 		new Log ();
-		Log.setLevelByName ("FINEST");
+		Log.setLevelByName ("info");
 		Properties conf = new Properties ();
 		conf.load (new FileInputStream (conffile));
 		String recognizer = conf.getProperty ("recognizer");
@@ -163,7 +173,8 @@ public class GuiPrep {
 		}
 		String shellScript = appDir + "lmgen.sh";
 
-		fixperms (shellScript, "rxw");
+		// fixperms (shellScript, "rxw");
+		fixperms (shellScript, "x");
 		System.out.println ("running " + shellScript);
 		String result = runcommand (shellScript);
 		return result;
@@ -171,7 +182,7 @@ public class GuiPrep {
 
 	static void fixperms (String file, String perms) {
 		try {
-			runcommand ("chmod u=" + perms + " " + file);
+			runcommand ("chmod a+" + perms + " " + file);
 		} catch (IOException ex) {
 			Logger.getLogger (GuiPrep.class.getName ()).log (Level.SEVERE, null, ex);
 		}
