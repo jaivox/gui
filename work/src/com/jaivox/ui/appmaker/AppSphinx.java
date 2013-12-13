@@ -96,6 +96,10 @@ public class AppSphinx extends JvxApp {
 					continue;
 				}
 				if (recognized != null) {
+					if (recognized.trim ().length () == 0) {
+						System.out.println ("I can't hear you.");
+						continue;
+					}
 					response = inter.execute (recognized);
 					System.out.println ("Reply: " + response);
 					Thread.sleep (4000);
@@ -115,7 +119,9 @@ public class AppSphinx extends JvxApp {
 		System.out.println ("processing file " + speech);
 		// speech = "/home/dev/wk/nb/gui/work/apps/common/test.wav";
 		try {
-			cm = new ConfigurationManager (new File (batch).toURI ().toURL ());
+			String cmfile = basedir + batch;
+			System.out.println ("cm script "+cmfile);
+			cm = new ConfigurationManager (new File (cmfile).toURI ().toURL ());
 			// allocate the recognizer
 			audioURL = new File (speech).toURI ().toURL ();
 			System.out.println ("initialized cm and audioURL");
@@ -157,12 +163,18 @@ public class AppSphinx extends JvxApp {
 				firePropertyChange ("result", "I can't hear what you said.");
 			}
 			if (recognized != null) {
-				response = inter.execute (recognized);
-				firePropertyChange ("result", response);
+				if (recognized.trim ().length () == 0) {
+					System.out.println ("I can't recognize what you said.");
+					firePropertyChange ("result", "Could not recognize anything.");
+				}
+				else {
+					response = inter.execute (recognized);
+					firePropertyChange ("result", response);
 
-				System.out.println ("Reply: " + response);
-				// Thread.sleep (4000);
-				// speaker.speak (response);
+					System.out.println ("Reply: " + response);
+					// Thread.sleep (4000);
+					// speaker.speak (response);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace ();
