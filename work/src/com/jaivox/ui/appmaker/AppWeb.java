@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class AppWeb extends JvxApp {
         
-        String project = "test";
+    String project = "test";
 	String basedir = "./";
 	String type = ".wav";
 	Interact inter;
@@ -36,9 +36,12 @@ public class AppWeb extends JvxApp {
 		basedir = kv.getProperty ("Base");
 		project = kv.getProperty ("project");
 		asrLang = kv.getProperty ("lang");
-                // speaker will get ttsLang = kv.getProperty ("ttslang");
+        // speaker will get ttsLang = kv.getProperty ("ttslang");
 		Command cmd = new Command ();
 		inter = new Interact (basedir, kv, cmd);
+		// String tts = kv.getProperty ("synthesizer").toLowerCase ();
+		// System.out.println ("Synthesizer is "+tts);
+		// if (tts.equals ("espeak"))
 		speaker = new Synthesizer (kv);
 	}
 

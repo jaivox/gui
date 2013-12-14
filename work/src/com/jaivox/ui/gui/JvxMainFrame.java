@@ -2,6 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.jaivox.ui.gui;
 
 import com.jaivox.synthesizer.web.Synthesizer;
@@ -35,33 +36,28 @@ import javax.swing.undo.UndoableEditSupport;
  * @author lin
  */
 public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
-    private static JvxMainFrame theApp = null;
-    
-    JvxDialogLoader dlgLoader = null;
-    JvxDialogHelper dlgHelper = null;
-    JvxSynonymsHelper synsHelper = null;
-    
-    static boolean dirty_flag = false;
-    static boolean generated_flag = false;
-    static String recognizer = null;
-    static UndoManager undoManager_;
-    static UndoableEditSupport undoSupport_;
-  
-    static JvxHelpFrame helpFrame = null;
-    static String helpDirectory = "/work/data/help/"; // use file.separator property?
-    static String urlDirectory = null;
 
-    String qualData [][] = null;
-    String headers [] = new String [4];
-    DragSource ds;
-    StringSelection transferable;
-    private String dlgFile;
-    private String dataFile;
-	
+	private static JvxMainFrame theApp = null;
+	JvxDialogLoader dlgLoader = null;
+	JvxDialogHelper dlgHelper = null;
+	JvxSynonymsHelper synsHelper = null;
+	static boolean dirty_flag = false;
+	static boolean generated_flag = false;
+	static String recognizer = null;
+	static UndoManager undoManager_;
+	static UndoableEditSupport undoSupport_;
+	static JvxHelpFrame helpFrame = null;
+	static String helpDirectory = "/work/data/help/"; // use file.separator property?
+	static String urlDirectory = null;
+	String qualData[][] = null;
+	String headers[] = new String[4];
+	DragSource ds;
+	StringSelection transferable;
+	private String dlgFile;
+	private String dataFile;
 	ButtonGroup Recognizers;
 	ButtonGroup Synthesizers;
-	
-	static String Languages [] = {
+	static String Languages[] = {
 		"English-US",
 		"Catalan",
 		"Croatian",
@@ -77,72 +73,72 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		"Swedish",
 		"Turkish"
 	};
-	
-	static TreeMap <String, String> ttsCodes;
-	static TreeMap <String, String> asrCodes;
-	
-    /**
-     * Creates new form JvxMainFrame
-     */
-    public JvxMainFrame() {
-        theApp = this;
-        undoManager_ = new UndoManager ();
-        dlgLoader = new JvxDialogLoader (this);
-        dlgHelper = new JvxDialogHelper (this);
-        synsHelper = new JvxSynonymsHelper (this);
-        /*
-        qualData = dlgLoader.loadQualData ();
+	static TreeMap<String, String> ttsCodes;
+	static TreeMap<String, String> asrCodes;
+
+	/**
+	 * Creates new form JvxMainFrame
+	 */
+	public JvxMainFrame () {
+		theApp = this;
+		undoManager_ = new UndoManager ();
+		dlgLoader = new JvxDialogLoader (this);
+		dlgHelper = new JvxDialogHelper (this);
+		synsHelper = new JvxSynonymsHelper (this);
+		/*
+		 qualData = dlgLoader.loadQualData ();
         
-        headers [0] = "Num";
-        headers [1] = "Road";
-        headers [2] = "Fast";
-        headers [3] = "Smooth";
-        */
+		 headers [0] = "Num";
+		 headers [1] = "Road";
+		 headers [2] = "Fast";
+		 headers [3] = "Smooth";
+		 */
 		// help system
 		String workingDirectory = System.getProperty ("user.dir");
 		// System.out.println ("Current directory: "+workingDirectory);
 		urlDirectory = "file://" + workingDirectory + helpDirectory;
 
-        initComponents();
+		initComponents ();
 		expandYNButton.setSelected (false);
 		expandYNButton.setText ("Expand Synonyms");
 		// turn off while testing
-		// checkInstalled ();
+		checkInstalled ();
 		initLanguages ();
 		initLanguageCodes ();
 		createButtonGroups ();
-        setAllToolTip();
-        registerF1Help();
-        new MenuUtils().setMenuBarForFrame(this);
-        
-        try {
-            RecentFileHistory.loadHistory();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(JvxMainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        DefaultTreeModel model = (DefaultTreeModel)dialogTree.getModel();
-        model.addTreeModelListener(new DlgTreeModelListener(this));
-       
-        this.dialogTree.setTransferHandler(new DialogTreeDNDHandler());
-        this.synsTab.setTransferHandler(new SynsTabDNDHandler());
-        
-        undoSupport_ = new UndoableEditSupport ();
-        undoSupport_.addUndoableEditListener (new UndoAdapter ());
-        //refreshUndoRedo ();
-    }
-    public static List<Component> getAllComponents(final Container c) {
-        Component[] comps = c.getComponents();
-        List<Component> compList = new ArrayList<Component>();
-        for (Component comp : comps) {
-          compList.add(comp);
-          if (comp instanceof Container) {
-            compList.addAll(getAllComponents((Container) comp));
-          }
-        }
-        return compList;
-    }
-	
+		setAllToolTip ();
+		registerF1Help ();
+		new MenuUtils ().setMenuBarForFrame (this);
+
+		try {
+			RecentFileHistory.loadHistory ();
+		} catch (BackingStoreException ex) {
+			Logger.getLogger (JvxMainFrame.class.getName ()).log (Level.SEVERE, null, ex);
+		}
+
+		DefaultTreeModel model = (DefaultTreeModel) dialogTree.getModel ();
+		model.addTreeModelListener (new DlgTreeModelListener (this));
+
+		this.dialogTree.setTransferHandler (new DialogTreeDNDHandler ());
+		this.synsTab.setTransferHandler (new SynsTabDNDHandler ());
+
+		undoSupport_ = new UndoableEditSupport ();
+		undoSupport_.addUndoableEditListener (new UndoAdapter ());
+		//refreshUndoRedo ();
+	}
+
+	public static List<Component> getAllComponents (final Container c) {
+		Component[] comps = c.getComponents ();
+		List<Component> compList = new ArrayList<Component> ();
+		for (Component comp : comps) {
+			compList.add (comp);
+			if (comp instanceof Container) {
+				compList.addAll (getAllComponents ((Container) comp));
+			}
+		}
+		return compList;
+	}
+
 	void createButtonGroups () {
 		Recognizers = new ButtonGroup ();
 		Synthesizers = new ButtonGroup ();
@@ -154,43 +150,50 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		Synthesizers.add (cbFestival);
 		Synthesizers.add (cbEspeak);
 	}
-	
-    void setAllToolTip() {
-        for (Component c : getAllComponents(this)) { 
-            if(c instanceof JComponent) {
-                String k = c.getName();
-                if(k != null) {
-                    String tip = JvxConfiguration.getHelpToolTip(k);
-                    //System.out.println("setAllToolTip:" + k +": "+ tip);
-                    if(tip != null) ((JComponent)c).setToolTipText(tip);
-                    //if(tip != null) registerFocusHandler((JComponent) c);
-                }
-            }
-        }
-    }
-    public static JvxMainFrame getInstance() { return theApp; }
-    
-    public JvxDialogLoader getDlgLoader() {
-        return dlgLoader;
-    }
 
-    public JvxDialogHelper getDlgHelper() {
-        return dlgHelper;
-    }
+	void setAllToolTip () {
+		for (Component c : getAllComponents (this)) {
+			if (c instanceof JComponent) {
+				String k = c.getName ();
+				if (k != null) {
+					String tip = JvxConfiguration.getHelpToolTip (k);
+					//System.out.println("setAllToolTip:" + k +": "+ tip);
+					if (tip != null) {
+						((JComponent) c).setToolTipText (tip);
+					}
+					//if(tip != null) registerFocusHandler((JComponent) c);
+				}
+			}
+		}
+	}
 
-    public JvxSynonymsHelper getSynsHelper() {
-        return synsHelper;
-    }
-    public void postUndoableEdit(UndoableEdit change) {
-        undoSupport_.postEdit(change);
-        dirty_flag = true;
-    }
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+	public static JvxMainFrame getInstance () {
+		return theApp;
+	}
+
+	public JvxDialogLoader getDlgLoader () {
+		return dlgLoader;
+	}
+
+	public JvxDialogHelper getDlgHelper () {
+		return dlgHelper;
+	}
+
+	public JvxSynonymsHelper getSynsHelper () {
+		return synsHelper;
+	}
+
+	public void postUndoableEdit (UndoableEdit change) {
+		undoSupport_.postEdit (change);
+		dirty_flag = true;
+	}
+
+	/**
+	 * This method is called from within the constructor to initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is always
+	 * regenerated by the Form Editor.
+	 */
+	@SuppressWarnings ("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -720,25 +723,32 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
- 
-/**
- * Check whether a program is installed by running the program with -h
- * option. Also check if the result is longer than 100 characters, since
- * the help obtained is usually much longer.
- * @param application
- * @return 
- */
-	public static boolean installed (String application) {
-		String command = application + " -h";
+
+	/**
+	 * Check whether a program is installed by running the program with -h
+	 * option. Also check if the result is longer than 100 characters, since the
+	 * help obtained is usually much longer.
+	 *
+	 * @param application
+	 * @return
+	 */
+	public static boolean installed (String command) {
 		String result = RecordTask.runcommand (command);
-		if (result == null) return false;
-		if (result.toLowerCase ().trim ().endsWith ("not found...")) return false;
-		if (result.length () < 100) return false;
+		// System.out.println ("command: "+command+"\n"+result);
+		if (result == null) {
+			return false;
+		}
+		if (result.toLowerCase ().trim ().endsWith ("not found...")) {
+			return false;
+		}
+		if (result.length () < 100) {
+			return false;
+		}
 		// System.out.println (result.substring (0, 100));
-		System.out.println (application+" is installed");
+		System.out.println (command + " is installed");
 		return true;
 	}
-	
+
 	public static boolean checkNetAccess (String url, int port) {
 		try {
 			InetSocketAddress address = new InetSocketAddress (url, port);
@@ -746,557 +756,654 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 			channel.configureBlocking (false);
 			boolean ok = channel.connect (address);
 			if (ok) {
-				if (channel.isOpen ()) channel.close ();
+				if (channel.isOpen ()) {
+					channel.close ();
+				}
 				return ok;
-			}
-			else {
+			} else {
 				return false;
 			}
-		}
-		catch (Exception e) {
-			System.out.println ("checkNetAccess: "+e.toString ());
+		} catch (Exception e) {
+			System.out.println ("checkNetAccess: " + e.toString ());
 			return false;
 		}
 	}
-	
-/**
- * Check for jar file in class path
- * @param content
- * @return 
- */
+
+	/**
+	 * Check for jar file in class path
+	 *
+	 * @param content
+	 * @return
+	 */
 	public static boolean checkClasspath (String content) {
-		String classpath = System.getProperty("java.class.path");
-		System.out.println ("classpath="+classpath);
+		String classpath = System.getProperty ("java.class.path");
+		System.out.println ("classpath=" + classpath);
 		int pos = classpath.indexOf (content);
 		if (pos != -1) {
-			System.out.println (content+" is in the classpath");
+			System.out.println (content + " is in the classpath");
 			return true;
-		}
-		else {
-			System.out.println (content+" is not in the classpath");
+		} else {
+			System.out.println (content + " is not in the classpath");
 			return false;
 		}
 	}
-	
+
 	void checkInstalled () {
-		cbEspeak.setEnabled (installed ("espeak"));
-		cbFestival.setEnabled (installed ("festival"));
+		// cbEspeak.setEnabled (installed ("espeak -h"));
+		cbEspeak.setEnabled (false);
+		// cbFestival.setEnabled (installed ("festival -h"));
+		cbFestival.setEnabled (false);
 		cbGoogleRecognizer.setEnabled (installed ("sox"));
-		cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
+		// cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
+		cbFreetts.setEnabled (false);
 		cbGoogleRecognizer.setEnabled (AppWeb.testSpeech ("work/apps/common/test.flac"));
-		cbSphinx.setEnabled (AppSphinx.testSpeech ("work/apps/common/test.wav"));
 		Synthesizer speaker = new Synthesizer ();
 		cbGoogletts.setEnabled (speaker.speak ("testing google text to speech"));
+
+		// sphinx works only in linux
+		// check this last, any failure returns
+		String os = System.getProperty("os.name");
+		if (os.startsWith("Windows")) {
+			System.out.println ("Sphinx Operating system: "+os);
+			cbSphinx.setEnabled (false);
+			return;
+		}
+		
+		/*
+		// The following check is needed, but did not work
+		// check for sphinx_lm_convert
+		if (!installed ("/usr/local/bin/sphinx_lm_convert -help")) {
+			System.out.println ("sphinx_lm_convert missing");
+			cbSphinx.setEnabled (false);
+			return;
+		}
+		*/
+		File f = new File ("/usr/local/bin/sphinx_lm_convert");
+		if (!f.exists ()) {
+			System.out.println ("Could not find sphinx_lm_convert");
+			cbSphinx.setEnabled (false);
+			return;
+		}
+		if (!AppSphinx.testSpeech ("work/apps/common/test.wav")) {
+			System.out.println ("sphinx test speech not recognized");
+			cbSphinx.setEnabled (false);
+			return;
+		}
+		cbSphinx.setEnabled (true);
+		
+		
 		// check some urls, does not seem to work right
 		/*
-		boolean okwebasr = 
-		checkNetAccess ("http://www.google.com/speech-api/v1/recognize?lang=en-US&client=chromium", 80);
-		cbGoogleRecognizer.setEnabled (okwebasr);
-		boolean okwebtts =
-		checkNetAccess ("http://translate.google.com/translate_tts?tl=en&&ie=UTF-8&q=test", 80);
-		cbGoogletts.setEnabled (okwebtts);
-		*/
+		 boolean okwebasr = 
+		 checkNetAccess ("http://www.google.com/speech-api/v1/recognize?lang=en-US&client=chromium", 80);
+		 cbGoogleRecognizer.setEnabled (okwebasr);
+		 boolean okwebtts =
+		 checkNetAccess ("http://translate.google.com/translate_tts?tl=en&&ie=UTF-8&q=test", 80);
+		 cbGoogletts.setEnabled (okwebtts);
+		 */
 	}
-	
+
 	void initLanguages () {
 		langCombo.setModel (new javax.swing.DefaultComboBoxModel (Languages));
 	}
-	
+
 	void initLanguageCodes () {
-		ttsCodes = new TreeMap <String, String> ();
-		asrCodes = new TreeMap <String, String> ();
+		ttsCodes = new TreeMap<String, String> ();
+		asrCodes = new TreeMap<String, String> ();
 
 		asrCodes.put ("English-US", "en-US");
 		ttsCodes.put ("English-US", "en");
 
 		asrCodes.put ("Catalan", "ca-ES");
 		ttsCodes.put ("Catalan", "ca");
-		
+
 		asrCodes.put ("Croatian", "hr_HR");
 		ttsCodes.put ("Croatian", "hr");
-		
+
 		asrCodes.put ("Dutch", "nl-NL");
 		ttsCodes.put ("Dutch", "nl");
-		
+
 		asrCodes.put ("French", "fr-FR");
 		ttsCodes.put ("French", "fr");
-		
+
 		asrCodes.put ("German", "de-DE");
 		ttsCodes.put ("German", "de");
-		
+
 		asrCodes.put ("Indonesian", "id-ID");
 		ttsCodes.put ("Indonesian", "id");
-		
+
 		asrCodes.put ("Italian", "it-IT");
 		ttsCodes.put ("Italian", "it");
-		
+
 		asrCodes.put ("Malay", "ms-MY");
 		ttsCodes.put ("Malay", "ms");
-		
+
 		asrCodes.put ("Mandarin-China", "cmn-Hans-CN");
 		ttsCodes.put ("Mandarin-China", "zh-CN");
-		
+
 		asrCodes.put ("Russian", "ru-RU");
 		ttsCodes.put ("Russian", "ru");
-		
+
 		asrCodes.put ("Spanish-Mexico", "es-MX");
 		ttsCodes.put ("Spanish-Mexico", "es");
-		
+
 		asrCodes.put ("Swedish", "sv-SE");
 		ttsCodes.put ("Swedish", "sv");
-		
+
 		asrCodes.put ("Turkish", "tr-TR");
 		ttsCodes.put ("Turkish", "tr");
 	}
-	
+
 	public String getAsrLanguage () {
 		int langid = langCombo.getSelectedIndex ();
-		String lang = Languages [langid];
+		String lang = Languages[langid];
 		String asr = asrCodes.get (lang);
-		if (asr != null) return asr;
-		else return "en-US";
+		if (asr != null) {
+			return asr;
+		} else {
+			return "en-US";
+		}
 	}
-	
+
 	public String getTtsLanguage () {
 		int langid = langCombo.getSelectedIndex ();
-		String lang = Languages [langid];
+		String lang = Languages[langid];
 		String tts = ttsCodes.get (lang);
-		if (tts != null) return tts;
-		else return "en";
-		
-	}
-	
-	public void actionPerformed(java.awt.event.ActionEvent evt) {   
-        if(evt.getActionCommand().equals("DBInterface")) {
-            this.dlgLoader.interfaceDialogs(evt);
-        }
-    } 
-    public DefaultMutableTreeNode getMouseOnNode(int x, int y) {
-        TreePath path = this.dialogTree.getPathForLocation(x, y);
-        if (path == null) return null;
+		if (tts != null) {
+			return tts;
+		} else {
+			return "en";
+		}
 
-        return (DefaultMutableTreeNode)path.getLastPathComponent();
-    }    
-    public DefaultMutableTreeNode getSelectedNode() {
-        TreePath tpath = dialogTree.getSelectionPath();
-        return tpath == null ? null : (DefaultMutableTreeNode)tpath.getLastPathComponent();
-    }    
-    public String getAppName() {
-        String proj = appName.getText().trim();
-        if(proj.length() <= 0 || proj.equals("Type Name ...")) {
-            proj = null;
-        }
-        return proj;
-    }
-    public String fileDialog(String appname) {
-        final JFileChooser fc = new JFileChooser(new File(JvxConfiguration.theConfig().getAppFolder()));
-        String loc = null;
-        fc.setDialogTitle("Choose Application Location(Folder)");
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fc.setCurrentDirectory(new File(appname));
-        int returnVal = fc.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            loc = fc.getSelectedFile().getAbsolutePath();
-        } 
-        return loc;
-    }
-    public boolean save() {
-        String proj = appName.getText().trim();
-        
-        if(proj.length() <= 0 || proj.equals("Type Name ...")) {
-            JOptionPane.showMessageDialog(null,
-                "Missing: Application Name\nUsing name \"test\"", "Error Massage",
-                JOptionPane.ERROR_MESSAGE);
-            
-            proj = "test"; appName.setText(proj);
-            //return false;
-        }
-        JvxConfiguration.theConfig().setAppName(appName.getText());
-        String f = fileDialog(appName.getText());
-        if(f != null) {
-            String s = f + File.separatorChar + appName.getText() + 
-                                            File.separatorChar;
-            JvxConfiguration.theConfig().setAppFolder(s);
-        } 
-        if(f != null) JvxConfiguration.theConfig().save(this);
-        return (f != null);
-    }
+	}
+
+	public void actionPerformed (java.awt.event.ActionEvent evt) {
+		if (evt.getActionCommand ().equals ("DBInterface")) {
+			this.dlgLoader.interfaceDialogs (evt);
+		}
+	}
+
+	public DefaultMutableTreeNode getMouseOnNode (int x, int y) {
+		TreePath path = this.dialogTree.getPathForLocation (x, y);
+		if (path == null) {
+			return null;
+		}
+
+		return (DefaultMutableTreeNode) path.getLastPathComponent ();
+	}
+
+	public DefaultMutableTreeNode getSelectedNode () {
+		TreePath tpath = dialogTree.getSelectionPath ();
+		return tpath == null ? null : (DefaultMutableTreeNode) tpath.getLastPathComponent ();
+	}
+
+	public String getAppName () {
+		String proj = appName.getText ().trim ();
+		if (proj.length () <= 0 || proj.equals ("Type Name ...")) {
+			proj = null;
+		}
+		return proj;
+	}
+
+	public String fileDialog (String appname) {
+		// final JFileChooser fc = new JFileChooser (new File (JvxConfiguration.theConfig ().getAppFolder ()));
+		final JFileChooser fc = new JFileChooser ();
+		String loc = null;
+		fc.setDialogTitle ("Choose Application Location(Folder)");
+		fc.setFileSelectionMode (JFileChooser.DIRECTORIES_ONLY);
+		fc.setCurrentDirectory (new File (appname));
+		int returnVal = fc.showOpenDialog (this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			loc = fc.getSelectedFile ().getAbsolutePath ();
+		}
+		return loc;
+	}
+
+	public boolean save () {
+		String proj = appName.getText ().trim ();
+
+		if (proj.length () <= 0 || proj.equals ("Type Name ...")) {
+			JOptionPane.showMessageDialog (null,
+					"Missing: Application Name\nUsing name \"test\"", "Error Massage",
+					JOptionPane.ERROR_MESSAGE);
+
+			proj = "test";
+			appName.setText (proj);
+			//return false;
+		}
+		JvxConfiguration.theConfig ().setAppName (appName.getText ());
+		String f = fileDialog (appName.getText ());
+		if (f != null) {
+			String s = f + File.separatorChar + appName.getText ()
+					+ File.separatorChar;
+			JvxConfiguration.theConfig ().setAppFolder (s);
+		}
+		if (f != null) {
+			JvxConfiguration.theConfig ().save (this);
+		}
+		return (f != null);
+	}
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
-        save();
+		// TODO add your handling code here:
+		save ();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void appNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appNameActionPerformed
-        // TODO add your handling code here:
-        JTextField apn = (JTextField)evt.getSource();
-        JvxConfiguration.theConfig().setAppName(apn.getText());
+		// TODO add your handling code here:
+		JTextField apn = (JTextField) evt.getSource ();
+		JvxConfiguration.theConfig ().setAppName (apn.getText ());
     }//GEN-LAST:event_appNameActionPerformed
 
     private void appNameMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_appNameMousePressed
-        // TODO add your handling code here:
-        JTextField apn = (JTextField)evt.getSource();
-        if(apn.getText().equals("Type Name ...")) apn.setText("");
+		// TODO add your handling code here:
+		JTextField apn = (JTextField) evt.getSource ();
+		if (apn.getText ().equals ("Type Name ...")) {
+			apn.setText ("");
+		}
     }//GEN-LAST:event_appNameMousePressed
 
     private void dlgTreeScrollPaneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dlgTreeScrollPaneFocusLost
-        // TODO add your handling code here:
-        //dialogTreeFocusLost(evt);
+		// TODO add your handling code here:
+		//dialogTreeFocusLost(evt);
     }//GEN-LAST:event_dlgTreeScrollPaneFocusLost
 
     private void dialogTreeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dialogTreeMouseClicked
-        // TODO add your handling code here:
-        // init and set the Grammar panel
-        //JTree tree = (JTree)evt.getSource();
-        //DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getSelectionPath().getLastPathComponent();
+		// TODO add your handling code here:
+		// init and set the Grammar panel
+		//JTree tree = (JTree)evt.getSource();
+		//DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getSelectionPath().getLastPathComponent();
     }//GEN-LAST:event_dialogTreeMouseClicked
 
     private void dialogTreeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dialogTreeMouseReleased
-        // TODO add your handling code here:
-        //if( !evt.isPopupTrigger() ) return;
-        //overlapDialog(evt, false);
-        dlgHelper.dialogTreeRClicked(evt);
-        //rightClickedNode = null;
+		// TODO add your handling code here:
+		//if( !evt.isPopupTrigger() ) return;
+		//overlapDialog(evt, false);
+		dlgHelper.dialogTreeRClicked (evt);
+		//rightClickedNode = null;
     }//GEN-LAST:event_dialogTreeMouseReleased
 
     private void dialogTreeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dialogTreeMousePressed
-        // TODO add your handling code here:
-        JTree tree = (JTree)evt.getSource();
-        TreeModel model = tree.getModel();
-        DefaultMutableTreeNode node = null;
-        if(model != null && model.getRoot() != null) {
-            node = (DefaultMutableTreeNode) model.getRoot();
-        }
-        if(model == null || model.getRoot() == null || 
-                    node.getChildCount() < 1 ||
-                    model.getChildCount(model.getRoot()) < 1) {
-            MenuUtils.openDialogFileMenu(evt);
-        }
-                
-        if( !evt.isPopupTrigger() ) {
-            dlgHelper.dialogTreeMouseClicked(evt);
-        }
-        else dlgHelper.dialogTreeRClicked(evt);
+		// TODO add your handling code here:
+		JTree tree = (JTree) evt.getSource ();
+		TreeModel model = tree.getModel ();
+		DefaultMutableTreeNode node = null;
+		if (model != null && model.getRoot () != null) {
+			node = (DefaultMutableTreeNode) model.getRoot ();
+		}
+		if (model == null || model.getRoot () == null
+				|| node.getChildCount () < 1
+				|| model.getChildCount (model.getRoot ()) < 1) {
+			MenuUtils.openDialogFileMenu (evt);
+		}
+
+		if (!evt.isPopupTrigger ()) {
+			dlgHelper.dialogTreeMouseClicked (evt);
+		} else {
+			dlgHelper.dialogTreeRClicked (evt);
+		}
     }//GEN-LAST:event_dialogTreeMousePressed
 
     private void synsTabMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_synsTabMousePressed
-        if( evt.isPopupTrigger() ) synsHelper.synsTabMouseRClicked(evt);
+		if (evt.isPopupTrigger ()) {
+			synsHelper.synsTabMouseRClicked (evt);
+		}
     }//GEN-LAST:event_synsTabMousePressed
 
     private void grammarListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grammarListMouseClicked
-        // TODO add your handling code here:
-        if( evt.isPopupTrigger() ) return;
-        JList grams = (JList)evt.getSource();
+		// TODO add your handling code here:
+		if (evt.isPopupTrigger ()) {
+			return;
+		}
+		JList grams = (JList) evt.getSource ();
     }//GEN-LAST:event_grammarListMouseClicked
 
     private void selectDbButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDbButtonActionPerformed
-        // TODO add your handling code here:
-        this.dlgLoader.interfaceDialogs(evt);
+		// TODO add your handling code here:
+		this.dlgLoader.interfaceDialogs (evt);
     }//GEN-LAST:event_selectDbButtonActionPerformed
 
     private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
-        // TODO add your handling code here:
-        try {
-            if (dirty_flag) generated_flag = false;
-            checkTargetOptions();
+		// TODO add your handling code here:
+		try {
+			if (dirty_flag) {
+				generated_flag = false;
+			}
+			checkTargetOptions ();
 
-            if (GuiPrep.Running) {
-                    GuiPrep.stopRunning ();
-                    //return;
-            }
-            if(!generated_flag) if(!save()) return;
+			if (GuiPrep.Running) {
+				GuiPrep.stopRunning ();
+				//return;
+			}
+			if (!generated_flag) {
+				if (!save ()) {
+					return;
+				}
+			}
 
-            if (!generated_flag) {
-                this.dlgHelper.generateApp(this);
-                generated_flag = true;
-            }
+			if (!generated_flag) {
+				this.dlgHelper.generateApp (this);
+				generated_flag = true;
+			}
 
-            if (generated_flag) {
-                this.dlgHelper.runApp (this);
-                setRunEnabled(false);
-            }
-        } catch (Exception e) {
-            generated_flag = false;
-            setRunEnabled(true);
-            e.printStackTrace();
-            return;
-        }
+			if (generated_flag) {
+				this.dlgHelper.runApp (this);
+				setRunEnabled (false);
+			}
+		} catch (Exception e) {
+			generated_flag = false;
+			setRunEnabled (true);
+			e.printStackTrace ();
+			return;
+		}
     }//GEN-LAST:event_btnRunActionPerformed
-    void setRunEnabled(boolean b) {
-        btnRun.setEnabled(b);
-    }
-    void checkTargetOptions() {
-        if(generated_flag && (recognizer != null)) {
-            if( !recognizer.equals( this.getRecognizer() ) ) {
-                generated_flag = false;     // regenerate for the selection
-            }
-        }
-        recognizer = this.getRecognizer();
-    }
+	void setRunEnabled (boolean b) {
+		btnRun.setEnabled (b);
+	}
+
+	void checkTargetOptions () {
+		if (generated_flag && (recognizer != null)) {
+			if (!recognizer.equals (this.getRecognizer ())) {
+				generated_flag = false;     // regenerate for the selection
+			}
+		}
+		recognizer = this.getRecognizer ();
+	}
     private void dialogTreeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dialogTreeKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_F3) {
-            TreePath path = dialogTree.getSelectionPath();
-            
-            DefaultMutableTreeNode node = null;
-            if (path != null) {
-                node = (DefaultMutableTreeNode)path.getLastPathComponent();
-            }
-            else {
-                node = (DefaultMutableTreeNode) dialogTree.getModel().getRoot();
-                node = !(node.isRoot() || node.isLeaf()) ? node.getNextNode() : node;
-                path = new TreePath(node);
-            }
-            if(node == null) return;
-            TreePath[] selectionPaths = dialogTree.getSelectionPaths();
-            //check if node was selected
-            boolean isSelected = false;
-            if (selectionPaths != null) {
-                for (TreePath selectionPath : selectionPaths) {
-                    if (selectionPath.equals(path)) {
-                        isSelected = true;
-                    }
-                }
-            }
-            //if clicked node was not selected, select it
-            if(!isSelected){
-                dialogTree.setSelectionPath(path);
-            }
-            
-            new DialogMenuAction().actionPerformed(
-                    new ActionEvent(dialogTree, ActionEvent.ACTION_PERFORMED, "Add"));
-        }
+		// TODO add your handling code here:
+		if (evt.getKeyCode () == java.awt.event.KeyEvent.VK_F3) {
+			TreePath path = dialogTree.getSelectionPath ();
+
+			DefaultMutableTreeNode node = null;
+			if (path != null) {
+				node = (DefaultMutableTreeNode) path.getLastPathComponent ();
+			} else {
+				node = (DefaultMutableTreeNode) dialogTree.getModel ().getRoot ();
+				node = !(node.isRoot () || node.isLeaf ()) ? node.getNextNode () : node;
+				path = new TreePath (node);
+			}
+			if (node == null) {
+				return;
+			}
+			TreePath[] selectionPaths = dialogTree.getSelectionPaths ();
+			//check if node was selected
+			boolean isSelected = false;
+			if (selectionPaths != null) {
+				for (TreePath selectionPath : selectionPaths) {
+					if (selectionPath.equals (path)) {
+						isSelected = true;
+					}
+				}
+			}
+			//if clicked node was not selected, select it
+			if (!isSelected) {
+				dialogTree.setSelectionPath (path);
+			}
+
+			new DialogMenuAction ().actionPerformed (
+					new ActionEvent (dialogTree, ActionEvent.ACTION_PERFORMED, "Add"));
+		}
     }//GEN-LAST:event_dialogTreeKeyPressed
 
     private void langComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_langComboActionPerformed
-        // TODO add your handling code here:
-        String lang = (String) langCombo.getSelectedItem();
-        if(lang.equals("English-US")) {
-            this.expandYNButton.setEnabled(true);
-            expandYNButton.setSelected(true);
-        }
-        else {
-            this.expandYNButton.setEnabled(false);
-            expandYNButton.setSelected(false);
-        }
+		// TODO add your handling code here:
+		String lang = (String) langCombo.getSelectedItem ();
+		if (lang.equals ("English-US")) {
+			this.expandYNButton.setEnabled (true);
+			expandYNButton.setSelected (true);
+		} else {
+			this.expandYNButton.setEnabled (false);
+			expandYNButton.setSelected (false);
+		}
     }//GEN-LAST:event_langComboActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
-        // TODO add your handling code here:
-        // TODO add your handling code here:
-        if(!save()) return;
-		if (dirty_flag) generated_flag = false;
+		// TODO add your handling code here:
+		// TODO add your handling code here:
+		if (!save ()) {
+			return;
+		}
+		if (dirty_flag) {
+			generated_flag = false;
+		}
 		if (!generated_flag) {
-	        this.dlgHelper.generateApp(this);
+			this.dlgHelper.generateApp (this);
 			generated_flag = true;
 		}
     }//GEN-LAST:event_btnGenerateActionPerformed
 
-	public boolean wordsToBeExpanded() {
-        return (this.expandYNButton.isEnabled() && expandYNButton.isSelected());
-    }
-    void registerF1Help() {
-        JComponent cl[] = { cbFestival, dialogTree, appName, cbFreetts, grammarList,
-                            btnRun,  cbGoogleRecognizer, osList, btnSave,
-                            cbGoogletts, qualdbTable, cbConsole, cbSphinx,
-                            selectDbButton, cbEspeak, synsTab };
-        for(JComponent c : cl) {
-            registerFocusHandler(c);
-        }
-    }
-    void registerFocusHandler(final JComponent c) {
-        c.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).
-        put(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0), "F1");
-        c.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                //System.out.println ("registerFocusHandler: mouseEntered: " + c.getName());
-                c.grabFocus ();
-            }
-        });
-        c.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                handleHelpKey(evt);
-            }
-        });
-    }
-    public JTree getDialogTree() {
-        return dialogTree;
-    }
-    
-    public JList getGrammarList() {
-        return grammarList;
-    }
+	public boolean wordsToBeExpanded () {
+		return (this.expandYNButton.isEnabled () && expandYNButton.isSelected ());
+	}
 
-    public JTable getSynsTab() {
-        return synsTab;
-    }
-    public JTable getQualdbTable() {
-        return qualdbTable;
-    }
-    public String getRecognizer() {
-        if(this.cbGoogleRecognizer.isSelected()) return "web";
-        if(this.cbSphinx.isSelected()) return "sphinx";
-        if(this.cbConsole.isSelected()) return "console";
-        return null;
-    }
-    public String getSynthesizer() {
-        if(this.cbFestival.isSelected()) return "festival";
-        if(this.cbGoogletts.isSelected()) return "web";
-        if(this.cbFreetts.isSelected()) return "freetts";
-        if(this.cbEspeak.isSelected()) return "espeak";
-        return null;
-    }
+	void registerF1Help () {
+		JComponent cl[] = {cbFestival, dialogTree, appName, cbFreetts, grammarList,
+			btnRun, cbGoogleRecognizer, osList, btnSave,
+			cbGoogletts, qualdbTable, cbConsole, cbSphinx,
+			selectDbButton, cbEspeak, synsTab};
+		for (JComponent c : cl) {
+			registerFocusHandler (c);
+		}
+	}
 
-    public boolean getCbConsole() {
-        return cbConsole.isSelected();
-    }
+	void registerFocusHandler (final JComponent c) {
+		c.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).
+				put (KeyStroke.getKeyStroke (java.awt.event.KeyEvent.VK_F1, 0), "F1");
+		c.addMouseListener (new java.awt.event.MouseAdapter () {
+			public void mouseEntered (java.awt.event.MouseEvent evt) {
+				//System.out.println ("registerFocusHandler: mouseEntered: " + c.getName());
+				c.grabFocus ();
+			}
+		});
+		c.addKeyListener (new java.awt.event.KeyAdapter () {
+			public void keyPressed (java.awt.event.KeyEvent evt) {
+				handleHelpKey (evt);
+			}
+		});
+	}
 
-    public boolean getCbEspeak() {
-        return cbEspeak.isSelected();
-    }
+	public JTree getDialogTree () {
+		return dialogTree;
+	}
 
-    public boolean getCbFestival() {
-        return cbFestival.isSelected();
-    }
+	public JList getGrammarList () {
+		return grammarList;
+	}
 
-    public boolean getCbFreetts() {
-        return cbFreetts.isSelected();
-    }
+	public JTable getSynsTab () {
+		return synsTab;
+	}
 
-    public boolean getCbGoogleRecognizer() {
-        return cbGoogleRecognizer.isSelected();
-    }
+	public JTable getQualdbTable () {
+		return qualdbTable;
+	}
 
-    public boolean getCbGoogletts() {
-        return cbGoogletts.isSelected();
-    }
+	public String getRecognizer () {
+		if (this.cbGoogleRecognizer.isSelected ()) {
+			return "web";
+		}
+		if (this.cbSphinx.isSelected ()) {
+			return "sphinx";
+		}
+		if (this.cbConsole.isSelected ()) {
+			return "console";
+		}
+		return null;
+	}
 
-    public boolean getCbSphinx() {
-        return cbSphinx.isSelected();
-    }
-    void startWizard() {
-        final JFrame frame = this;
-        final WizardDialog dialog = new WizardDialog(frame, true);
-        dialog.setVisible(true);
-        /*
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        dialog.setVisible(false);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-        * */
-        //this.appName.setText( dialog.getCardValue("app_name").toString() );
-        this.dlgFile = (String) dialog.getCardValue("dialog_file");
-        this.dataFile = (String) dialog.getCardValue("data_file");
-        System.out.println("startWizard: " + dlgFile);
-    }
+	public String getSynthesizer () {
+		if (this.cbFestival.isSelected ()) {
+			return "festival";
+		}
+		if (this.cbGoogletts.isSelected ()) {
+			return "web";
+		}
+		if (this.cbFreetts.isSelected ()) {
+			return "freetts";
+		}
+		if (this.cbEspeak.isSelected ()) {
+			return "espeak";
+		}
+		return null;
+	}
 
-    static void createHelpFrame () {
-        if (helpFrame == null) {
-                helpFrame = new JvxHelpFrame ();
-        }
-        helpFrame.setVisible (true);
-    }
-	
-    static void showHelp (String url) {
-        createHelpFrame ();
-        helpFrame.setHelpPage (url);
-    }
-    void handleHelpKey(java.awt.event.KeyEvent evt) {
-        if (evt.getKeyCode()==java.awt.event.KeyEvent.VK_F1) {
-            //System.out.println("F1 pressed");
-            JComponent c = (JComponent) evt.getSource();
-            String key = c.getName();
-            String urlPath = urlDirectory + JvxConfiguration.getHelpURL(key);
-            showHelp (urlPath);
-        }
-    }
-    public void setDirtyFlag(boolean flag) {
-        dirty_flag = flag;
-    }
-    private boolean confirmExit() {
-        
-        try {
-            RecentFileHistory.flush();
-        } catch (BackingStoreException ex) {
-            Logger.getLogger(JvxMainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if(dirty_flag) {
-            Object[] options = {"Yes, please",
-                                    "No, thanks",
-                                        "Cancel"};
-            int n = JOptionPane.showOptionDialog(this,
-                            "Your unsaved changes will be lost on Exit!\n" +
-                            "Would you like to Save the Changes and Exit?",
-                            "Confirm Exit",
-                            JOptionPane.YES_NO_CANCEL_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            options,
-                            options[0]);
-            if (n == JOptionPane.YES_OPTION) {
-                save();
-            }
-            else if (n == JOptionPane.CANCEL_OPTION) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	public boolean getCbConsole () {
+		return cbConsole.isSelected ();
+	}
+
+	public boolean getCbEspeak () {
+		return cbEspeak.isSelected ();
+	}
+
+	public boolean getCbFestival () {
+		return cbFestival.isSelected ();
+	}
+
+	public boolean getCbFreetts () {
+		return cbFreetts.isSelected ();
+	}
+
+	public boolean getCbGoogleRecognizer () {
+		return cbGoogleRecognizer.isSelected ();
+	}
+
+	public boolean getCbGoogletts () {
+		return cbGoogletts.isSelected ();
+	}
+
+	public boolean getCbSphinx () {
+		return cbSphinx.isSelected ();
+	}
+
+	void startWizard () {
+		final JFrame frame = this;
+		final WizardDialog dialog = new WizardDialog (frame, true);
+		dialog.setVisible (true);
+		/*
+		 java.awt.EventQueue.invokeLater(new Runnable() {
+		 public void run() {
+		 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+		 @Override
+		 public void windowClosing(java.awt.event.WindowEvent e) {
+		 dialog.setVisible(false);
+		 }
+		 });
+		 dialog.setVisible(true);
+		 }
+		 });
+		 * */
+		//this.appName.setText( dialog.getCardValue("app_name").toString() );
+		this.dlgFile = (String) dialog.getCardValue ("dialog_file");
+		this.dataFile = (String) dialog.getCardValue ("data_file");
+		System.out.println ("startWizard: " + dlgFile);
+	}
+
+	static void createHelpFrame () {
+		if (helpFrame == null) {
+			helpFrame = new JvxHelpFrame ();
+		}
+		helpFrame.setVisible (true);
+	}
+
+	static void showHelp (String url) {
+		createHelpFrame ();
+		helpFrame.setHelpPage (url);
+	}
+
+	void handleHelpKey (java.awt.event.KeyEvent evt) {
+		if (evt.getKeyCode () == java.awt.event.KeyEvent.VK_F1) {
+			//System.out.println("F1 pressed");
+			JComponent c = (JComponent) evt.getSource ();
+			String key = c.getName ();
+			String urlPath = urlDirectory + JvxConfiguration.getHelpURL (key);
+			showHelp (urlPath);
+		}
+	}
+
+	public void setDirtyFlag (boolean flag) {
+		dirty_flag = flag;
+	}
+
+	private boolean confirmExit () {
+
+		try {
+			RecentFileHistory.flush ();
+		} catch (BackingStoreException ex) {
+			Logger.getLogger (JvxMainFrame.class.getName ()).log (Level.SEVERE, null, ex);
+		}
+
+		if (dirty_flag) {
+			Object[] options = {"Yes, please",
+				"No, thanks",
+				"Cancel"};
+			int n = JOptionPane.showOptionDialog (this,
+					"Your unsaved changes will be lost on Exit!\n"
+					+ "Would you like to Save the Changes and Exit?",
+					"Confirm Exit",
+					JOptionPane.YES_NO_CANCEL_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,
+					options,
+					options[0]);
+			if (n == JOptionPane.YES_OPTION) {
+				save ();
+			} else if (n == JOptionPane.CANCEL_OPTION) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * @param args the command line arguments
+	 */
+	public static void main (String args[]) {
+		/* Set the Nimbus look and feel */
+		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JvxMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JvxMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JvxMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JvxMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+		 */
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels ()) {
+				if ("Nimbus".equals (info.getName ())) {
+					javax.swing.UIManager.setLookAndFeel (info.getClassName ());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException ex) {
+			java.util.logging.Logger.getLogger (JvxMainFrame.class.getName ()).log (java.util.logging.Level.SEVERE, null, ex);
+		} catch (InstantiationException ex) {
+			java.util.logging.Logger.getLogger (JvxMainFrame.class.getName ()).log (java.util.logging.Level.SEVERE, null, ex);
+		} catch (IllegalAccessException ex) {
+			java.util.logging.Logger.getLogger (JvxMainFrame.class.getName ()).log (java.util.logging.Level.SEVERE, null, ex);
+		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+			java.util.logging.Logger.getLogger (JvxMainFrame.class.getName ()).log (java.util.logging.Level.SEVERE, null, ex);
+		}
+		//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                final JvxMainFrame jf = new JvxMainFrame();
-                JvxMainFrame.theApp = jf;
-                jf.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        try { 
-                            if( !jf.confirmExit() ) return;
-                        } catch (Exception ex) { ex.printStackTrace(); }
-                        System.exit(0);
-                    }
-                });
-                jf.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-                jf.setVisible(true);
-                //jf.startWizard();
-            }
-        });
-    }
-
+		/* Create and display the form */
+		java.awt.EventQueue.invokeLater (new Runnable () {
+			public void run () {
+				final JvxMainFrame jf = new JvxMainFrame ();
+				JvxMainFrame.theApp = jf;
+				jf.addWindowListener (new java.awt.event.WindowAdapter () {
+					@Override
+					public void windowClosing (java.awt.event.WindowEvent e) {
+						try {
+							if (!jf.confirmExit ()) {
+								return;
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace ();
+						}
+						System.exit (0);
+					}
+				});
+				jf.setDefaultCloseOperation (DO_NOTHING_ON_CLOSE);
+				jf.setVisible (true);
+				//jf.startWizard();
+			}
+		});
+	}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField appName;
     private javax.swing.JButton btnGenerate;
@@ -1342,6 +1449,4 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTable synsTab;
     private javax.swing.JPanel targetSpecPanel;
     // End of variables declaration//GEN-END:variables
-
-
 }
