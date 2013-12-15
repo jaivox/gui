@@ -802,22 +802,22 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
 		// sphinx works only in linux
 		// check this last, any failure returns
-		String os = System.getProperty("os.name");
-		if (os.startsWith("Windows")) {
-			System.out.println ("Sphinx Operating system: "+os);
+		String os = System.getProperty ("os.name");
+		if (os.startsWith ("Windows")) {
+			System.out.println ("Sphinx Operating system: " + os);
 			cbSphinx.setEnabled (false);
 			return;
 		}
-		
+
 		/*
-		// The following check is needed, but did not work
-		// check for sphinx_lm_convert
-		if (!installed ("/usr/local/bin/sphinx_lm_convert -help")) {
-			System.out.println ("sphinx_lm_convert missing");
-			cbSphinx.setEnabled (false);
-			return;
-		}
-		*/
+		 // The following check is needed, but did not work
+		 // check for sphinx_lm_convert
+		 if (!installed ("/usr/local/bin/sphinx_lm_convert -help")) {
+		 System.out.println ("sphinx_lm_convert missing");
+		 cbSphinx.setEnabled (false);
+		 return;
+		 }
+		 */
 		File f = new File ("/usr/local/bin/sphinx_lm_convert");
 		if (!f.exists ()) {
 			System.out.println ("Could not find sphinx_lm_convert");
@@ -830,8 +830,8 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 			return;
 		}
 		cbSphinx.setEnabled (true);
-		
-		
+
+
 		// check some urls, does not seem to work right
 		/*
 		 boolean okwebasr = 

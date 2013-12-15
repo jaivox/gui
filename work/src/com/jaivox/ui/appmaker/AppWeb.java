@@ -117,7 +117,7 @@ public class AppWeb extends JvxApp {
     }
 
     public static boolean testSpeech (String speech) {
-        speech = RecordTask.wavToflac(speech);
+        // speech = RecordTask.wavToflac(speech);
         SpeechInput R = new SpeechInput ();
         int empty = 0;
         int maxempty = 5;

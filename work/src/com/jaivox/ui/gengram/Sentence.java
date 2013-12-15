@@ -27,15 +27,15 @@ public class Sentence {
 			tree = t;
 			StringTokenizer st = new StringTokenizer (orig, Parse.breaks);
 			int n = st.countTokens ();
-			words = new String [n];
-			for (int i=0; i<n; i++) {
-				words [i] = st.nextToken ();
+			words = new String[n];
+			for (int i = 0; i < n; i++) {
+				words[i] = st.nextToken ();
 			}
 			// words = orig.split (" ");
 			forms = form.split (" ");
 			N = forms.length;
 			if (n != N) {
-				Debug ("Something wrong N="+N+" "+n+"\n"+orig+"\n"+tree+"\n"+form);
+				Debug ("Something wrong N=" + N + " " + n + "\n" + orig + "\n" + tree + "\n" + form);
 				return;
 			}
 			Valid = true;
@@ -248,9 +248,9 @@ public class Sentence {
 				blank[stage] = words[stage];
 				generateokay (blank, stage + 1);
 			} else {
-                                if (selectionHandler != null) {
-                                    sub = selectionHandler.filterUnSelected (sub);
-                                }
+				if (selectionHandler != null) {
+					sub = selectionHandler.filterUnSelected (sub);
+				}
 				for (int i = 0; i < sub.length; i++) {
 					blank[stage] = sub[i];
 					generateokay (blank, stage + 1);

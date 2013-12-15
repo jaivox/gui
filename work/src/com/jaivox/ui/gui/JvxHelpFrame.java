@@ -14,37 +14,36 @@ import javax.swing.event.HyperlinkListener;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author dev
  */
 public class JvxHelpFrame extends JFrame
-	implements ActionListener, HyperlinkListener {
+		implements ActionListener, HyperlinkListener {
 
 	public String currentUrl;
-	static ArrayList <String> urls;
+	static ArrayList<String> urls;
 	static int currentPosition;
-	
+
 	/**
 	 * Creates new form JvxHelpFrame
 	 */
 	public JvxHelpFrame () {
 		initComponents ();
-		urls = new ArrayList <String> ();
+		urls = new ArrayList<String> ();
 		currentPosition = -1;
 		setDefaultCloseOperation (HIDE_ON_CLOSE);
 	}
-	
+
 	public JvxHelpFrame (String url) {
 		initComponents ();
-		urls = new ArrayList <String> ();
+		urls = new ArrayList<String> ();
 		currentUrl = url;
 		currentPosition = 0;
 		urls.add (url);
 		setDefaultCloseOperation (HIDE_ON_CLOSE);
 	}
-	
+
 	public void setHelpPage (String url) {
 		currentUrl = url;
 		currentPosition++;
@@ -62,7 +61,7 @@ public class JvxHelpFrame extends JFrame
 			e.printStackTrace ();
 		}
 	}
-	
+
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always
@@ -143,36 +142,50 @@ public class JvxHelpFrame extends JFrame
     }// </editor-fold>//GEN-END:initComponents
 
     private void HomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeButtonActionPerformed
-        // TODO add your handling code here:
-		if (urls.size () == 0) return; 
+		// TODO add your handling code here:
+		if (urls.size () == 0) {
+			return;
+		}
 		currentUrl = urls.get (0);
 		currentPosition = 0;
 		try {
 			HelpField.setPage (new URL (currentUrl));
 			int n = urls.size ();
 			// System.out.println ("Current Position: "+currentPosition+" Total "+n);
-			if (currentPosition < n-1) NextButton.setEnabled (true);
-			else NextButton.setEnabled (false);
-			if (currentPosition > 0) PreviousButton.setEnabled (true);
-			else PreviousButton.setEnabled (false);
+			if (currentPosition < n - 1) {
+				NextButton.setEnabled (true);
+			} else {
+				NextButton.setEnabled (false);
+			}
+			if (currentPosition > 0) {
+				PreviousButton.setEnabled (true);
+			} else {
+				PreviousButton.setEnabled (false);
+			}
 		} catch (Exception e) {
 			e.printStackTrace ();
 		}
     }//GEN-LAST:event_HomeButtonActionPerformed
 
     private void NextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextButtonActionPerformed
-        int n = urls.size ();
-		if (currentPosition < n-1) {
+		int n = urls.size ();
+		if (currentPosition < n - 1) {
 			currentPosition++;
 			currentUrl = urls.get (currentPosition);
 			try {
 				HelpField.setPage (new URL (currentUrl));
 				n = urls.size ();
 				// System.out.println ("Current Position: "+currentPosition+" Total "+n);
-				if (currentPosition < n-1) NextButton.setEnabled (true);
-				else NextButton.setEnabled (false);
-				if (currentPosition > 0) PreviousButton.setEnabled (true);
-				else PreviousButton.setEnabled (false);
+				if (currentPosition < n - 1) {
+					NextButton.setEnabled (true);
+				} else {
+					NextButton.setEnabled (false);
+				}
+				if (currentPosition > 0) {
+					PreviousButton.setEnabled (true);
+				} else {
+					PreviousButton.setEnabled (false);
+				}
 			} catch (Exception e) {
 				e.printStackTrace ();
 			}
@@ -180,7 +193,7 @@ public class JvxHelpFrame extends JFrame
     }//GEN-LAST:event_NextButtonActionPerformed
 
     private void PreviousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreviousButtonActionPerformed
-        int n = urls.size ();
+		int n = urls.size ();
 		if (currentPosition > 0) {
 			currentPosition--;
 			currentUrl = urls.get (currentPosition);
@@ -188,10 +201,16 @@ public class JvxHelpFrame extends JFrame
 				HelpField.setPage (new URL (currentUrl));
 				n = urls.size ();
 				// System.out.println ("Current Position: "+currentPosition+" Total "+n);
-				if (currentPosition < n-1) NextButton.setEnabled (true);
-				else NextButton.setEnabled (false);
-				if (currentPosition > 0) PreviousButton.setEnabled (true);
-				else PreviousButton.setEnabled (false);
+				if (currentPosition < n - 1) {
+					NextButton.setEnabled (true);
+				} else {
+					NextButton.setEnabled (false);
+				}
+				if (currentPosition > 0) {
+					PreviousButton.setEnabled (true);
+				} else {
+					PreviousButton.setEnabled (false);
+				}
 			} catch (Exception e) {
 				e.printStackTrace ();
 			}
@@ -200,14 +219,18 @@ public class JvxHelpFrame extends JFrame
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
 		// clear the urls
-		urls = new ArrayList <String> ();
+		urls = new ArrayList<String> ();
 		currentPosition = -1;
-        setVisible (false);
+		setVisible (false);
     }//GEN-LAST:event_formWindowClosing
 
 	public void actionPerformed (ActionEvent event) {
-		if (currentUrl == null) return;
-		if (currentUrl.equals ("")) return;
+		if (currentUrl == null) {
+			return;
+		}
+		if (currentUrl.equals ("")) {
+			return;
+		}
 		try {
 			HelpField.setPage (new URL (currentUrl));
 		} catch (Exception e) {
@@ -229,31 +252,35 @@ public class JvxHelpFrame extends JFrame
 					HelpField.setPage (next);
 					int n = urls.size ();
 					// System.out.println ("Current Position: "+currentPosition+" Total "+n);
-					if (currentPosition < n-1) NextButton.setEnabled (true);
-					else NextButton.setEnabled (false);
-					if (currentPosition > 0) PreviousButton.setEnabled (true);
-					else PreviousButton.setEnabled (false);
-				}
-				else if (protocol.startsWith ("http")) {
+					if (currentPosition < n - 1) {
+						NextButton.setEnabled (true);
+					} else {
+						NextButton.setEnabled (false);
+					}
+					if (currentPosition > 0) {
+						PreviousButton.setEnabled (true);
+					} else {
+						PreviousButton.setEnabled (false);
+					}
+				} else if (protocol.startsWith ("http")) {
 					if (!Desktop.isDesktopSupported ()) {
-						System.out.println ("No desktop browser support for "+protocol);
-						System.out.println ("while trying to open "+next.toString ());
+						System.out.println ("No desktop browser support for " + protocol);
+						System.out.println ("while trying to open " + next.toString ());
 					}
 					Desktop desktop = Desktop.getDesktop ();
 					if (desktop.isSupported (Desktop.Action.BROWSE)) {
 						desktop.browse (next.toURI ());
 					}
-				}
-				else {
-					System.out.println ("Invalid protocol "+protocol);
-					System.out.println ("while trying to open "+next.toString ());
+				} else {
+					System.out.println ("Invalid protocol " + protocol);
+					System.out.println ("while trying to open " + next.toString ());
 				}
 			} catch (Exception e) {
 				e.printStackTrace ();
 			}
 		}
 	}
-	
+
 	/**
 	 * @param args the command line arguments
 	 */
