@@ -1,0 +1,8 @@
+
+(Qu'est-ce qui est actuellement à la mode?) (Les accessoires)
+	(Et les sacs à main?) (Ils étaient branchés l'année dernière, mais cette année non)
+	(Et les bijoux lourds?) (Non, maintenant c'est l'or blanc)
+	(Quelles couleurs sont populaires?) (Pour la plupart, c'est les tons couleur de terre profonde)
+		(Ça veut dire marron?) (Eh bien, il y a plusieurs couleurs de tons)
+			(Gris, alors?) (Pas vraiment, plutôt les tons couleur rougeâtre)
+

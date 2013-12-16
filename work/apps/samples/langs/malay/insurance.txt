@@ -1,0 +1,11 @@
+
+(Helo, saya nak dapatkan insurans kereta) (baiklah)
+(Ada dua buah kereta, berumur kira-kira tiga tahun) (untuk berapa orang?)
+	(Kami berdua saja) (puan dan suami?)
+		(Ya) (puan mahupun suami terlibat dalam kemalangan kebelakangan ini?)
+			(Tidak) (pelanggaran lalu lintas bergerak?)
+				(Tidak ada) (maka kita barangkali mendapatkan harga yang baik)
+		(Tidak, saya dan anak saya) (berapa umur anak puan?)
+			(Dua puluh) (harga untuk lelaki muda mahal)
+				(Sayang) (tetapi kita bisa mendapatkan harga terbaik yang ada)
+

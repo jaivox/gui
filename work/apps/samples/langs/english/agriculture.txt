@@ -1,0 +1,10 @@
+
+(hello, I am from the local farm division) (I am busy)
+(i am here to advise you on crops) (I do not have any crops)
+	(then what do I see growing here?) (that is an orchard young man)
+		(well that is a crop) (and a fungus is a tree, go away)
+	(we can advise you on your farm) (I do not need any advise)
+		(do you use scientific methods?) (I use methods that work)
+			(i doubt if this tree will have any peaches) (I will also be suprised)
+				(then you need my help) (no you need to know that is a pear tree)
+

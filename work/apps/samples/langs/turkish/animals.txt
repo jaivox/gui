@@ -1,0 +1,9 @@
+
+(Evet, o bir avuç) (kedi? Olmasıdır)
+	(Onun adı nedir) (pisi)
+		(O bütün gün uyuyor?) (Kadar değil düşündüğüm gibi)
+			(Gerçekten mi?) (Evet, o dışarı köpek ile oynuyor)
+		(O herhangi bir fare yakalamak mi?) (Muhtemelen o farelerin korkuyor)
+			(Sonra o ne yapıyor?) (O köpeğin kuyruğunu yakalar)
+		(O çizik mi?) (Onu zarar sadece)
+

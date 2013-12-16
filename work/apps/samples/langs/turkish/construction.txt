@@ -1,0 +1,9 @@
+
+(Bir güverte inşa ediyoruz?) (Evet, bir müteahhit var)
+	(Onlar kereste kullanıyorsunuz?) (Yok, yeni bir sentetik malzeme)
+		(Bu sağlam?) (Onlarca yıl gerekiyordu)
+			(Ne yapılmıştır?) (Bu odun parçacıkları ile bazı reçine)
+		(Doğaldır?) (Lekeli ahşap gibi görünüyor)
+			(O kahverengi var mı?) (Ben farklı renklerde olduğunu düşünüyorum)
+	(Somut üsleri var mı?) (Şehir kodu ile gerekli olduğunu)
+		(Şehir bu onaylama var mı?) (Sanırım)

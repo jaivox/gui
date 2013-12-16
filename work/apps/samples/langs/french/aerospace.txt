@@ -1,0 +1,7 @@
+
+(Vous avez un avion à vendre?) (Oui, nous en avons plusieurs)
+	(Vous avez quelque chose à moins de 2 millions de dollars?) (Quelques anciens)
+		(Qu'est-ce qu'ils sont?) (Il y a un Falcon et un Gulfstream)
+	(Vous avez quelque chose à moins de 20000 dollars?) (Ce ne sont pas des voitures, ça)
+		(Une voiture volante, alors?) (Si vous partiez, alors?)
+

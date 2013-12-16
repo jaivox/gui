@@ -1,0 +1,9 @@
+
+(Su zgrade palube?) (Yeah, oni imaju ugovor)
+	(Oni su koristeći drvo?) (Ne, to je novi sintetički materijal)
+		(Je da je čvrst?) (Trebao trajati desetljećima)
+			(Što je to od?) (To je neka smola s drveta čestica)
+		(Je da je prirodni?) (Izgleda kao obojenog drva)
+			(To moraju smeđe?) (Mislim da postoje različite boje)
+	(Oni imaju konkretne podloge?) (Koji je potreban gradu koda)
+		(Nema grad morati odobriti ovo?) (Mislim tako)

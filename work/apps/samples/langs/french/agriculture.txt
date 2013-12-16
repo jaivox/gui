@@ -1,0 +1,10 @@
+
+(Bonjour, Je suis du Département de l'Agriculture) (Je suis occupé)
+(Je viens pour vous conseiller sur la récolte) (Je ne recueille rien)
+	(Alors qu'est-ce que je vois pousser ici?) (C'est un verger, jeune homme)
+		(Eh bien, c'est une récolte) (Et un champignon est un arbre, allez-vous-en)
+	(Nous pouvons vous conseiller sur votre ferme) (Je n'ai pas besoin de conseils)
+		(Utilisez-vous les méthodes scientifiques?) (J'utilise des méthodes qui marchent)
+			(Je doute que cet arbre aie des pêches) (Moi aussi, je m'étonnerais)
+				(Alors il vous faut mon aide) (Non, c'est vous, il faut que vous sachez que c'est un poirier)
+

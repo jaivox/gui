@@ -1,0 +1,10 @@
+
+(Y a-t-il des produits chimiques dangereux dans la maison?) (Oui, surtout les nettoyants)
+	(Comme quoi par exemple?) (Comme par exemple l'eau de javel et les nettoyeurs de tuyaux)
+		(Sont-ils toxiques?) (Sans doute)
+	(Comme par exemple le nettoyant à plancher?) (Certaines solutions douces de savon ne font pas de mal)
+		(Et les solutions de lavage?) (Peut-être ils sont un peu dangereux)
+	(Le rince-bouche est sûr?) (Il est sûr en petites quantités)
+		(Si mon fils boit du rince-bouche?) (Vous devez appeler le médecin)
+		(Si mon fils a mangé du dentifrice?) (C'est probablement pas de problème)
+

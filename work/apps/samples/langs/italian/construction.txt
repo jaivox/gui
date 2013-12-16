@@ -1,0 +1,9 @@
+
+(Stanno costruendo un ponte?) (Sì, hanno un imprenditore)
+	(Stanno usando legname?) (No, non è un nuovo materiale sintetico)
+		(Che è solido?) (Dovrebbe durare per decenni)
+			(Che cosa è fatta?) (Che è un po 'di resina con particelle di legno)
+		(È quella naturale?) (Sembra legno tinto)
+			(Serve che al marrone?) (Penso che ci sono diversi colori)
+	(Cosa hanno basi in cemento?) (Che è richiesto dal codice della città)
+		(Non la città deve approvare questo?) (Penso di sì)

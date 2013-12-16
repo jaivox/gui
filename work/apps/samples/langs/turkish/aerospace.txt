@@ -1,0 +1,7 @@
+
+(Eğer satış için bir uçak var mı?) (Evet biz birkaç var)
+	(Bir şey az 2 milyon var mı) (birkaç eski)
+		(Bunlar nelerdir?) (Bir şahin ve bir Gulfstream yoktur)
+	(Eğer 20000 altında bir şey var mı?) (Bu arabalar değildir)
+		(Nasıl uçan bir araba hakkında?) (Nasıl bir uçan sıçrama alma konusunda?)
+

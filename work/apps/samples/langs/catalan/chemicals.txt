@@ -1,0 +1,10 @@
+
+(Hi ha substàncies químiques perilloses a la llar?) (Sí, especialment productes de neteja)
+	(Com què?) (Per exemple, clor i netejadors de desguassos)
+		(Són tòxics?) (Sens dubte)
+	(Com netejador de pisos) (algunes solucions sabonoses suaus són acceptables)
+		(Què hi ha de fregar solucions?) (Probablement no estan molt segurs)
+	(És segur esbandida bucal) (és segur en petites quantitats)
+		(I si el meu fill beu esbandida bucal?) (Heu de trucar al metge)
+		(I si el meu sone va menjar pasta de dents) (que és probablement molt bé)
+

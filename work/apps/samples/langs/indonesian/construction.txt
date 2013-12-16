@@ -1,0 +1,9 @@
+
+(Mereka membangun dek?) (Ya, ada kontraktor)
+	(Menggunakan kayu?) (Tidak, bahan sintetik baru)
+		(Itu kukuh?) (Dianggap dapat bertahan berdekade-dekade)
+			(Diperbuat daripada apa?) (Resin dengan partikel kayu)
+		(Itu alamiah?) (Merupai kayu belak)
+			(Harus menjadi coklat?) (Saya pikir ada warna banyak)
+	(Ada asas beton?) (Hukum kota perlukan asas beton)
+		(Pemerintah kota perlu meluluskan ini?) (Saya pikir begitu)

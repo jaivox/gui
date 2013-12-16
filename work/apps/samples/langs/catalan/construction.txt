@@ -1,0 +1,9 @@
+
+(Estan construint una baralla?) (Sí, tenen un contractista)
+	(Estan utilitzant fusta?) (No, no és un nou material sintètic)
+		(És que robust?) (Se suposa que durarà per dècades)
+			(El que està fet?) (Que és una mica de resina amb partícules de fusta)
+		(Que és natural?) (S'assembla a la fusta tacada)
+			(Què ha de marró?) (Crec que hi ha diferents colors)
+	(Què tenen bases concretes?) (Que necessita el codi de la ciutat)
+		(No la ciutat ha d'aprovar això?) (Això crec)

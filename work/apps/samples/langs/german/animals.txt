@@ -1,0 +1,9 @@
+
+(Ist das Ihre Katze?) (Ja, sie kann einen ganz schön in Trab halten)
+	(Wie heißt Sie?) (Mieze)
+		(Schläft sie den ganzen Tag?) (Nicht so viel, wie ich dachte)
+			(Wirklich?) (Ja, sie spielt draußen mit dem Hund)
+		(Fängt sie Mäuse?) (Wahrscheinlich hat sie Angst vor Mäusen)
+			(Also, was macht sie denn?) (Sie fängt den Schwanz vom Hund)
+		(Kratzt sie?) (Nur wenn man ihr Weh tut)
+

@@ -1,0 +1,9 @@
+
+(Están construyendo una baraja?) (Sí, tienen un contratista)
+	(¿Están utilizando madera?) (No, no es un nuevo material sintético)
+		(Es que robusto?) (Se supone que durará por décadas)
+			(Lo que está hecho?) (Que es un poco de resina con partículas de madera)
+		(Que es natural?) (Se parece a la madera manchada)
+			(Qué tiene que marrón?) (Creo que hay diferentes colores)
+	(Qué tienen bases concretas?) (Que necesita el código de la ciudad)
+		(No la ciudad tiene que aprobar esto?) (Eso creo)

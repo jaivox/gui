@@ -1,0 +1,9 @@
+
+(Est-ce que c'est votre chat?) (Oui, elle est difficile!)
+	(Comment s'appelle-t-elle?) (Minette)
+		(Elle dort toute la journée?) (Moins que je le pensais)
+			(Ah oui?) (Oui, elle est dehors où elle joue avec le chien)
+		(Elle attrape les souris?) (Elle a probablement peur des souris)
+			(Alors qu'est-ce qu'elle fait?) (Elle attrape la queue du chien)
+		(Elle ne se gratte pas?) (Seulement si vous la blessez)
+

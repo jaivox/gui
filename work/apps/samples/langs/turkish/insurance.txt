@@ -1,0 +1,11 @@
+
+(Merhaba, ben araba sigortası alma hakkında arıyorum) (ben bu konuda size yardımcı olabilir)
+(Ben üç yaşında iki araba, var) (kaç sürücüleri?)
+	(Bize sadece iki) (sen ve kocan?)
+		(Evet) (Son zamanlarda bir kaza ya mi?)
+			(Yok) (nasıl hareket ihlalleri?)
+				(Yok) (iyi o zaman muhtemelen iyi bir fiyatla alabilirsiniz)
+		(Oğlum ve ben hiç) (oğlun kaç yaşında?)
+			(Yirmi bir) (genç erkekler için iyi oranları yüksektir)
+				(Bu çok kötü) (ama biz mevcut en iyi alabilirsiniz)
+

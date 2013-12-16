@@ -1,0 +1,11 @@
+
+(Halo, saya mau dapatkan asuransi mobil) (baiklah)
+(Ada dua buah mobil, berumur kira-kira tiga tahun) (untuk berapa orang?)
+	(Kami berdua saja) (ibu dan suami?)
+		(Ya) (ibu maupun suami terlibat dalam kecelakaan belakangan ini?)
+			(Tidak) (pelanggaran lalu lintas bergerak?)
+				(Tidak ada) (maka kita barangkali mendapatkan harga yang baik)
+		(Tidak, saya dan anak saya) (berapa umur anak ibu?)
+			(Dua puluh) (harga untuk lelaki muda mahal)
+				(Sayang) (tetapi kita bisa mendapatkan harga terbaik yang ada)
+

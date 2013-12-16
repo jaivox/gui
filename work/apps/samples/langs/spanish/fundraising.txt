@@ -1,0 +1,11 @@
+
+(Hola) (buenas tardes señor Smith, llamo para obtener su ayuda)
+	(¿Cómo puedo ayudar) (¿ha oído hablar de las recientes inundaciones en Minnesota)
+		(Sí) (estamos recogiendo suministros para las familias desplazadas)
+			(¿Qué tipo de cosas?) (Nuestra mayor necesidad es para la construcción de
+			materiales)
+				(Pero no tengo que) (se puede donar dinero en efectivo)
+		(Oh, esto es superior minnesota) (mi hermana es uno de los afectados)
+			(Lamento escuchar eso) (bueno, estoy tratando de ayudar a los que son como ella)
+				(¿Qué puedo hacer?) (Que en su mayoría necesitan dinero en efectivo para las fuentes)
+

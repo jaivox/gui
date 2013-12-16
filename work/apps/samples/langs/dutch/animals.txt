@@ -1,0 +1,9 @@
+
+(Is dat uw kat?) (Ja, ze is een handvol)
+	(Wat is haar naam) (kitty)
+		(Doet ze de hele dag slapen?) (Niet zoveel als ik dacht)
+			(Echt waar?) (Ja, ze is buiten spelen met de hond)
+		(Doet ze geen muizen te vangen?) (Waarschijnlijk is ze bang van muizen)
+			(Toen wat doet ze?) (Vangt ze de staart van de hond)
+		(Doet ze krabben?) (Alleen als je haar pijn)
+

@@ -1,0 +1,10 @@
+
+(Hola, soy de la división local de la granja) (Estoy ocupado)
+(Estoy aquí para aconsejarle sobre los cultivos) (No tengo ningún cultivo)
+	(Entonces, ¿qué es lo que veo cada vez aquí?) (Que es un joven huerto)
+		(Así que es un cultivo) (y un hongo es un árbol, vaya)
+	(Le podemos asesorar en su explotación) (Yo no necesito ningún consejo)
+		(Cómo se utiliza métodos científicos?) (Yo uso métodos que funcionan)
+			(Dudo que este árbol tendrá ningún melocotones) (también estaré sorprendido)
+				(Entonces necesitas mi ayuda) (no es necesario saber que es un árbol de pera)
+

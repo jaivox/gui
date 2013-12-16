@@ -1,0 +1,11 @@
+
+(Hola, llamo de conseguir seguro de coche) (te puedo ayudar con eso)
+(Tengo dos coches, cerca de tres años de edad) (cuántos conductores?)
+	(Sólo el dos de nosotros) (usted y su marido?)
+		(Sí) (¿Alguno de ustedes tiene un accidente recientemente?)
+			(No) (¿qué hay violaciónes en movimiento?)
+				(No) (bueno, entonces probablemente podamos conseguir buenos precios)
+		(No, mi hijo y yo) (¿Qué edad tiene su hijo?)
+			(Que es veinte) (tasas y los hombres jóvenes son altos)
+				(Eso es demasiado malo) (pero podemos conseguir el mejor disponible)
+

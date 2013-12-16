@@ -1,0 +1,9 @@
+
+(are they building a deck?) (yeah, they have a contractor)
+	(are they using lumber?) (no, it is a new synthetic material)
+		(is that sturdy?) (supposed to last for decades)
+			(what is it made of?) (it is some resin with wood particles)
+		(is that natural?) (looks like stained wood)
+			(does it have to brown?) (I think there are different colors)
+	(do they have concrete bases?) (that is required by city code)
+		(does the city have to approve this?) (I think so)

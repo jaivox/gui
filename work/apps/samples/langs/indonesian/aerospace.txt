@@ -1,0 +1,7 @@
+
+(Apakah ada pesawat dijual?) (Ya ada banyak)
+	(Ada apa-apa kurang daripada 2 juta) (ada dua-tiga yang tua)
+		(Apa mereka?) (Ada falcon dan gulfstream)
+	(Ada apa-apa kurang dari 20000?) (Ini bukan mobil)
+		(Ada mobil terbang?) (Pergilah!)
+

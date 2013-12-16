@@ -1,0 +1,10 @@
+
+(Halo) (selamat sore Pak Smith, saya minta tolong)
+	(Minta tolong apa) (pak mendengar berita tentang banjir yang terkini di minnesota)
+		(Ya) (kami mengumpul persediaan untuk keluarga pengungsi)
+			(Persediaan jenis apa?) (Bahan konstruksi yang paling kami perlukan)
+				(Tetapi saya tidak punya) (boleh menyumbangkan uang tunai)
+		(Oh, di minnesota atas) (kakak saya seorang pengungsi)
+			(Saya turut sedih mendengarkannya) (saya coba membantu orang-orang seperti kakak)
+				(Apa yang saya boleh buat?) (Kami kebanyakan perlukan uang tunai untuk persediaan)
+

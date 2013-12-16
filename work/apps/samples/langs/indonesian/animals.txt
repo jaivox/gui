@@ -1,0 +1,9 @@
+
+(Ini kucing anda?) (Ya, sukar diurus)
+	(Siapa namanya) (kucing)
+		(Tidur sepanjang hari?) (Kurang daripada yang saya pikirkan)
+			(Sungguh?) (Ya, sedang bermain-main keluar dengan anjing)
+		(Menangkap tikus?) (Barangkali takut tikus)
+			(Maka apa lakukan?) (Menangkap ekor anjing)
+		(Mencalarkan?) (Hanya jika orang menyakiti)
+

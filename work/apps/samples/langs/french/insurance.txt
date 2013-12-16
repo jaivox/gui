@@ -1,0 +1,11 @@
+
+(Allô, je téléphone pour obtenir l'assurance automobile) (Très bien, je serais ravi de vous aider)
+(J'ai deux voitures depuis environ trois ans) (Pour combien de personnes?)
+	(Seulement nous deux) (Vous et votre mari?)
+		(Oui) (Quelqu'un d'entre vous a récemment eu un accident?)
+			(Non) (Vous avez eu des violations mobiles?)
+				(Non) (Alors, nous pourrons peut-être obtenir de bons taux)
+		(Non, c'est mon fils et moi) (Quel âge a votre fils?)
+			(Vingt ans) (Ah, les taux pour les jeunes sont élevés)
+				(Dommage!) (Mais on peut obtenir le meilleur taux disponible)
+

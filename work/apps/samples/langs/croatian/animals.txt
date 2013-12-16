@@ -1,0 +1,9 @@
+
+(Je da je vaša mačka?) (Da, ona je šaka)
+	(Ono što je njezino ime) (Kitty)
+		(Ne spava po cijeli dan?) (Ne onoliko koliko sam mislila)
+			(Stvarno?) (Da, ona se igra s psom)
+		(Ona uhvatiti bilo miševe?) (Vjerojatno ona se boji miševa)
+			(Što onda ona radi?) (Uhvati psa za rep)
+		(Ona ispočetka?) (Samo ako je povrijeđen)
+

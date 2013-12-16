@@ -1,0 +1,9 @@
+
+(Bygger de ett däck?) (Ja, de har en byggherre)
+	(Använder de virke?) (Nej, det är ett nytt syntetiskt material)
+		(Är det hållbar?) (Man förväntar att det hållår i årtionden)
+			(Vad är det gjord av?) (Det är någon harts med träpartiklar)
+		(Är det naturligt?) (Ser ut som målat trä)
+			(Bör det brun vara?) (Jag tror att det finns olika färger)
+	(Har de konkret grunder?) (Det krävs stadkoden)
+		(Måste staden godkänna det?) (Det tror jag)

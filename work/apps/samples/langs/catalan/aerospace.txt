@@ -1,0 +1,7 @@
+
+(És el que té un pla per a la venda?) (Sí tenim diversos)
+	(Té una mica menys de 2 milions de dòlars) (uns pocs vells)
+		(Quins?) (Hi ha un falcó i un Gulfstream)
+	(Tens res sota 20000?) (No es tracta de cotxes)
+		(Què tal un cotxe volador?) (¿Hi ha de fer un salt volar?)
+

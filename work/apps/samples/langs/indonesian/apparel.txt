@@ -1,0 +1,8 @@
+
+(Apa trendi hari-hari ini?) (Aksesori)
+	(Beg tas?) (Itu popular tahun lalu, tidak tahun ini)
+	(Perhiasan berat?) (Bukan, sekarang emas putih popular)
+	(Warna apa popular?) (Kebanyakan warna nada bumi)
+		(Maksudnya coklat?) (Ada warna banyak)
+			(Abu-abu?) (Tidak, lebih seperti warna nada merah)
+

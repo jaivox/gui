@@ -1,0 +1,7 @@
+
+(Hai un aereo in vendita?) (Sì abbiamo diversi)
+	(Avete nulla di meno di 2 milioni di euro) (alcune fra le più vecchie)
+		(Cosa sono?) (C'è un falco e un Gulfstream)
+	(Hai qualcosa sotto 20000?) (Queste non sono le auto)
+		(Come su una macchina volante?) (Che ne dite di fare un salto volante?)
+

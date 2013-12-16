@@ -1,0 +1,10 @@
+
+(Monsieur, voulez-vous acheter un couteau Jinsu étonnant?) (Qu'est-ce qu'il fait?)
+	(Il coupe à travers n'importe quoi) (Ah oui?)
+		(Laissez-moi démontrer sur ce tuyau) (Mais je ne coupe pas de tuyaux)
+	(Eh bien, c'est le couteau plus affilé du monde) (Est-il en pointe de diamant?)
+		(Les pointes de diamant ne sont pas pour les couteaux) (Mais je l'utilise pour couper l'acier)
+			(Ce couteau n'a jamais besoin d'affûtage) (C'est probablement que vous ne l'utilisez pas)
+				(Monsieur, voulez-vous essayer gratis?) (Non, merci, je dois m'en aller)
+	(Il fait tout ce que vous voulez) (Est-ce qu'il fait disparaître aux vendeurs?)
+		(Très drôle, monsieur, mais vous coupez bien des choses?) (Oui, je coupe les vendeurs)

@@ -1,0 +1,11 @@
+
+(Hallo, ich rufe an, um Autoversicherung zu bekommen) (Da kann ich Ihnen schon helfen)
+(Ich habe zwei Autos, etwa drei Jahre alt) (Wie viele Fahrer?)
+	(Nur wir zwei) (Das heißt, Sie und Ihr Mann?)
+		(Ja) (Haben Sie oder Ihr Mann vor kurzem einen Unfall gehabt?)
+			(Nein) (Verkehrsverstöße?)
+				(Nein) (Dann können wir vielleicht gute Preise finden)
+		(Nein, mein Sohn und ich) (Wie alt ist Ihr Sohn?)
+			(Er ist zwanzig) (Hm, die Autoversicherung kostet mehr für junge Männer)
+				(Das ist schade) (Aber wir suchen trotzdem den besten Preis, der es gibt)
+

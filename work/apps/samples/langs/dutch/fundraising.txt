@@ -1,0 +1,11 @@
+
+(Hallo) (goedemiddag meneer Smith, roep ik om uw hulp te krijgen)
+	(Hoe kan ik helpen) (heb je gehoord van de recente overstromingen in Minnesota)
+		(Ja) (we zijn het verzamelen van benodigdheden voor ontheemde gezinnen)
+			(Wat voor soort dingen?) (Onze grootste behoefte is voor het bouwen van
+			materialen)
+				(Maar ik niet hebben dat) (u kunt doneren geld)
+		(Oh, dit is de bovenste Minnesota) (mijn zus is een van de getroffenen)
+			(Sorry om te horen dat) (nou ja, ik ben op zoek naar mensen zoals haar te helpen)
+				(Wat kan ik doen?) (We vooral geld nodig voor leveringen)
+

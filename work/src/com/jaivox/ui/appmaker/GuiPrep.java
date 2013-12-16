@@ -206,36 +206,6 @@ public class GuiPrep {
 	}
 
 	//temp code
-	static String buildAppCode (StringBuffer code, String type, String appname) {
-		String clz = Character.toUpperCase (appname.charAt (0)) + appname.substring (1)
-				+ Character.toUpperCase (type.charAt (0)) + type.substring (1);
-
-		code.append ("import com.jaivox.interpreter.Command;\nimport com.jaivox.interpreter.Interact;\n");
-		code.append ("import com.jaivox.synthesizer.web.Synthesizer;\n\n");
-		code.append ("import java.util.Properties;\nimport java.io.*;\n\n");
-		code.append ("public class ").append (clz);
-		code.append (" {\n");
-		code.append ("\tpublic static void main(String[] args) {\n");
-		if (type.equals ("runappsphinx")) {
-			code.append ("\t\trunappsphinx.config=\"").append (appname)
-					.append (".config.xml").append ("\";\n");
-		}
-		code.append ("\t\t").append (type).append (" c = new ").append (type);
-		code.append ("() {\n\t\t\t@Override\n\t\t\tvoid initializeInterpreter () {\n");
-		code.append ("\t\t\ttry {\n");
-		code.append ("\t\t\tProperties kv = new Properties ();\n");
-		code.append ("\t\t\tkv.load(new FileInputStream(\"").append (appname).append (".conf\"));\n");
-		code.append ("\t\t\tCommand cmd = new Command ();\n");
-		code.append ("\t\t\tinter = new Interact (basedir, kv, cmd);\n");
-		if (!type.equals ("console")) {
-			code.append ("\t\t\tspeaker = new Synthesizer (basedir, kv);\n");
-		}
-		code.append ("\t\t\t}catch(Exception e) {e.printStackTrace(); }\n");
-		code.append ("\t\t\t}\n\t\t\t};\n");
-		code.append ("\t}").append ("\n}");
-		return clz;
-	}
-
 	static void doSphinxStuff (String treefile, Properties conf) throws FileNotFoundException, IOException {
 		String project = conf.getProperty ("project");
 		String appfolder = conf.getProperty ("appfolder");

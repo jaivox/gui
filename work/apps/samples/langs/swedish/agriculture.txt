@@ -1,0 +1,10 @@
+
+(Hej, jag är medlem av Jordbruksdepartementet) (jag är upptagen)
+(Jag är här för att ge er råd om grödor) (Jag har inga grödor)
+	(Vad växer här då?) (Det är en fruktträdgård, yngling)
+		(Nå, det är en gröda) (och en svamp är ett träd, försvinn)
+	(Vi kan ge er råd om er gård) (Jag behöver inga råd)
+		(Använder ni vetenskapliga metoder?) (Jag använder metoder som fungerar)
+			(Jag tvivlar på om detta träd kommer att ha persikor) (jag skulle också bli överraskad)
+				(Då behöver ni min hjälp) (nej ni behöver veta att det är ett päronträd)
+

@@ -1,0 +1,10 @@
+
+(Helo) (selamat petang Encik Smith, saya minta tolong)
+	(Minta tolong apa) (encik mendengar berita tentang banjir yang terkini di minnesota)
+		(Ya) (kami mengumpul bekalan untuk keluarga pelarian)
+			(Bekal jenis apa?) (Bahan pembinaan yang paling kami perlukan)
+				(Tetapi saya tidak punya) (boleh menyumbangkan wang tunai)
+		(Oh, di minnesota atas) (kakak saya seorang pelarian)
+			(Saya turut sedih mendengarkannya) (saya cuba membantu orang-orang seperti kakak)
+				(Apa yang saya boleh buat?) (Kami hampir kesemuanya perlukan wang tunai untuk bekalan)
+

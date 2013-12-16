@@ -1,0 +1,9 @@
+
+(Zijn ze het bouwen van een deck?) (Ja, ze hebben een aannemer)
+	(Gebruiken ze hout?) (Nee, het is een nieuw synthetisch materiaal)
+		(Is dat stevige?) (Verondersteld voor het laatst voor tientallen jaren)
+			(Wat is het van gemaakt?) (Het is een hars met hout deeltjes)
+		(Is dat natuurlijk?) (Ziet eruit als gebeitst hout)
+			(Heeft het te bruin?) (Ik denk dat er verschillende kleuren)
+	(Hebben ze betonnen sokkels?) (Die wordt vereist door de stad code)
+		(Niet de stad moet dit goedkeuren?) (Denk ik zo)

@@ -1,0 +1,10 @@
+
+(Orada ev çevresinde tehlikeli kimyasallardır?) (Evet, özellikle temizleyiciler)
+	(Ne gibi?) (Örneğin, çamaşır suyu ve drenaj temizleyici)
+		(Onlar zehirlidir?) (Kesinlikle)
+	(Zemin yıkama gibi) (bazı hafif sabun çözümler ok)
+		(Nasıl çözümler ovma hakkında?) (Muhtemelen onlar da güvenli değildir)
+	(Bir gargara güvenli) (küçük miktarlarda güvenli)
+		(Ne oğlum içecekler gargara olur?) (Eğer doktorunuzu aramalısınız)
+		(Benim sone diş macunu yedim ne varsa) (muhtemelen ok)
+

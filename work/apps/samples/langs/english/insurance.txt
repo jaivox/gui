@@ -1,0 +1,11 @@
+
+(hello, I am calling about getting car insurance) (I can help you with that)
+(I have two cars, about three years old) (how many drivers?)
+	(just the two of us) (you and your husband?)
+		(yes) (did either of you have an accident recently?)
+			(no) (how about moving violations?)
+				(no) (well then we can probably get good rates)
+		(no it my son and I) (how old is your son?)
+			(he is twenty) (well rates for young men are high)
+				(that is too bad) (but we can get the best available)
+

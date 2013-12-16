@@ -1,0 +1,7 @@
+
+(Heb je een vliegtuig te koop?) (Ja, we hebben meerdere)
+	(Weet u iets minder dan 2 miljoen hebben) (een paar oude)
+		(Wat zijn dat?) (Er is een valk en een Gulfstream)
+	(Weet u iets onder 20.000 hebben?) (Dit zijn geen auto's)
+		(Wat dacht je van een vliegende auto?) (Hoe over het nemen van een vliegende sprong?)
+

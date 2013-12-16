@@ -1,0 +1,10 @@
+
+(Hallå) (goddag, Herr Smith. jag ringer för att få er hjälp)
+	(Hur kan jag hjälpa till) (har ni hört talas om den senaste tidens översvämningar i Minnesota)
+		(Ja) (vi samlar förnödenheter för flyktingfamiljer)
+			(Vad för slags saker?) (Vårt största behov är byggnadsmaterialer)
+				(Men jag har inte det) (du kan donera kontanter)
+		(Å, det är Övre Minnesota) (min syster är bland de drabbade)
+			(Tråkigt att höra) (ja, jag försöker hjälpa dem som är lik henne)
+				(Vad kan jag göra?) (Vi behöver mest kontanter för förnödenheter)
+

@@ -1,0 +1,10 @@
+
+(Hallo) (Guten Tag, Herr Smith, ich rufe Sie an, damit ich Ihre Hilfe bekommen kann)
+	(Wie kann ich Ihnen helfen?) (Haben Sie schon von den jüngsten Überschwemmungen in Minnesota gehört?)
+		(Ja) (Wir sammeln Vorräte für den verschleppten Familien)
+			(Was für Sachen sammeln Sie?) (Am meisten brauchen wir Baustoffe)
+				(Aber das habe ich nicht) (Sie dürfen Bargeld spenden)
+		(Oh, das ist Nordminnesota) (Meine Schwester ist eine von den Verschleppten)
+			(Es tut mir leid, das zu hören) (Also, ich versuche, andere wie sie zu helfen)
+				(Was kann ich denn machen?) (Wir brauchen überhaupt Geld, um Vorräte zu kaufen)
+

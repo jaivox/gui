@@ -1,0 +1,9 @@
+
+(Mereka membina dek?) (Ya, ada kontraktor)
+	(Menggunakan kayu?) (Tidak, bahan sintetik baru)
+		(Itu kukuh?) (Dianggap dapat bertahan berdekad-dekad)
+			(Diperbuat daripada apa?) (Resin dengan zarah kayu)
+		(Itu semula jadi?) (Merupai kayu belak)
+			(Harus menjadi perang?) (Saya fikir ada warna banyak)
+	(Ada asas konkrit?) (Kanun bandar raya perlukan asas konkrit)
+		(Kerajaan bandar raya perlu meluluskan ini?) (Saya fikir begitu)

@@ -1,0 +1,9 @@
+
+(Bauen sie ein Deck?) (Ja, sie haben einen Unternehmer)
+	(Nutzen sie Holz?) (Nein, es ist ein neuer Kunststoff)
+		(Ist das robust?) (Angeblich dauert es Jahrzehnte)
+			(Woraus wird das gemacht?) (Es ist ein Harz mit Holzteilchen)
+		(Ist das natürlich?) (Es sieht wie gebeizter Holz aus)
+			(Muss es braun werden?) (Ich glaube, es gibt verschiedene Farben)
+	(Haben sie Betonsockel?) (Dem Stadtgesetz ansprechend ist das erforderlich)
+		(Muss das Rathaus das genehmigen?) (Ich glaube schon)

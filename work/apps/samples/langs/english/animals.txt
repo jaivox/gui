@@ -1,0 +1,9 @@
+
+(is that your cat?) (yeah, she is a handful)
+	(what is her name) (kitty)
+		(does she sleep all day?) (not as much as I thought)
+			(really?) (yeah, she is out playing with the dog)
+		(does she catch any mice?) (probably she is scared of mice)
+			(then what does she do?) (she catches the dog's tail)
+		(does she scratch?) (only if you hurt her)
+

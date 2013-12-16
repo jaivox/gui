@@ -1,0 +1,11 @@
+
+(hello) (good afternoon Mr. Smith, I am calling to get your help)
+	(how can I help) (have you heard of the recent floods in minnesota)
+		(yes) (we are gathering supplies for displaced families)
+			(what sorts of things?) (our greatest need is for building
+			materials)
+				(but I not have that) (you can donate cash)
+		(oh, this is upper minnesota) (my sister is among those affected)
+			(sorry to hear that) (well, I am trying to help those like her)
+				(what can I do?) (we mostly need cash for supplies)
+

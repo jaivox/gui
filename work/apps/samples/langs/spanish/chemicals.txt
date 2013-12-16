@@ -1,0 +1,10 @@
+
+(¿Hay sustancias químicas peligrosas en el hogar?) (Sí, especialmente productos de limpieza)
+	(Como qué?) (Por ejemplo, cloro y limpiadores de desagües)
+		(¿Son tóxicos?) (Sin duda)
+	(Como limpiador de pisos) (algunas soluciones jabonosas suaves son aceptables)
+		(¿Qué hay de fregar soluciones?) (Probablemente no están muy seguros)
+	(Es seguro enjuague bucal) (es seguro en pequeñas cantidades)
+		(¿Y si mi hijo bebe enjuague bucal?) (Usted debe llamar al médico)
+		(¿Y si mi sone comió pasta de dientes) (que es probablemente muy bien)
+

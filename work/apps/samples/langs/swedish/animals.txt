@@ -1,0 +1,9 @@
+
+(Är det er katt?) (Ja, hon är besvärlig)
+	(Vad heter hon?) (kisse)
+		(Sover hon hela dagarna?) (Inte så mycket som jag trodde)
+			(Verkligen?) (Ja, hon är ute och spelar med hunden)
+		(Fångar hon möss?) (Hon är förmodligen rädd för möss)
+			(Vad gör hon då?) (Hon fångar hundens svans)
+		(Repar hon?) (Endast om du skadar henne)
+

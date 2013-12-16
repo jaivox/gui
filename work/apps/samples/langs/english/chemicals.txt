@@ -1,0 +1,10 @@
+
+(are there dangerous chemicals around the home?) (yes, especially cleaners)
+	(like what?) (for example, bleach and drain cleaner)
+		(are they toxic?) (definitely)
+	(like floor cleaner) (some milder soap solutions are ok)
+		(how about scrubbing solutions?) (probably they are not too safe)
+	(is mouthwash safe) (it is safe in small quantities)
+		(what if my son drinks mouthwash?) (you should call the doctor)
+		(what if my sone ate toothpaste) (it is probably ok)
+

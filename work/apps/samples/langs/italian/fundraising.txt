@@ -1,0 +1,11 @@
+
+(Ciao) (buon pomeriggio signor Smith, sto chiamando per ottenere il vostro aiuto)
+	(Come posso aiutare) (avete sentito parlare delle recenti inondazioni in Minnesota)
+		(Si) (stiamo raccogliendo forniture per le famiglie sfollate)
+			(Che tipo di cose?) (Il nostro più grande bisogno è per la costruzione di
+			materiali)
+				(Ma non ho quello) (si può donare denaro contante)
+		(Oh, questo è superiore Minnesota) (mia sorella è tra le persone colpite)
+			(Dispiace) (beh, sto cercando di aiutare quelli come lei)
+				(Che ci posso fare?) (Noi per lo più bisogno di contanti per le forniture)
+

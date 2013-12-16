@@ -1,0 +1,11 @@
+
+(Hallå, jag ringer för att få bilförsäkring) (jag kan hjälpa er med det)
+(Jag har två bilar, ungefär tre år gammal) (hur många förare?)
+	(Bara två av oss) (ni och er man?)
+		(Ja) (har endera av er råkad en olycka nyligen?)
+			(Nej) (vad sägs om trafikbots?)
+				(Nej) (nå alltså vi kan nog få bra priser)
+		(Nej det är min son och jag) (hur gammal är din son?)
+			(Han är tjugo) (nå priser för unga män är hög)
+				(Det är synd) (men vi kan få den bästa tillgängliga)
+

@@ -1,0 +1,10 @@
+
+(Allô?) (Bonjour, monsieur, je téléphone afin de vous demander de l'aide)
+	(Comment est-ce que je peux vous aider?) (Vous avez entendu parler des inondations récentes au Minnesota?)
+		(Oui) (Nous recueillons des meubles pour les familles déplacées)
+			(Quel genre de choses?) (Nous avons besoin surtout des matériaux de construction)
+				(Mais je n'en ai pas) (Vous pouvez faire un don d'argent)
+		(Oh, c'est le Minnesota supérieur) (Ma sœur est une des victimes)
+			(Je suis désolé de l'entendre) (Alors, j'essaie d'aider les autres qui sont comme elle)
+				(Qu'est-ce que je faire?) (On a surtout besoin d'argent pour les meubles)
+

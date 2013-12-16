@@ -1,0 +1,10 @@
+
+(Gibt es gefährliche Chemikalien in der Wohnung?) (Ja, vor allem Reinigungsmittel)
+	(Was zum Beispiel?) (Bleichen, Abflussreiniger...)
+		(Sind sie giftig?) (Bestimmt)
+	(Fußbodenreiniger, zum Beispiel?) (Einige milde Seifenlösungen sind in Ordnung)
+		(Und Waschlösungen denn?) (Wahrscheinlich sind sie nicht zu sicher)
+	(Ist Mundwasser sicher?) (Es ist sicher in kleinen Mengen)
+		(Und wenn mein Sohn Mundwasser trinkt?) (Dann sollen Sie beim Arzt anrufen)
+		(Und wenn mein Sohn Zahnpasta essen würde?) (Das wäre wahrscheinlich kein Problem)
+

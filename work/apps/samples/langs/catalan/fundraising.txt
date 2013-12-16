@@ -1,0 +1,11 @@
+
+(Hola) (bona tarda senyor Smith, truco per obtenir la seva ajuda)
+	(Com puc ajudar) (¿ha sentit parlar de les recents inundacions a Minnesota)
+		(Sí) (estem recollint subministraments per a les famílies desplaçades)
+			(Quin tipus de coses?) (Nostra major necessitat és per a la construcció de
+			materials)
+				(Però no he de) (es pot donar diners en efectiu)
+		(Oh, això és superior minnesota) (la meva germana és un dels afectats)
+			(Lamento escoltar això) (bé, estic tractant d'ajudar els que són com ella)
+				(Què puc fer?) (Que en la seva majoria necessiten diners en efectiu per a les fonts)
+

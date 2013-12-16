@@ -1,0 +1,9 @@
+
+(Es que su gato?) (Sí, es un puñado)
+	(¿Cuál es su nombre) (gatito)
+		(No se duerme todo el día?) (No tanto como yo pensaba)
+			(¿En serio?) (Sí, ella está fuera jugando con el perro)
+		(No se captura ningún ratón?) (Probablemente tiene miedo de los ratones)
+			(Entonces, ¿qué hace?) (Ella coge la cola del perro)
+		(No se raye?) (Sólo si haces daño a ella)
+

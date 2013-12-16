@@ -1,0 +1,9 @@
+
+(Ils sont en train de construire un pont?) (Oui, ils ont un entrepreneur)
+	(Utilisent-ils le bois?) (Non, c'est une nouvelle matière synthétique)
+		(Est-elle solide?) (Supposément elle dure des décennies)
+			(De quoi se compose-t-elle?) (C'est de la résine avec des particules de bois)
+		(Est-elle naturelle?) (Il paraît que c'est du bois teint)
+			(Doit-elle être brune?) (Je crois qu'il y en a en plusieurs couleurs)
+	(Ils ont des bases en béton?) (C'est la loi de la ville)
+		(Il faut que la mairie approuve tout ça?) (Je crois que oui)

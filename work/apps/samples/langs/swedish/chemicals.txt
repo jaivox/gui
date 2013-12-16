@@ -1,0 +1,10 @@
+
+(Finns det farliga kemikalier i hemmet?) (Ja, särskilt rengöringsmedel)
+	(Som vad?) (T.ex. blekmedel och propplösare)
+		(Är de giftiga?) (Definitivt)
+	(Som golvrengöringsmedel) (vissa mildare tvållösningar är ok)
+		(Vad sägs om scrub lösningar?) (De är förmodligen inte säker)
+	(Är munvatten säker) (det är säkert i små mängder)
+		(Vad sägs om min son dricker munskölj?) (Ni bör ringa doktorn)
+		(Vad sägs om min sone åt tandkräm) (det är förmodligen ok)
+

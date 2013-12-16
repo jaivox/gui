@@ -1,0 +1,7 @@
+
+(do you have a plane for sale?) (yes we have several)
+	(do you have anything less than 2 million) (a few old ones)
+		(what are they?) (there is a falcon and a gulfstream)
+	(do you have anything under 20000?) (these are not cars)
+		(how about a flying car?) (how about taking a flying leap?)
+

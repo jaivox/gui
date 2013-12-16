@@ -1,0 +1,9 @@
+
+(È che il vostro gatto?) (Sì, lei è un pugno)
+	(Che cosa è il suo nome) (Kitty)
+		(Fa a dormire tutto il giorno?) (Non tanto come pensavo)
+			(Davvero?) (Sì, lei è fuori giocando con il cane)
+		(Fa a prendere eventuali topi?) (Probabilmente lei ha paura dei topi)
+			(Allora cosa fa?) (Afferra la coda del cane)
+		(Non si graffia?) (Solo se si è fatto del male)
+

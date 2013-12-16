@@ -1,0 +1,7 @@
+
+(Har ni en plan till salu?) (Ja vi har flera)
+	(Har ni något billigare än 2 miljoner) (ja, några gamla)
+		(Vad är de?) (Det finns en Falcon och en Gulfstream)
+	(Har ni något under 20000?) (Dessa är inte bilar)
+		(Vad sägs om en flygande bil?) (Vad sägs om att sticka ut?)
+

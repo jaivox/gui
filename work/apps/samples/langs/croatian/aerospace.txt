@@ -1,0 +1,7 @@
+
+(Imate li avion za prodaju?) (Da imamo više)
+	(Imate li nešto manje od 2 milijuna kuna) (nekoliko starih)
+		(Što su oni?) (Tu je sokol i Gulfstream)
+	(Imate li išta ispod 20.000?) (To nisu automobili)
+		(Kako o letećem automobilu?) (O tome kako uzimanje leteći skok?)
+

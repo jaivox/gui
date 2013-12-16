@@ -1,0 +1,10 @@
+
+(Ada bahan kimia berbahaya di sekitar rumah?) (Ya, terutama bahan pencuci)
+	(Seperti apa?) (Seperti peluntur dan pencuci longkang)
+		(Mereka toksik?) (Pasti)
+	(Seperti pencuci lantai) (ada larutan sabun ringan yang selamat)
+		(Larutan penggahar?) (Barangkali tidak selamat)
+	(Cecair pencuci mulut selamat) (dalam kuantiti kecil saja)
+		(Jika anak saya minum cecair pencuci mulut?) (Harus panggil doktor)
+		(Jika anak saya makan ubat gigi) (barangkali tidak ada masalah)
+
