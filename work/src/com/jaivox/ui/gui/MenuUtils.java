@@ -25,6 +25,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -313,6 +314,10 @@ class HelpAction extends AbstractAction {
 			} catch (Exception ex) {
 				Logger.getLogger (HelpAction.class.getName ()).log (Level.SEVERE, null, ex);
 			}
+		} else if (action.equals (MA_ABOUT.getValue (NAME))) {
+			JOptionPane.showMessageDialog (null,
+					"Jaivox Application Generator\nDeveloped By Rajesh John\nFor more info: contact@jaivox.com", "About App Gen",
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
