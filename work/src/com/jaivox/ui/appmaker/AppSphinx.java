@@ -22,7 +22,7 @@ package com.jaivox.ui.appmaker;
 
 import com.jaivox.interpreter.Command;
 import com.jaivox.interpreter.Interact;
-import com.jaivox.synthesizer.web.Synthesizer;
+import com.jaivox.synthesizer.Synthesizer;
 import com.jaivox.util.Log;
 import edu.cmu.sphinx.frontend.util.AudioFileDataSource;
 import edu.cmu.sphinx.frontend.util.Microphone;
@@ -77,7 +77,16 @@ public class AppSphinx extends JvxApp {
 		// speaker will get ttsLang = kv.getProperty ("ttslang");
 		Command cmd = new Command ();
 		inter = new Interact (basedir, kv, cmd);
-		speaker = new Synthesizer (kv);
+		String synth = kv.getProperty ("synthesizer");
+		if (synth.equals ("espeak")) {
+			speaker = new com.jaivox.synthesizer.espeak.Synthesizer (kv);
+		}
+		else if (synth.equals ("freetts")) {			
+			speaker = new com.jaivox.synthesizer.freetts.Synthesizer (kv);
+		}
+		else { // if synth.equals ("web")) {
+			speaker = new com.jaivox.synthesizer.web.Synthesizer (kv);
+		}
 	}
 
 	void processSpeech () {

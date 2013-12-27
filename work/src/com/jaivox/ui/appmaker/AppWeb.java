@@ -24,7 +24,7 @@ import com.jaivox.interpreter.Command;
 import com.jaivox.interpreter.Interact;
 import com.jaivox.recognizer.web.SpeechInput;
 import com.jaivox.recognizer.web.Mike;
-import com.jaivox.synthesizer.web.Synthesizer;
+import com.jaivox.synthesizer.Synthesizer;
 import java.util.Properties;
 
 public class AppWeb extends JvxApp {
@@ -61,7 +61,16 @@ public class AppWeb extends JvxApp {
 		// String tts = kv.getProperty ("synthesizer").toLowerCase ();
 		// System.out.println ("Synthesizer is "+tts);
 		// if (tts.equals ("espeak"))
-		speaker = new Synthesizer (kv);
+		String synth = kv.getProperty ("synthesizer");
+		if (synth.equals ("espeak")) {
+			speaker = new com.jaivox.synthesizer.espeak.Synthesizer (kv);
+		}
+		else if (synth.equals ("freetts")) {			
+			speaker = new com.jaivox.synthesizer.freetts.Synthesizer (kv);
+		}
+		else { // if synth.equals ("web")) {
+			speaker = new com.jaivox.synthesizer.web.Synthesizer (kv);
+		}
 	}
 
 	void processSpeech () {

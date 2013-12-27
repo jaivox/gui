@@ -808,13 +808,13 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	}
 
 	void checkInstalled () {
-		// cbEspeak.setEnabled (installed ("espeak -h"));
-		cbEspeak.setEnabled (false);
+		cbEspeak.setEnabled (installed ("espeak -h"));
+		// cbEspeak.setEnabled (false);
 		// cbFestival.setEnabled (installed ("festival -h"));
 		cbFestival.setEnabled (false);
 		cbGoogleRecognizer.setEnabled (installed ("sox"));
-		// cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
-		cbFreetts.setEnabled (false);
+		cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
+		// cbFreetts.setEnabled (false);
 		cbGoogleRecognizer.setEnabled (AppWeb.testSpeech ("work/apps/common/test.flac"));
 		Synthesizer speaker = new Synthesizer ();
 		cbGoogletts.setEnabled (speaker.speak ("testing google text to speech"));
