@@ -156,6 +156,7 @@ public class RunDialog extends javax.swing.JDialog
             }
         });
 
+        sendButton.setMnemonic('S');
         sendButton.setText("Send");
         sendButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
