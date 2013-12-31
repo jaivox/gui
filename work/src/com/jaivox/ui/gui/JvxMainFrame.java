@@ -295,6 +295,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         expandYNButton.setSelected(true);
         expandYNButton.setText("Expand Synonyms (Y/N)?");
+        expandYNButton.setName ("expandYNButton");
 
         javax.swing.GroupLayout langPanelLayout = new javax.swing.GroupLayout(langPanel);
         langPanel.setLayout(langPanelLayout);
@@ -524,6 +525,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         });
 
         testButton.setText("Test");
+        testButton.setName ("testButton");
         testButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 testButtonActionPerformed(evt);
@@ -667,6 +669,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         );
 
         btnGenerate.setText("Generate");
+        btnGenerate.setName ("btnGenerate");
         btnGenerate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateActionPerformed(evt);
@@ -1221,15 +1224,15 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	}
 
 	void registerF1Help () {
+		// in alphabetical order depending on contents of help directory
 		JComponent cl[] = {
-                        appName, btnRun, btnSave, 
-                        cbConsole, cbSphinx, cbGoogletts, cbEspeak, 
-                        cbGoogleRecognizer, cbFestival, cbFreetts, 
-                        dialogTree, grammarList,
-			osList, 
-			qualdbTable, 
-			selectDbButton, synsTab, testButton
-                };
+			appName, btnRun, btnSave, btnGenerate, 
+			cbConsole, cbEspeak,
+			cbFestival, cbFreetts, cbGoogleRecognizer,
+			cbGoogletts, cbSphinx, dialogTree, 
+			expandYNButton,
+			grammarList, osList, selectDbButton,
+			synsTab, testButton, qualdbTable };
 		for (JComponent c : cl) {
 			registerFocusHandler (c);
 		}
