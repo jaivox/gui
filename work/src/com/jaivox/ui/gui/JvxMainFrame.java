@@ -58,6 +58,8 @@ import javax.swing.undo.UndoableEditSupport;
 public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
 	private static JvxMainFrame theApp = null;
+        private static final boolean testMode = true;
+        
 	JvxDialogLoader dlgLoader = null;
 	JvxDialogHelper dlgHelper = null;
 	JvxSynonymsHelper synsHelper = null;
@@ -121,8 +123,13 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		initComponents ();
 		expandYNButton.setSelected (false);
 		expandYNButton.setText ("Expand Synonyms");
-		// turn off while testing
-		//checkInstalled ();
+		
+                testButton.setEnabled(isTesting());
+                testButton.setVisible(isTesting());
+                // turn off while testing
+                if(!isTesting()) {
+                    checkInstalled ();
+                }
 		initLanguages ();
 		initLanguageCodes ();
 		createButtonGroups ();
@@ -207,7 +214,9 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		undoSupport_.postEdit (change);
 		dirty_flag = true;
 	}
-
+        public static boolean isTesting() {
+            return testMode;
+        }
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always
@@ -408,7 +417,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -456,14 +465,14 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 .addContainerGap()
                 .addComponent(selectDbButton, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(selectDbButton)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -475,11 +484,11 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 821, Short.MAX_VALUE)
+            .addGap(0, 825, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 173, Short.MAX_VALUE)
+            .addGap(0, 175, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("", jPanel3);
@@ -530,7 +539,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 .addGap(18, 18, 18)
                 .addComponent(appName, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(65, 65, 65)
-                .addComponent(testButton)
+                .addComponent(testButton, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(langPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(dgdPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -546,7 +555,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                         .addComponent(testButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dgdPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         targetSpecPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Target Specification", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(210, 90, 90)));
@@ -749,7 +758,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGap(0, 9, Short.MAX_VALUE))
         );
 
         pack();
@@ -820,13 +829,13 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	}
 
 	void checkInstalled () {
-		cbEspeak.setEnabled (installed ("espeak -h"));
-		// cbEspeak.setEnabled (false);
+		// cbEspeak.setEnabled (installed ("espeak -h"));
+		cbEspeak.setEnabled (false);
 		// cbFestival.setEnabled (installed ("festival -h"));
 		cbFestival.setEnabled (false);
 		cbGoogleRecognizer.setEnabled (installed ("sox"));
-		cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
-		// cbFreetts.setEnabled (false);
+		// cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
+		cbFreetts.setEnabled (false);
 		cbGoogleRecognizer.setEnabled (AppWeb.testSpeech ("work/apps/common/test.flac"));
 		Synthesizer speaker = new Synthesizer ();
 		cbGoogletts.setEnabled (speaker.speak ("testing google text to speech"));
@@ -1212,10 +1221,15 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	}
 
 	void registerF1Help () {
-		JComponent cl[] = {cbFestival, dialogTree, appName, cbFreetts, grammarList,
-			btnRun, cbGoogleRecognizer, osList, btnSave,
-			cbGoogletts, qualdbTable, cbConsole, cbSphinx,
-			selectDbButton, cbEspeak, synsTab};
+		JComponent cl[] = {
+                        appName, btnRun, btnSave, 
+                        cbConsole, cbSphinx, cbGoogletts, cbEspeak, 
+                        cbGoogleRecognizer, cbFestival, cbFreetts, 
+                        dialogTree, grammarList,
+			osList, 
+			qualdbTable, 
+			selectDbButton, synsTab, testButton
+                };
 		for (JComponent c : cl) {
 			registerFocusHandler (c);
 		}
