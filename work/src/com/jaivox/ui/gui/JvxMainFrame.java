@@ -294,8 +294,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         jLabel1.setText("Select Language:");
 
         expandYNButton.setSelected(true);
-        expandYNButton.setText("Expand Synonyms (Y/N)?");
-        expandYNButton.setName ("expandYNButton");
+        expandYNButton.setText("Expand Synonyms");
 
         javax.swing.GroupLayout langPanelLayout = new javax.swing.GroupLayout(langPanel);
         langPanel.setLayout(langPanelLayout);
@@ -525,7 +524,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         });
 
         testButton.setText("Test");
-        testButton.setName ("testButton");
         testButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 testButtonActionPerformed(evt);
@@ -557,7 +555,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                         .addComponent(testButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dgdPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addGap(0, 14, Short.MAX_VALUE))
         );
 
         targetSpecPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Target Specification", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(210, 90, 90)));
@@ -669,7 +667,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         );
 
         btnGenerate.setText("Generate");
-        btnGenerate.setName ("btnGenerate");
         btnGenerate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateActionPerformed(evt);
@@ -761,7 +758,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 9, Short.MAX_VALUE))
+                .addGap(0, 10, Short.MAX_VALUE))
         );
 
         pack();
@@ -1217,6 +1214,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
         // TODO add your handling code here:
         new JvxTest(this).simpletest();
+        //new JvxTest(this).simpleVoiceTest();
     }//GEN-LAST:event_testButtonActionPerformed
 
 	public boolean wordsToBeExpanded () {

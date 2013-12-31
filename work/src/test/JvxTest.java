@@ -19,7 +19,7 @@ this package.
 */
 package test;
 
-import com.jaivox.ui.gui.JvxMainFrame;
+import com.jaivox.ui.gui.JvxConfiguration;
 import com.jaivox.ui.gui.JvxMainFrame;
 import java.awt.AWTException;
 import java.awt.Component;
@@ -29,6 +29,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -38,62 +39,132 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class JvxTest {
     private static JFrame parent = null;
     static Robot bot = null;
+    String appfolder = "";
+    int procdelay = 6;
 
     public JvxTest(JvxMainFrame aThis) {
         parent = aThis;
-    }
-    public void simpletest() {
         try {
             bot = new Robot();
-            bot.setAutoDelay(100);
-            new Thread()
-            {
-                public void run() {
-                    // open dialog file
-                    menuClick("File", "Open Dialog Tree");
-                    System.out.println("menu clicked");
-                    bot.delay(3*1000);
-                    
-                    // focus text field
-                    for(int i = 0; i < 7; i++) sendKey(KeyEvent.VK_TAB);
-                    keyin("samples/quick/turing/manusfood");
-                    sendOK();
-                    
-                    // click Run
-                    bot.delay(6 * 1000);
-                    buttonClick("Run");
-                    bot.delay(1000);
-                    sendOK();
-                    bot.delay(1000);
-                    sendOK();
-                    bot.delay(2*1000);
-                    
-                    // the questions...
-                    typeAndSend("What is your favorite food");
-                    typeAndSend("how do you not know");
-                    typeAndSend("so");
-                    typeAndSend("do you like sports");
-                    typeAndSend("do you like to read");
-                    typeAndSend("What are your hobbies");
-                    typeAndSend("Why did you answer my question with a question");
-                    typeAndSend("why are you so annoying");
-                }
-            }.start();
         } catch (AWTException ex) {
             Logger.getLogger(JvxTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        bot.setAutoDelay(100);
+        appfolder = new File(JvxConfiguration.theConfig().getAppFolder()).getAbsolutePath();
+    }
+    void showmsg(String msg) {
+        JOptionPane.showMessageDialog(null, msg);
+    }
+    public void simpleVoiceTest() {
+        showmsg("About to start Automated testing... Please dont change the window focus!");
+        new Thread()
+        {
+            public void run() {
+                System.out.println("Start Testing...");
+                
+                // open dialog file
+                menuClick("File", "Open Dialog Tree");
+                bot.delay(1 * 1000);
+
+                // focus text field. May not work on other lookNfeel or if the file dialog has different accessory layout
+                for(int i = 0; i < 7; i++) sendKey(KeyEvent.VK_TAB);
+                keyin("samples/quick/turing/manusfood");    // dialog file
+                bot.delay(2 * 1000); 
+                sendOK();
+                bot.delay(procdelay * 1000);            // wait for dialog load
+                
+                // enable Google
+                buttonClick("Google");
+                bot.delay(1 * 1000);
+                
+                // click Run
+                buttonClick("Run");
+                bot.delay(1000);
+                sendOK();
+                bot.delay(1000);
+                for(int i = 0; i < 7; i++) sendKey(KeyEvent.VK_TAB);
+                sendKey(KeyEvent.VK_CONTROL, KeyEvent.VK_A);
+                keyin(appfolder);                                 // App folder
+                bot.delay(2 * 1000);
+                sendOK();
+                bot.delay((procdelay/2) * 1000);
+
+                // the questions...
+                speakAndSend();
+                speakAndSend();
+                speakAndSend();
+                
+                showmsg("Testing completed!");
+            }
+        }.start();
+    }
+    public void simpletest() {
+        showmsg("About to start Automated testing... Please dont change the window focus!");
+        new Thread()
+        {
+            public void run() {
+                
+                buttonClick("Expand Synonyms");
+                bot.delay(500);
+                procdelay = 60;     // more wait for exapand
+                
+                // open dialog file
+                menuClick("File", "Open Dialog Tree");
+                System.out.println("menu clicked");
+                bot.delay(1 * 1000);
+
+                // focus text field. May not work on other lookNfeel or if the file dialog has different accessory layout
+                for(int i = 0; i < 7; i++) sendKey(KeyEvent.VK_TAB);
+                keyin("samples/quick/turing/manusfood");    // dialog file
+                bot.delay(2 * 1000); 
+                sendOK();
+                bot.delay(procdelay * 1000);            // wait for dialog load
+                
+                // click Run
+                buttonClick("Run");
+                bot.delay(1000);
+                sendOK();
+                bot.delay(1000);
+                for(int i = 0; i < 7; i++) sendKey(KeyEvent.VK_TAB);
+                sendKey(KeyEvent.VK_CONTROL, KeyEvent.VK_A);
+                keyin(appfolder);                                 // App folder
+                bot.delay(2 * 1000);
+                sendOK();
+                bot.delay((procdelay/2) * 1000);
+
+                // the questions...
+                typeAndSend("What is your favorite food");
+                typeAndSend("how do you not know");
+                typeAndSend("so");
+                typeAndSend("do you like sports");
+                typeAndSend("do you like to read");
+                typeAndSend("What are your hobbies");
+                typeAndSend("Why did you answer my question with a question");
+                typeAndSend("why are you so annoying");
+                
+                showmsg("Testing completed!");
+            }
+        }.start();
     }
     
+    static void speakAndSend() {
+        bot.delay(1*1000);
+        sendMnemonic(KeyEvent.VK_K);
+        bot.delay(1*1000);
+        sendMnemonic(KeyEvent.VK_S);
+        bot.delay(5*1000);
+    }
     static void typeAndSend(String speech) {
         bot.delay(1*1000);
         keyin(speech);
         bot.delay(1*1000);
         sendMnemonic(KeyEvent.VK_S);
-        bot.delay(5*1000);
+        bot.delay(3*1000);
         sendMnemonic(KeyEvent.VK_S);
         bot.delay(1*1000);
     }
@@ -101,48 +172,49 @@ public class JvxTest {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection sel = new StringSelection( text );
         clipboard.setContents(sel, sel);
-        bot.keyPress(KeyEvent.VK_CONTROL);
-        bot.keyPress(KeyEvent.VK_V);
-        bot.keyRelease(KeyEvent.VK_V);
-        bot.keyRelease(KeyEvent.VK_CONTROL);
+        sendKey(KeyEvent.VK_CONTROL, KeyEvent.VK_V);
     }
     static void sendOK() {
         bot.keyPress(KeyEvent.VK_ENTER);
         bot.keyRelease(KeyEvent.VK_ENTER);
     }
     static void sendMnemonic(int key) {
-        bot.keyPress(KeyEvent.VK_ALT);
-        sendKey(key);
-        bot.keyRelease(KeyEvent.VK_ALT);
+        sendKey(KeyEvent.VK_ALT, key);
     }
     static void sendKey(int key) {
         bot.keyPress(key); 
         bot.keyRelease(key);
     }
-    
-    static void buttonClick(String text) {
+    static void sendKey(int modkey, int key) {
+        bot.keyPress(modkey);
+        sendKey(key);
+        bot.keyRelease(modkey);
+    }
+    static boolean buttonClick(String text) {
+        boolean b = false;
         for (Component c : getAllComponents (parent)) {
             if (c instanceof AbstractButton) {
                 final AbstractButton btn = (AbstractButton) c;
                 if (btn != null) {
                     if(btn.getText().equals(text)) {
-                        new Thread()
+                        new Thread()    // otherwise the confirm msgbox will block the testing thread!
                         {
                             public void run() {
                                 btn.doClick();
                             }
                         }.start();
-                        
-                        System.out.println(text + " button clicked");
+                        b = true;
                     }
                 }
             }
         }
+        System.out.println(text + " button " + (b ? "clicked" : "NOT Found!!!"));
+        return b;
     }
     
     static void menuClick(final String menu, final String item) {
         final JMenuBar bar = parent.getJMenuBar();
-        new Thread()
+        new Thread()  // otherwise the file dialog will block the testing thread!
         {
             public void run() {
                 for(int i = 0; i < bar.getMenuCount(); i++) {

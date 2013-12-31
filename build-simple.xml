@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<!--This build file uses the ant runtime environment, which gets your system classpath.
+    It is better to run config.bash to set the classpath explicitly -->
+
+<project name="jag" default="jag" basedir=".">
+    <property name="base.dir" value="."/>
+    <property name="lib.base" value="dist"/>
+    <property name="lib.dir" value="${lib.base}/lib"/>
+    <property name="build.dir" value="${ant.project.name}build"/>
+    <property name="zip.dir" value="${build.dir}"/>
+    
+    <path id="classpath">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+    <pathconvert pathsep=" " property="jar.classpath">
+        <path path="${ant.refid:classpath}"/>
+        <chainedmapper>
+            <flattenmapper/>
+            <filtermapper>
+                <replacestring from=" " to="%20"/>
+            </filtermapper>
+            <globmapper from="*" to="lib/*"/>
+        </chainedmapper>
+    </pathconvert>
+    
+    <!-- targets: clean build jag -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <target name="build" depends="clean">
+        <mkdir dir="${build.dir}/classes"/>
+        <javac debug="true" includeantruntime="true" srcdir="work/src" destdir="${build.dir}/classes">
+           <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <target name="jag" depends="build">
+        <echo>Create jag.zip</echo>   
+
+        <jar destfile="${build.dir}/jag.jar" basedir="${build.dir}/classes">
+            <manifest>
+              <attribute name="Built-By" value="${user.name}"/>
+              <attribute name="Implementation-Vendor" value="jaivox"/>
+              <attribute name="Implementation-Title" value="JAG"/>
+              <attribute name="Implementation-Version" value="0.1"/>
+              <attribute name="Main-Class" value="com.jaivox.ui.gui.JvxMainFrame"/>
+              <attribute name="Class-Path" value="${jar.classpath}"/>
+            </manifest>
+        </jar>
+
+        <zip destfile="${zip.dir}/jag.zip">
+            <fileset dir="${build.dir}/" includes="jag.jar"/>
+            <fileset dir="${lib.base}/" includes="lib/*.*"/>
+            <fileset dir="./" includes="LICENSE"/>
+            <!-- <fileset dir="./" includes="README.md"/> -->
+            <fileset dir="${base.dir}/">
+                <include name="doc/*.*"/>
+                <include name="work/apps/common/*.*"/>
+                <include name="work/apps/samples/*.*"/>
+                <include name="work/data/**/*.*"/>
+                <include name="work/config/**/*.*"/>
+            </fileset>
+        </zip>
+
+    </target>
+</project>

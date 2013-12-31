@@ -28,6 +28,7 @@ import com.jaivox.ui.appmaker.AppConsole;
 import com.jaivox.ui.appmaker.AppSphinx;
 import com.jaivox.ui.appmaker.AppWeb;
 import com.jaivox.ui.appmaker.JvxRunnableApp;
+import com.jaivox.ui.appmaker.RecordReplayTask;
 import com.jaivox.ui.appmaker.RecordTask;
 import java.awt.Frame;
 
@@ -90,7 +91,12 @@ public class RunDialog extends javax.swing.JDialog
 				((AbstractDocument) this.queryArea.getDocument ()).setDocumentFilter (docl);
 			}
 		} else {
-			recorder = new RecordTask (10000);
+                        if(JvxMainFrame.isTesting()) {
+                            recorder = new RecordReplayTask();
+                        } 
+                        else {
+                            recorder = new RecordTask (10000);
+                        }
 			recorder.setPropertyChangeListener (this);
 		}
 
@@ -149,6 +155,7 @@ public class RunDialog extends javax.swing.JDialog
         answerArea.setRows(5);
         jScrollPane2.setViewportView(answerArea);
 
+        speakButton.setMnemonic('K');
         speakButton.setText("Speak");
         speakButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -241,6 +248,7 @@ public class RunDialog extends javax.swing.JDialog
 		if (evt.getActionCommand ().equals ("Cancel")) {
 			setInfoText ("Recording cancelled...");
 			stopRecording ();
+                        curSpeech--;
 			return;
 		} else {
 			this.speakButton.setText ("Cancel");

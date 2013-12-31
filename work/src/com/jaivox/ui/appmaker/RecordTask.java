@@ -58,7 +58,9 @@ public class RecordTask implements ActionListener {
 	String samplefile;
 	Recorder sampler;
 	protected PropertyChangeListener propertyChangeListener = null;
-
+        
+        public RecordTask() {}
+        
 	public RecordTask (int recorderTimeout) {
 		wavformat = new AudioFormat (8000.0f, 16, 1, true, false);
 		info = new DataLine.Info (TargetDataLine.class, wavformat);

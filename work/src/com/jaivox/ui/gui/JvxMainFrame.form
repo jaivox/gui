@@ -191,7 +191,7 @@
                 <Component class="javax.swing.JToggleButton" name="expandYNButton">
                   <Properties>
                     <Property name="selected" type="boolean" value="true"/>
-                    <Property name="text" type="java.lang.String" value="Expand Synonyms (Y/N)?"/>
+                    <Property name="text" type="java.lang.String" value="Expand Synonyms"/>
                   </Properties>
                 </Component>
               </SubComponents>
