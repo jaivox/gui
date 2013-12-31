@@ -58,7 +58,7 @@ import javax.swing.undo.UndoableEditSupport;
 public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
 	private static JvxMainFrame theApp = null;
-        private static final boolean testMode = true;
+        private static final boolean testMode = false;
         
 	JvxDialogLoader dlgLoader = null;
 	JvxDialogHelper dlgHelper = null;

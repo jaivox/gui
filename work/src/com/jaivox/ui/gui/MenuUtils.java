@@ -32,9 +32,8 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
@@ -236,7 +235,7 @@ class RecentFileAction extends AbstractAction implements MenuListener {
 	public void menuSelected (MenuEvent e) {
 		MENU_RECENT.removeAll ();
 		List files = Arrays.asList (RecentFileHistory.getHistory ().get ());
-		Collections.reverse (files);
+		//Collections.reverse (files);
 		MenuUtils.addSubMenus (files, MENU_RECENT, MA_RECENT);
 	}
 
@@ -364,7 +363,7 @@ class RecentFileHistory {
 	public static void loadHistory () throws BackingStoreException {
 		Preferences rfh = Preferences.userNodeForPackage (RecentFileHistory.class);
 		for (String s : rfh.keys ()) {
-			RecentFileHistory.getHistory ().files.push (s);
+			RecentFileHistory.getHistory ().files.add (s);
 		}
 	}
 
@@ -376,7 +375,7 @@ class RecentFileHistory {
 		}
 		rfh.flush ();
 	}
-	private Stack<String> files = new Stack<String> ();
+	private LinkedList<String> files = new LinkedList<String> ();
 
 	public void add (String f) {
 		if (files.contains (f)) {
@@ -384,7 +383,8 @@ class RecentFileHistory {
 		}
 		files.push (f);
 		if (files.size () > 5) {
-			files.setSize (5);
+			//files.setSize (5);
+                        files.removeLast();
 		}
 	}
 
