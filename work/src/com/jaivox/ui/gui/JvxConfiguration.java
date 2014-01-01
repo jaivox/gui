@@ -291,7 +291,13 @@ public class JvxConfiguration {
 	static String helpDirectory = "/work/data/help/";
 	static Properties helpTips = new Properties ();
 
-	static String getResourceValue (String key) {
+	public static String getHelpDirectory() {
+            String workingDirectory = System.getProperty ("user.dir");
+            String dir = workingDirectory + helpDirectory + "/" + 
+                            locale.getLanguage () + "/";
+            return dir;
+        }
+        static String getResourceValue (String key) {
 		String val = null;
 		val = helpTips.getProperty (key);
 		if (val != null) {

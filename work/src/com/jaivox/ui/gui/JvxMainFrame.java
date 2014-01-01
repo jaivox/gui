@@ -39,10 +39,13 @@ import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1225,21 +1228,43 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	}
 
 	void registerF1Help () {
-		// in alphabetical order depending on contents of help directory
-		JComponent cl[] = {
-			appName, btnRun, btnSave, btnGenerate, 
-			cbConsole, cbEspeak,
-			cbFestival, cbFreetts, cbGoogleRecognizer,
-			cbGoogletts, cbSphinx, dialogTree, 
-			expandYNButton,
-			grammarList, osList, selectDbButton,
-			synsTab, testButton, qualdbTable };
-		for (JComponent c : cl) {
-			registerFocusHandler (c);
-		}
+            String tts[] = new File(JvxConfiguration.getHelpDirectory()).list(
+                    new FilenameFilter() {
+                        public boolean accept(File dir, String name) {
+                            return name.endsWith(".tt");
+                        }
+                    });
+            Set<String> tips = new HashSet<String>();
+            for(String t : tts) {
+                tips.add( t.substring(0, t.lastIndexOf(".")) );
+            }
+            List<Component> comps = getAllComponents(this);
+            for(Component c : comps) {
+                String name = c.getName();
+                if(name != null) {
+                    if(tips.contains(name)) {
+                        registerFocusHandler ((JComponent) c);
+                    }
+                }
+            }
+            /*
+            // in alphabetical order depending on contents of help directory
+            JComponent cl[] = {
+                    appName, btnRun, btnSave, btnGenerate, 
+                    cbConsole, cbEspeak,
+                    cbFestival, cbFreetts, cbGoogleRecognizer,
+                    cbGoogletts, cbSphinx, dialogTree, 
+                    expandYNButton,
+                    grammarList, osList, selectDbButton,
+                    synsTab, testButton, qualdbTable };
+            for (JComponent c : cl) {
+                    registerFocusHandler (c);
+            }
+            */
 	}
 
 	void registerFocusHandler (final JComponent c) {
+                //System.out.println ("registerFocusHandler: " + c.getName());
 		c.getInputMap (JComponent.WHEN_IN_FOCUSED_WINDOW).
 				put (KeyStroke.getKeyStroke (java.awt.event.KeyEvent.VK_F1, 0), "F1");
 		c.addMouseListener (new java.awt.event.MouseAdapter () {
