@@ -25,7 +25,6 @@ import com.jaivox.tools.Generator;
 import com.jaivox.ui.gui.JvxMainFrame;
 import com.jaivox.ui.gui.RunDialog;
 import com.jaivox.util.Log;
-import java.awt.Point;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,6 +43,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.jaivox.util.Pair;
 
 public class GuiPrep {
 
@@ -261,12 +261,12 @@ public class GuiPrep {
 			Set keys = kv.stringPropertyNames ();
 			int n = keys.size ();
 			String okeys[] = new String[n];
-			Point op[] = new Point[n];
+			Pair op[] = new Pair[n];
 			int pi = 0;
 			for (Iterator<String> it = keys.iterator (); it.hasNext ();) {
 				String key = it.next ();
 				okeys[pi] = key;
-				op[pi] = new Point (pi, -key.length ());
+				op[pi] = new Pair (pi, -key.length ());
 				pi++;
 			}
 			Utils.quicksortpointy (op, 0, n - 1);
@@ -281,7 +281,7 @@ public class GuiPrep {
 
 			// replace longest keys first
 			for (int i = 0; i < n; i++) {
-				Point p = op[i];
+				Pair p = op[i];
 				String key = okeys[p.x];
 				String val = kv.getProperty (key);
 				if (name.startsWith (key)) {
