@@ -298,7 +298,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         expandYNButton.setSelected(true);
         expandYNButton.setText("Expand Synonyms");
-        expandYNButton.setName ("expandYNButton");
 
         javax.swing.GroupLayout langPanelLayout = new javax.swing.GroupLayout(langPanel);
         langPanel.setLayout(langPanelLayout);
@@ -528,7 +527,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         });
 
         testButton.setText("Test");
-        testButton.setName ("testButton");
         testButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 testButtonActionPerformed(evt);
@@ -638,9 +636,13 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
         jLabel2.setText("OS: ");
 
-        osList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Linux-RH", "Linux-Debian", "Windows", "Mac", "Tab-Android", "Tab-iOS" }));
-        osList.setEnabled(false);
+        osList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Linux", "Windows", "Android", " " }));
         osList.setName("osList"); // NOI18N
+        osList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                osListActionPerformed(evt);
+            }
+        });
 
         cbConsole.setSelected(true);
         cbConsole.setText("Console Version");
@@ -672,7 +674,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         );
 
         btnGenerate.setText("Generate");
-        btnGenerate.setName ("btnGenerate");
         btnGenerate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateActionPerformed(evt);
@@ -1223,6 +1224,10 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         //new JvxTest(this).simpleVoiceTest();
     }//GEN-LAST:event_testButtonActionPerformed
 
+    private void osListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_osListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_osListActionPerformed
+
 	public boolean wordsToBeExpanded () {
 		return (this.expandYNButton.isEnabled () && expandYNButton.isSelected ());
 	}
@@ -1352,7 +1357,9 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	public boolean getCbSphinx () {
 		return cbSphinx.isSelected ();
 	}
-
+        public String getTargetOS() {
+            return this.osList.getSelectedItem().toString();
+        }
 	void startWizard () {
 		final JFrame frame = this;
 		final WizardDialog dialog = new WizardDialog (frame, true);

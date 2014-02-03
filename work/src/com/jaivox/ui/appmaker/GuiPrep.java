@@ -106,6 +106,7 @@ public class GuiPrep {
 			String cpsrc = conf.getProperty ("cpsrc");
 			String cfile = conf.getProperty ("common_words");
 			String efile = conf.getProperty ("error_dlg");
+                        String tos = conf.getProperty ("target_platform");
 
 			if (appfolder == null | cpsrc == null) {
 			}
@@ -143,6 +144,9 @@ public class GuiPrep {
 				System.out.println ("live.conf generated for live sphinx version");
 			}
 
+                        if(tos.equals("Android")) {
+                            new AndroidAppGenerator(conf).generate();
+                        }
 			System.out.println ("Application Generated: Path: " + appfolder);
 
 		} catch (Exception ex) {

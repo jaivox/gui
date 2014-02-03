@@ -219,6 +219,7 @@ public class JvxConfiguration {
 		if (!theFrame.getCbSphinx ()) {
 			conf.remove ("lm_training_file");
 		}
+                conf.put("target_platform", theFrame.getTargetOS());
 	}
 
 	private boolean validatefields (JvxMainFrame theFrame) {
