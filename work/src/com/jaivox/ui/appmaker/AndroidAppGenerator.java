@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +22,8 @@ import java.util.logging.Logger;
  */
 class AndroidAppGenerator {
     Properties conf = null;
+    static String[] cfiles = { "AndroidFileUtil.java", "JvxInteract.java" };
+    
     public AndroidAppGenerator(Properties conf) {
         this.conf = conf;
     }
@@ -36,18 +37,20 @@ class AndroidAppGenerator {
                 appfolder += File.separator;
         }
         try {
-            PrintWriter out = new PrintWriter(appfolder + "appfiles.lst");
+            PrintWriter out = new PrintWriter(appfolder + "assets.lst");
             File f = new File(appfolder);
             String files[] = f.list();
             for(String s : files) {
+                if(s.endsWith(".java")) continue;
                 createCheckSum(appfolder, s);
-                out.println(s);
+                out.println(project +"/" + s);
             }
             out.close();
-            GuiPrep.copyFile (cpsrc + "/" + "andpack.sh", appfolder + "andpack.sh");
-            GuiPrep.copyFile (cpsrc + "/" + "JvxDroid.apk", appfolder + "JvxDroid.ap_");
         } catch (IOException ex) {
             Logger.getLogger(AndroidAppGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for(String f  : cfiles) {
+            GuiPrep.generateFile (conf, cpsrc, appfolder, f);
         }
     }
     void createCheckSum(String folder, String file) {
