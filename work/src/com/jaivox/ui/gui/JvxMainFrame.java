@@ -130,9 +130,9 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
                 testButton.setEnabled(isTesting());
                 testButton.setVisible(isTesting());
                 // turn off while testing
-                if(!isTesting()) {
-                    checkInstalled ();
-                }
+                // if(!isTesting()) {
+                //     checkInstalled ();
+                // }
 		initLanguages ();
 		initLanguageCodes ();
 		createButtonGroups ();

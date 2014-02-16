@@ -106,7 +106,7 @@ public class GuiPrep {
 			String cpsrc = conf.getProperty ("cpsrc");
 			String cfile = conf.getProperty ("common_words");
 			String efile = conf.getProperty ("error_dlg");
-                        String tos = conf.getProperty ("target_platform");
+			String tos = conf.getProperty ("target_platform");
 
 			if (appfolder == null | cpsrc == null) {
 			}
@@ -144,13 +144,55 @@ public class GuiPrep {
 				System.out.println ("live.conf generated for live sphinx version");
 			}
 
-                        if(tos.equals("Android")) {
-                            new AndroidAppGenerator(conf).generate();
-                        }
+			if (tos.equals ("Android")) {
+				if (copyAndroidFiles (conf)) {
+					new AndroidAppGenerator (conf).generate ();
+				}
+			}
 			System.out.println ("Application Generated: Path: " + appfolder);
 
 		} catch (Exception ex) {
 			ex.printStackTrace ();
+		}
+	}
+	
+	static boolean copyAndroidFiles (Properties conf) {
+		String common_dir = conf.getProperty ("common");
+		String android_dir = common_dir + File.separator + "android";
+		String appfolder = conf.getProperty ("appfolder");
+		if (!copyDirectory (android_dir, appfolder)) {
+			Log.severe ("Could not copy Android files to "+appfolder);
+			return false;
+		}
+		else return true;
+	}
+	
+	static boolean copyDirectory (String source, String destination) {
+		try {
+			System.out.println ("Android: copying "+source+" to "+destination);
+			File src = new File (source);
+			File app = new File (destination);
+			if (!app.exists ()) {
+				app.mkdirs ();
+			}
+			if (src.isFile ()) {
+				copyFile (source, destination);
+				return true;
+			}
+			else {
+				String names [] = src.list ();
+				for (String name: names) {
+					String child = source + File.separator + name;
+					String dest = destination + File.separator + name;
+					boolean ok = copyDirectory (child, dest);
+					if (!ok) return false;
+				}
+			}
+			return true;
+		}
+		catch (Exception e) {
+			Log.severe (e.toString ());
+			return false;
 		}
 	}
 
