@@ -83,6 +83,13 @@ public class GuiPrep {
 		File targ = new File (t);
 		Files.copy (src.toPath (), targ.toPath (), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 	}
+	
+	public static void moveFile (String s, String t) throws IOException {
+		File src = new File (s);
+		File targ = new File (t);
+		Files.move (src.toPath (), targ.toPath (),
+				java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+	}
 
 	static boolean isRecognizerEnabled (Properties conf, String name) {
 		return conf.getProperty ("recognizer_" + name, "false").equalsIgnoreCase ("true");
@@ -112,6 +119,12 @@ public class GuiPrep {
 			}
 			if (!appfolder.endsWith (File.separator)) {
 				appfolder += File.separator;
+			}
+			// android generates files to a custom location
+			if (tos.equals ("Android")) {
+				generateAndroidApp (conf);
+				System.out.println ("Android app generated: Path:" + appfolder);
+				return;
 			}
 			copyFile (cpsrc + "/" + cfile, appfolder + "/" + cfile);
 			copyFile (cpsrc + "/" + efile, appfolder + "/" + efile);
@@ -144,11 +157,6 @@ public class GuiPrep {
 				System.out.println ("live.conf generated for live sphinx version");
 			}
 
-			if (tos.equals ("Android")) {
-				if (copyAndroidFiles (conf)) {
-					new AndroidAppGenerator (conf).generate ();
-				}
-			}
 			System.out.println ("Application Generated: Path: " + appfolder);
 
 		} catch (Exception ex) {
@@ -156,15 +164,76 @@ public class GuiPrep {
 		}
 	}
 	
+	static void generateAndroidApp (Properties conf) {
+		try {
+			String project = conf.getProperty ("project");
+			String appfolder = conf.getProperty ("appfolder");
+			String cpsrc = conf.getProperty ("cpsrc");
+			String cfile = conf.getProperty ("common_words");
+			String efile = conf.getProperty ("error_dlg");
+			if (!appfolder.endsWith (File.separator)) {
+				appfolder += File.separator;
+			}
+			
+			copyFile (cpsrc + "/" + cfile, appfolder + "/" + cfile);
+			copyFile (cpsrc + "/" + efile, appfolder + "/" + efile);
+
+			errors = cpsrc + "/" + "errors.txt";
+			String outfile = appfolder + project + ".dlg";
+			String questions = appfolder + project + ".quest";
+			// Gui2Gram.dlgtree = appfolder + project + ".tree";
+			Rule2Fsm rf = new Rule2Fsm (appfolder, "dialog.tree");
+			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project + ".tree");
+			// Rule2Fsm.name = appfolder + "dialog" + ".tree";
+			// Gui2Gram.gram = appfolder + "dialog" + ".tree";
+			GuiPrep.generate (rf, gg, outfile, questions);
+
+			// Generator gen = new Generator (conffile);
+			// batch version used from Gui console
+			Generator gen = new Generator (conf);
+			gen.createQuestions ();
+			String asr = conf.getProperty ("recognizer");
+
+			String assets = appfolder  + "assets/console/";
+			conf.setProperty ("assets", assets);
+			boolean ok = copyAndroidFiles (conf);
+			if (ok) new AndroidAppGenerator (conf).generate ();
+		}
+		catch (Exception e) {
+			e.printStackTrace ();
+		}
+	}
+	
 	static boolean copyAndroidFiles (Properties conf) {
-		String common_dir = conf.getProperty ("common");
-		String android_dir = common_dir + File.separator + "android";
-		String appfolder = conf.getProperty ("appfolder");
-		if (!copyDirectory (android_dir, appfolder)) {
-			Log.severe ("Could not copy Android files to "+appfolder);
+		try {
+			String common_dir = conf.getProperty ("common");
+			String android_dir = common_dir + File.separator + "android";
+			String appfolder = conf.getProperty ("appfolder");
+			// move some previously generated files
+			if (!copyDirectory (android_dir, appfolder)) {
+				Log.severe ("Could not copy Android files to "+appfolder);
+				return false;
+			}
+			String assets = appfolder + "assets/console/";
+			File assetsdir = new File (assets);
+			if (!assetsdir.exists ()) assetsdir.mkdirs ();
+			File mainapp = new File (appfolder);
+			for (String name : mainapp.list ()) {
+				if (name.equals ("proguard-project.txt")) continue;
+				if (name.equals ("project.properties")) continue;
+				if (name.endsWith (".png")) continue;
+				String src = appfolder + name;
+				File S = new File (src);
+				if (S.isDirectory ()) continue;
+				String dest = assets + name;
+				moveFile (src, dest);
+			}
+			return true;
+		}
+		catch (Exception e) {
+			Log.severe (e.toString ());
 			return false;
 		}
-		else return true;
 	}
 	
 	static boolean copyDirectory (String source, String destination) {

@@ -31,6 +31,7 @@ class AndroidAppGenerator {
     void generate() {
         String project = conf.getProperty ("project");
         String appfolder = conf.getProperty ("appfolder");
+		String assets = conf.getProperty ("assets");
         String cpsrc = conf.getProperty ("cpsrc");
         
         if (!appfolder.endsWith (File.separator)) {
@@ -38,12 +39,12 @@ class AndroidAppGenerator {
         }
         try {
             PrintWriter out = new PrintWriter(appfolder + "assets.lst");
-            File f = new File(appfolder);
+            File f = new File(assets);
             String files[] = f.list();
             for(String s : files) {
                 if(s.endsWith(".java")) continue;
-                createCheckSum(appfolder, s);
-                out.println(project +"/" + s);
+                createCheckSum(assets, s);
+                out.println("assets/console/" + s);
             }
             out.close();
         } catch (IOException ex) {
@@ -57,6 +58,7 @@ class AndroidAppGenerator {
         MessageDigest md;
         try {
             File f = new File(folder, file);
+			if (f.isDirectory ()) return;
             md = MessageDigest.getInstance("MD5");
             InputStream is = new FileInputStream(f);
             DigestInputStream dis = new DigestInputStream(is, md);
