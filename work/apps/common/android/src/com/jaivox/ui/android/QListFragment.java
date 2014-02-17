@@ -1,9 +1,12 @@
-package com.jaivox.ui.jvxdroid;
+package com.jaivox.ui.android;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+
+import com.jaivox.ui.jvxdroid.R;
+
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,7 +28,7 @@ public class QListFragment extends Fragment {
 		StringBuffer sb = new StringBuffer();
 		Reader reader = null;
 		try {
-			reader = new InputStreamReader(assets.open("console/dialog.tree"));
+			reader = new InputStreamReader(assets.open("test/dialog.tree"));
 			BufferedReader br = new BufferedReader(reader);
 			String line = "";
 			while (null != (line = br.readLine())) {

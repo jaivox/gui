@@ -1,11 +1,8 @@
-package com.jaivox.ui.jvxdroid;
+package com.jaivox.ui.android;
 
-import java.util.Properties;
+import com.jaivox.ui.jvxdroid.R;
 
-import com.jaivox.interpreter.Command;
-import com.jaivox.interpreter.Interact;
-import com.jaivox.util.Log;
-
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,12 +32,16 @@ public class ConsoleFragment extends JvxAppFragment {
 		String speech = st.getText().toString();
 		speak(speech);
 		
-		if(inter == null) createApp( getBaseDirectory() );
-		String result = processSpeech(speech);
-
-		TextView txtResult = (TextView) rootView.findViewById(R.id.txtResult);
-		txtResult.setText(result);
-		speak(result);
+		if(speech.trim().length() > 0 ) {
+			String result = processSpeech(speech);
+			Log.i(this.getClass().getSimpleName(), "speech-result: "+ speech +" - "+ result);
+			
+			if(result != null) {
+				TextView txtResult = (TextView) rootView.findViewById(R.id.txtResult);
+				txtResult.setText(result == null ? "" : result);
+				speak(result);
+			}
+		}
 	}
 	
 	@Override
@@ -56,34 +57,5 @@ public class ConsoleFragment extends JvxAppFragment {
 	}
 	protected int getFragmentId() {
 		return R.layout.fragment_jvx_console;
-	}
-	
-	///
-	Interact inter;
-	
-	public void createApp(String basedir) {
-		new Log ();
-		Log.setLevelByName ("info");
-		Properties kv = new Properties ();
-		kv.setProperty("Base", basedir);
-		kv.setProperty ("common_words", "common_en.txt");
-		kv.setProperty ("questions_file", "test.quest");
-		kv.setProperty ("grammar_file", "test.dlg");
-		Command cmd = new Command ();
-		inter = new Interact (basedir, kv, cmd);
-        
-		lang = kv.getProperty ("ttslang");
-        initTTS(lang);
-	}
-	public String processSpeech (String speech) {
-		String response = inter.execute (speech);
-		return response;
-	}
-	public String getBaseDirectory() {
-		return appDir;
-	}
-	@Override
-	public String getAppName() {
-		return "console";
 	}
 }

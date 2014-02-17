@@ -222,6 +222,7 @@ public class GuiPrep {
 				if (name.equals ("proguard-project.txt")) continue;
 				if (name.equals ("project.properties")) continue;
 				if (name.endsWith (".png")) continue;
+				if (name.endsWith (".xml")) continue;
 				String src = appfolder + name;
 				File S = new File (src);
 				if (S.isDirectory ()) continue;

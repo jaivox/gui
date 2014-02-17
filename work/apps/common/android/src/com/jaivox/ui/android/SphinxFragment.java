@@ -1,10 +1,8 @@
-package com.jaivox.ui.jvxdroid;
+package com.jaivox.ui.android;
 
 import java.io.File;
-import java.util.Properties;
+import com.jaivox.ui.jvxdroid.R;
 
-import com.jaivox.interpreter.Command;
-import com.jaivox.interpreter.Interact;
 import edu.cmu.pocketsphinx.Config;
 import edu.cmu.pocketsphinx.Decoder;
 import edu.cmu.pocketsphinx.Hypothesis;
@@ -25,7 +23,7 @@ public class SphinxFragment extends JvxAppFragment implements RecognitionListene
 		super();
 	}
 	public void init() {
-		syncAssets(rootView.getContext(), "sphinx");	// sphinx models etc.
+		if( !syncAssets(rootView.getContext(), "sphinx") ) return;	// sphinx models etc.
 		
 		Button b = (Button) rootView.findViewById(R.id.btnSend);
         b.setOnClickListener(this);
@@ -48,18 +46,24 @@ public class SphinxFragment extends JvxAppFragment implements RecognitionListene
 		String speech = st.getText().toString();
 		speak(speech);
 		
-		if(inter == null) createApp( getBaseDirectory() );
-		String result = processSpeech(speech);
-
-		TextView txtResult = (TextView) rootView.findViewById(R.id.txtResult);
-		txtResult.setText(result);
-		speak(result);
+		if(speech.trim().length() > 0 ) {
+			String result = processSpeech(speech);
+			Log.i(this.getClass().getSimpleName(), "speech-result: "+ speech +" - "+ result);
+			
+			if(result != null) {
+				TextView txtResult = (TextView) rootView.findViewById(R.id.txtResult);
+				txtResult.setText(result == null ? "" : result);
+				speak(result);
+			}
+		}
 	}
 	public void speakButtonClicked(View view) {
-		// 	TODO sphinx
+		
 		Button btn = (Button) rootView.findViewById(R.id.btnSpeak);
 	    
 		initSphinx(rootView.getContext());
+		
+		if(recognizer == null) return;
 		
 		if(btn.getText().equals("Speak")) {
 			recognizer.addListener(this);
@@ -103,16 +107,24 @@ public class SphinxFragment extends JvxAppFragment implements RecognitionListene
 	
 	///
 	static {
-        System.loadLibrary("pocketsphinx_jni");
+        try {
+        	System.loadLibrary("pocketsphinx_jni");
+        	libLoaded = true;
+        } catch (Exception e) { 
+        	e.printStackTrace(); 
+        	libLoaded = false; 
+        }
     }
     
 	SpeechRecognizer recognizer = null;
+	static boolean libLoaded = false;
 	
     private static String joinPath(File dir, String path) {
         return new File(dir, path).getPath();
     }
     void initSphinx(Context c) {
-    	if(recognizer != null) return;
+    	if(!libLoaded || recognizer != null) return;
+    	
     	
     	File base = new File(sphinxFolder());
         Config config = Decoder.defaultConfig();
@@ -161,31 +173,4 @@ public class SphinxFragment extends JvxAppFragment implements RecognitionListene
         EditText st = (EditText) rootView.findViewById(R.id.txtSpeech);
 		st.setText(speech);
     }
-
-    ///
-	Interact inter;
-	
-	public void createApp(String basedir) {
-		Properties kv = new Properties ();
-		kv.setProperty("Base", basedir);
-		kv.setProperty ("common_words", "common_en.txt");
-		kv.setProperty ("questions_file", "test.quest");
-		kv.setProperty ("grammar_file", "test.dlg");
-		Command cmd = new Command ();
-		inter = new Interact (basedir, kv, cmd);
-        
-		lang = kv.getProperty ("ttslang");
-        initTTS(lang);
-	}
-	public String processSpeech (String speech) {
-		String response = inter.execute (speech);
-		return response;
-	}
-	public String getBaseDirectory() {
-		return appDir;
-	}
-	@Override
-	public String getAppName() {
-		return "console";		// use console for native
-	}
 }

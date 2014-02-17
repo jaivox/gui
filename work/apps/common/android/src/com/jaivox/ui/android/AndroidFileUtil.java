@@ -1,4 +1,4 @@
-package com.jaivox.ui.jvxdroid;
+package com.jaivox.ui.android;
 
 import java.io.*;
 
@@ -28,38 +28,44 @@ public class AndroidFileUtil {
             String md5Path = path + ".md5";
             File extHash = new File(extDir, md5Path);
             extFile.getParentFile().mkdirs();
-            
+        	boolean cp = true;
+
             if(quick) {
-	            Reader hashreader = null;
-	            Reader exthashreader = null;
+            	BufferedReader hashreader = null;
+            	BufferedReader exthashreader = null;
+            	cp = false;
+            	
 	            try {
 	                // Read asset hash.
-	            	hashreader = new InputStreamReader(assets.open(md5Path));
-	                String hash = new BufferedReader(hashreader).readLine();
-	                // Read file hash and compare.
-	                exthashreader = new InputStreamReader(new FileInputStream(extHash));
-	                if (hash.equals(new BufferedReader(exthashreader).readLine())) {
-	                    Log.i(TAG, "skip " + path + ", checksums match");
-	                    continue;
-	                }
-	            } catch (IOException e) { }
+	            	// Read file hash and compare.
+	                hashreader = new BufferedReader(
+	            			new InputStreamReader(assets.open(md5Path)) );
+	            	exthashreader = new BufferedReader( 
+	                		new InputStreamReader(new FileInputStream(extHash)) );
+	                String hash = hashreader.readLine();
+	                String exthash = hashreader.readLine();
+	                if (!hash.equals(exthash)) cp =true;
+
+	            } catch (IOException e) {
+	            	// copy any way
+	            	cp = true;
+	            }
 	            finally {
 	            	if(hashreader != null) hashreader.close();
 	            	if(exthashreader != null) exthashreader.close();
 	            }
             }
-
-            Log.i(TAG, "copy " + path + " to " + extFile);
-            copyStream(assets.open(path), new FileOutputStream(extFile));
-            InputStream hashStream = assets.open(md5Path);
-            copyStream(hashStream, new FileOutputStream(extHash));
+            if(cp) {
+            	Log.i(TAG, "copy " + path + " to " + extFile);
+                copyStream(assets.open(path), new FileOutputStream(extFile));
+                InputStream hashStream = assets.open(md5Path);
+                copyStream(hashStream, new FileOutputStream(extHash));
+            }
         }
         reader.close();
         
         return extDir;
     }
-
-    
 
     /**
      * Returns external files directory for the application.

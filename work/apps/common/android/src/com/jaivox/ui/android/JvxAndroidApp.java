@@ -1,9 +1,8 @@
-package com.jaivox.ui.jvxdroid;
+package com.jaivox.ui.android;
 
 public interface JvxAndroidApp {
 	public String getAppName();
 	public void init();
-	public void createApp(String basedir);
 	public String processSpeech (String speech);
 	public String getBaseDirectory();
 }

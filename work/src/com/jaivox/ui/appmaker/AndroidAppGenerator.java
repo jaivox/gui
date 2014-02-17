@@ -44,14 +44,16 @@ class AndroidAppGenerator {
             for(String s : files) {
                 if(s.endsWith(".java")) continue;
                 createCheckSum(assets, s);
-                out.println("assets/console/" + s);
+                out.println("console/" + s);
             }
             out.close();
         } catch (IOException ex) {
             Logger.getLogger(AndroidAppGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
+		String dest = appfolder + "src/com/jaivox/ui/android/";
         for(String f  : cfiles) {
-            GuiPrep.generateFile (conf, cpsrc, appfolder, f);
+            // GuiPrep.generateFile (conf, cpsrc, appfolder, f);
+            GuiPrep.generateFile (conf, cpsrc, dest, f);
         }
     }
     void createCheckSum(String folder, String file) {

@@ -1,6 +1,8 @@
-package com.jaivox.ui.jvxdroid;
+package com.jaivox.ui.android;
 
 import java.util.Locale;
+
+import com.jaivox.ui.jvxdroid.R;
 
 
 import android.os.Bundle;
@@ -106,4 +108,5 @@ public class JvxActivity extends FragmentActivity {
 			return null;
 		}
 	}
+	Fragment appPages[] = new Fragment[3];
 }
