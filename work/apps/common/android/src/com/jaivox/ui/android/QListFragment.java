@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import com.jaivox.ui.jvxdroid.R;
+import com.jaivox.ui.PATproject.R;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;

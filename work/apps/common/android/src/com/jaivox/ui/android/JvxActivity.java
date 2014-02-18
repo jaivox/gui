@@ -2,7 +2,7 @@ package com.jaivox.ui.android;
 
 import java.util.Locale;
 
-import com.jaivox.ui.jvxdroid.R;
+import com.jaivox.ui.PATproject.R;
 
 
 import android.os.Bundle;

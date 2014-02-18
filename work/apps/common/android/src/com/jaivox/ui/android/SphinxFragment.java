@@ -1,7 +1,7 @@
 package com.jaivox.ui.android;
 
 import java.io.File;
-import com.jaivox.ui.jvxdroid.R;
+import com.jaivox.ui.PATproject.R;
 
 import edu.cmu.pocketsphinx.Config;
 import edu.cmu.pocketsphinx.Decoder;

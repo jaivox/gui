@@ -1,6 +1,6 @@
 package com.jaivox.ui.android;
 
-import com.jaivox.ui.jvxdroid.R;
+import com.jaivox.ui.PATproject.R;
 
 import android.util.Log;
 import android.view.View;

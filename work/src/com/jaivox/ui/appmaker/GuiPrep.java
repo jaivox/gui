@@ -210,7 +210,7 @@ public class GuiPrep {
 			String android_dir = common_dir + File.separator + "android";
 			String appfolder = conf.getProperty ("appfolder");
 			// move some previously generated files
-			if (!copyDirectory (android_dir, appfolder)) {
+			if (!copyDirectory (conf, android_dir, appfolder)) {
 				Log.severe ("Could not copy Android files to "+appfolder);
 				return false;
 			}
@@ -238,24 +238,36 @@ public class GuiPrep {
 		}
 	}
 	
-	static boolean copyDirectory (String source, String destination) {
+	static boolean copyDirectory (Properties conf, String source, String destination) {
 		try {
 			System.out.println ("Android: copying "+source+" to "+destination);
 			File src = new File (source);
 			File app = new File (destination);
-			if (!app.exists ()) {
+			if (src.isDirectory () && !app.exists ()) {
 				app.mkdirs ();
 			}
 			if (src.isFile ()) {
-				copyFile (source, destination);
-				return true;
+				if (source.endsWith ("AndroidManifest.xml")) {
+					generateAndroidFile (conf, source, destination);
+				}
+				else if (source.endsWith ("ConsoleFragment.java") ||
+						source.endsWith ("JvxActivity.java") ||
+						source.endsWith ("NativeSpeechFragment.java") ||
+						source.endsWith ("QListFragment.java") ||
+						source.endsWith ("SphinxFragment.java")) {
+					generateAndroidFile (conf, source, destination);
+				}
+				else {
+					copyFile (source, destination);
+					return true;
+				}
 			}
 			else {
 				String names [] = src.list ();
 				for (String name: names) {
 					String child = source + File.separator + name;
 					String dest = destination + File.separator + name;
-					boolean ok = copyDirectory (child, dest);
+					boolean ok = copyDirectory (conf, child, dest);
 					if (!ok) return false;
 				}
 			}
@@ -427,6 +439,53 @@ public class GuiPrep {
 				return false;
 			}
 			Log.info ("wrote: " + destname);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace ();
+			return false;
+		}
+	}
+	
+	static boolean generateAndroidFile (Properties kv, String src, String dest) {
+		String common = src;
+		try {
+			Set keys = kv.stringPropertyNames ();
+			int n = keys.size ();
+			String okeys[] = new String[n];
+			Pair op[] = new Pair[n];
+			int pi = 0;
+			for (Iterator<String> it = keys.iterator (); it.hasNext ();) {
+				String key = it.next ();
+				okeys[pi] = key;
+				op[pi] = new Pair (pi, -key.length ());
+				pi++;
+			}
+			Utils.quicksortpointy (op, 0, n - 1);
+			String text = loadFile (src);
+			String changed = text;
+
+			// replace longest keys first
+			for (int i = 0; i < n; i++) {
+				Pair p = op[i];
+				String key = okeys[p.x];
+				String val = kv.getProperty (key);
+				String pat = patIndicator + key;
+				if (text.indexOf (pat) != -1) {
+					// Log.fine ("replacing "+pat+" with "+val+" in "+name);
+					if (val != null) {
+						changed = changed.replace (pat, val);
+					} else {
+						Log.info ("Missing value for " + pat);
+					}
+				}
+			}
+			if (changed.indexOf (patIndicator) != -1) {
+				changed = fixmisses (src, changed);
+			}
+			if (!writeFile (dest, changed)) {
+				return false;
+			}
+			Log.info ("wrote: " + dest);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace ();
