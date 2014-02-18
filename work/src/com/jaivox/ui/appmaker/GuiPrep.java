@@ -247,7 +247,8 @@ public class GuiPrep {
 				app.mkdirs ();
 			}
 			if (src.isFile ()) {
-				if (source.endsWith ("AndroidManifest.xml")) {
+				if (source.endsWith ("AndroidManifest.xml") ||
+                                        source.endsWith ("strings.xml")) {
 					generateAndroidFile (conf, source, destination);
 				}
 				else if (source.endsWith ("ConsoleFragment.java") ||
