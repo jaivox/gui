@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 class AndroidAppGenerator {
     Properties conf = null;
-    static String[] cfiles = { "AndroidFileUtil.java", "JvxInteract.java" };
+    static String[] cfiles = { "JvxInteract.java" };
     
     public AndroidAppGenerator(Properties conf) {
         this.conf = conf;
@@ -31,28 +31,27 @@ class AndroidAppGenerator {
     void generate() {
         String project = conf.getProperty ("project");
         String appfolder = conf.getProperty ("appfolder");
-		String assets = conf.getProperty ("assets");
+	String assets = conf.getProperty ("assets");
         String cpsrc = conf.getProperty ("cpsrc");
         
         if (!appfolder.endsWith (File.separator)) {
                 appfolder += File.separator;
         }
         try {
-            PrintWriter out = new PrintWriter(appfolder + "assets.lst");
+            PrintWriter out = new PrintWriter(appfolder + "assets/assets.lst");
             File f = new File(assets);
             String files[] = f.list();
             for(String s : files) {
                 if(s.endsWith(".java")) continue;
                 createCheckSum(assets, s);
-                out.println("console/" + s);
+                out.println(project +"/"+ s);
             }
             out.close();
         } catch (IOException ex) {
             Logger.getLogger(AndroidAppGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
-		String dest = appfolder + "src/com/jaivox/ui/android/";
+	String dest = appfolder + "src/com/jaivox/ui/android/";
         for(String f  : cfiles) {
-            // GuiPrep.generateFile (conf, cpsrc, appfolder, f);
             GuiPrep.generateFile (conf, cpsrc, dest, f);
         }
     }

@@ -194,7 +194,7 @@ public class GuiPrep {
 			gen.createQuestions ();
 			String asr = conf.getProperty ("recognizer");
 
-			String assets = appfolder  + "assets/console/";
+			String assets = appfolder + "assets/"+ project +"/";
 			conf.setProperty ("assets", assets);
 			boolean ok = copyAndroidFiles (conf);
 			if (ok) new AndroidAppGenerator (conf).generate ();
@@ -214,7 +214,7 @@ public class GuiPrep {
 				Log.severe ("Could not copy Android files to "+appfolder);
 				return false;
 			}
-			String assets = appfolder + "assets/console/";
+			String assets = conf.getProperty("assets");
 			File assetsdir = new File (assets);
 			if (!assetsdir.exists ()) assetsdir.mkdirs ();
 			File mainapp = new File (appfolder);
@@ -223,6 +223,7 @@ public class GuiPrep {
 				if (name.equals ("project.properties")) continue;
 				if (name.endsWith (".png")) continue;
 				if (name.endsWith (".xml")) continue;
+                                //if(name.endsWith(".java")) continue;
 				String src = appfolder + name;
 				File S = new File (src);
 				if (S.isDirectory ()) continue;
