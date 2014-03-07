@@ -29,7 +29,10 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -46,7 +49,9 @@ public class JvxTest {
     static Robot bot = null;
     String appfolder = "";
     int procdelay = 6;
-
+    String dlgFile = "work/apps/samples/cookbb.tree";
+    String qfile = "";
+    
     public JvxTest(JvxMainFrame aThis) {
         parent = aThis;
         try {
@@ -56,6 +61,8 @@ public class JvxTest {
         }
         bot.setAutoDelay(100);
         appfolder = new File(JvxConfiguration.theConfig().getAppFolder()).getAbsolutePath();
+        qfile = appfolder + "/test/test.tree";
+        
     }
     void showmsg(String msg) {
         JOptionPane.showMessageDialog(null, msg);
@@ -109,9 +116,9 @@ public class JvxTest {
         {
             public void run() {
                 
-                buttonClick("Expand Synonyms");
+                procdelay = 40;
+               // buttonClick("Expand Synonyms");  procdelay = 30;     // more wait for exapand
                 bot.delay(500);
-                procdelay = 60;     // more wait for exapand
                 
                 // open dialog file
                 menuClick("File", "Open Dialog Tree");
@@ -120,7 +127,7 @@ public class JvxTest {
 
                 // focus text field. May not work on other lookNfeel or if the file dialog has different accessory layout
                 for(int i = 0; i < 7; i++) sendKey(KeyEvent.VK_TAB);
-                keyin("samples/quick/turing/manusfood");    // dialog file
+                keyin(dlgFile);    // dialog file
                 bot.delay(2 * 1000); 
                 sendOK();
                 bot.delay(procdelay * 1000);            // wait for dialog load
@@ -138,6 +145,7 @@ public class JvxTest {
                 bot.delay((procdelay/2) * 1000);
 
                 // the questions...
+                /*
                 typeAndSend("What is your favorite food");
                 typeAndSend("how do you not know");
                 typeAndSend("so");
@@ -146,11 +154,25 @@ public class JvxTest {
                 typeAndSend("What are your hobbies");
                 typeAndSend("Why did you answer my question with a question");
                 typeAndSend("why are you so annoying");
+                */
+                BufferedReader in = null;
+                String line = "";
+                int i = 0;
+                try {
+                    in = new BufferedReader (new FileReader (qfile));
+                    while ((line = in.readLine ()) != null) {
+                        if(i++ % 2 != 0) continue;
+                        if(line.startsWith("*")) line = line.substring(1);
+                        typeAndSend(line);
+                    }
+                } 
+                catch (Exception e) { e.printStackTrace(); }
+                finally { if(in != null) try { in.close(); } catch (IOException ex) { } }
                 
                 showmsg("Testing completed!");
             }
         }.start();
-    }
+    };
     
     static void speakAndSend() {
         bot.delay(1*1000);

@@ -151,7 +151,8 @@ public class SentenceX implements SelectionHandler {
 	public void setTabModvalues (ArrayList<ArrayList<Object>> tabModvalues) {
 		this.tabModvalues = tabModvalues;
 	}
-
+        
+        static String breaks = "[~`!@#$%^&*\\(\\)+=\\{\\}\\[\\]|\\:;\'\"<>,.?/ \t\r\n]";
 	public String dump (int level) {
 		StringBuffer sb = new StringBuffer ();
 		if (tabModvalues == null) {
@@ -161,7 +162,10 @@ public class SentenceX implements SelectionHandler {
 		sb.append ('*').append (this.theSentence.orig).append ('\n');
 		for (Object alt : alts) {
 			String sent = (String) alt;
-			if (sent.equals (this.theSentence.orig)) {
+                        sent = sent.replaceAll(breaks, "");
+                        String s = this.theSentence.orig.replaceAll(breaks, "");
+                        if(sent.equals (s)) {
+			//if (sent.equals (this.theSentence.orig)) {
 				continue;
 			}
 			boolean sel = true;
