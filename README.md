@@ -1,5 +1,6 @@
-Jaivox Application Generator (JAG) version 0.1 December 2013
-Copyright 2010-2013 by Bits and Pixels, Inc.
+Jaivox Application Generator (JAG) version 0.2 March 2014
+Copyright 2010-2014 by Bits and Pixels, Inc.
+Developed by Rajesh John rajesh@jaivox.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,4 +35,4 @@ ant -buildfile jagbuild.xml
 from this directory. This will create a distributable jag.zip and a runnable
 jag.jar.
 
-(December 25, 2013)
+(March 17, 2013)

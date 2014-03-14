@@ -1,6 +1,6 @@
 /*
-   Jaivox Application Generator (JAG) version 0.1 December 2013
-   Copyright 2010-2013 by Bits and Pixels, Inc.
+   Jaivox Application Generator (JAG) version 0.2 March 2014
+   Copyright 2010-2014 by Bits and Pixels, Inc.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import com.jaivox.ui.appmaker.AppSphinx;
 import com.jaivox.ui.appmaker.AppWeb;
 import com.jaivox.ui.appmaker.GuiPrep;
 import com.jaivox.ui.appmaker.RecordTask;
-import test.JvxTest;
+// import test.JvxTest;
 import java.awt.Component;
 import java.awt.Container;
 import javax.swing.*;
@@ -1223,7 +1223,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 
     private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
         // TODO add your handling code here:
-        new JvxTest(this).simpletest();
+       //  new JvxTest(this).simpletest();
         //new JvxTest(this).simpleVoiceTest();
     }//GEN-LAST:event_testButtonActionPerformed
 
