@@ -134,7 +134,7 @@ public class GuiPrep {
 			String questions = appfolder + project + ".quest";
 			// Gui2Gram.dlgtree = appfolder + project + ".tree";
 			Rule2Fsm rf = new Rule2Fsm (appfolder, "dialog.tree");
-			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project + ".tree");
+			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project + ".tree", "dialog.def");
 			// Rule2Fsm.name = appfolder + "dialog" + ".tree";
 			// Gui2Gram.gram = appfolder + "dialog" + ".tree";
 			GuiPrep.generate (rf, gg, outfile, questions);
@@ -183,7 +183,7 @@ public class GuiPrep {
 			String questions = appfolder + project + ".quest";
 			// Gui2Gram.dlgtree = appfolder + project + ".tree";
 			Rule2Fsm rf = new Rule2Fsm (appfolder, "dialog.tree");
-			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project + ".tree");
+			Gui2Gram gg = new Gui2Gram (appfolder, "dialog.tree", project + ".tree", "dialog.def");
 			// Rule2Fsm.name = appfolder + "dialog" + ".tree";
 			// Gui2Gram.gram = appfolder + "dialog" + ".tree";
 			GuiPrep.generate (rf, gg, outfile, questions);

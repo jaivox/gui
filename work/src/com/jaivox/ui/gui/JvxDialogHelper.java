@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Map.Entry;
 import java.util.Properties;
 import javax.swing.JPopupMenu;
@@ -170,37 +171,83 @@ public class JvxDialogHelper {
 		return tdump.toString ();
 	}
 
-	public void dumpDialogToFile (String fname) throws IOException {
+	public void dumpDialogToFile (String fname, String def_file) throws IOException {
+		java.io.FileOutputStream out = new FileOutputStream (fname);
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) theFrame.getDialogTree ().getModel ().getRoot ();
+		StringBuilder tdump = new StringBuilder ();
+                StringBuilder dlg_def = new StringBuilder();
+		dumpDialog (root, tdump, dlg_def);
+		out.write (tdump.toString ().getBytes ());
+                out.close();
+                
+                out = new FileOutputStream (def_file);
+		out.write (dlg_def.toString ().getBytes ());
+                out.close();
+                
+	}
+        public void createDialogDefinitionFile (String fname) throws IOException {
 		java.io.FileOutputStream out = new FileOutputStream (fname);
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) theFrame.getDialogTree ().getModel ().getRoot ();
 		StringBuffer tdump = new StringBuffer ();
 
-		dumpDialog (root, tdump);
+		createDefinitionFile (root, tdump);
 		out.write (tdump.toString ().getBytes ());
+                out.close();
 	}
-
-	public void dumpDialog (DefaultMutableTreeNode node, StringBuffer tdump) {
-		int level = 0;
-		while (node != null) {
-			level = node.getLevel ();
-			//System.out.println(level +": "+ node);
-			if (level < 2) {
-				node = node.getNextNode ();  // skil dialog.road
-				continue;
-			}
-			for (int i = 0; i < level - 2; i++) {
-				tdump.append ('\t');
-			}
-			tdump.append ('(').append (node.toString ()).append (')');
-			if (!node.isLeaf ()) {
-				node = (DefaultMutableTreeNode) node.getNextNode ();
-				tdump.append (" (").append (node.toString ()).append (')');
-			}
-			tdump.append ('\n');
-			node = node.getNextNode ();
+        
+        void createDefinitionFile(DefaultMutableTreeNode node, StringBuffer tdump) {
+            if(node == null) return;
+            if(!node.isLeaf() && node.getLevel () >= 2) {
+                if(node.getChildCount() > 1) {
+                    
+                    int i = 0;
+                    for(Enumeration e = node.children(); e.hasMoreElements();) {
+                        DefaultMutableTreeNode child = (DefaultMutableTreeNode) e.nextElement();
+                        if(!child.isLeaf())  continue;
+                        String s = child.toString().replaceAll("[.?]", "");
+                        if(i == 0)  { tdump.append ("{\n").append (s.replaceAll (" ", ".")); i++; }
+                        tdump.append ("\n\t").append(s).append(" ;");
+                    }
+                    tdump.append ("\n}\n");
+                }
+            }
+            createDefinitionFile(node.getNextNode(), tdump);
+        }
+        void dumpDialog(DefaultMutableTreeNode node, StringBuilder sb, StringBuilder dlg_def) {
+            for(Enumeration e = node.children(); e.hasMoreElements();) {
+                DefaultMutableTreeNode child = (DefaultMutableTreeNode) e.nextElement();
+                if(child.getLevel() >= 2) dumpDialogNew(child, sb, dlg_def);
+                else dumpDialog(child, sb, dlg_def);
+            }
+        }
+        void dumpDialogNew (DefaultMutableTreeNode node, StringBuilder tdump, StringBuilder dlg_def) {
+                if(node == null || node.isLeaf()) return;
+                
+                for (int i = 0; i < node.getLevel () - 2; i++) tdump.append ('\t');
+                tdump.append ("(").append (node.toString ()).append (')');
+                
+                StringBuilder sb = new StringBuilder();
+                int alts = 0;
+                for (int i = 0; i < node.getChildCount (); i++) {
+                    DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+                    if(!child.isLeaf()) continue;
+                    if(i == 0)tdump.append (" (").append (child.toString ()).append (")\n");
+                    
+                    String s = child.toString().replaceAll("[.?]", "");
+                    if(i == 0)  sb.append ("{\n").append (s.replaceAll (" ", "."));
+                    if(sb.length() > 0) sb.append ("\n\t").append(s).append(" ;");
+                    alts++;
+		}
+                if(sb.length() > 0) sb.append ("\n}\n");
+                if(alts > 1) dlg_def.append(sb);
+                
+                for (int i = 0; i < node.getChildCount (); i++) {
+                    DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+                    if(child.isLeaf()) continue;
+                    dumpDialogNew (child, tdump, dlg_def);
 		}
 	}
-
+	
 	void debugTree (JTree tree) {
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel ().getRoot ();
 		for (Enumeration e = root.breadthFirstEnumeration (); e.hasMoreElements ();) {
