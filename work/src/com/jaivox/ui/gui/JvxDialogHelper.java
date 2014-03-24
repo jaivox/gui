@@ -231,9 +231,10 @@ public class JvxDialogHelper {
                 for (int i = 0; i < node.getChildCount (); i++) {
                     DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
                     if(!child.isLeaf()) continue;
-                    if(i == 0)tdump.append (" (").append (child.toString ()).append (")\n");
+                    String s = child.toString().toLowerCase();
+                    if(i == 0)tdump.append (" (").append (s).append (")\n");
                     
-                    String s = child.toString().replaceAll("[.?]", "");
+                    s = s.replaceAll("[.?]", "");
                     if(i == 0)  sb.append ("{\n").append (s.replaceAll (" ", "."));
                     if(sb.length() > 0) sb.append ("\n\t").append(s).append(" ;");
                     alts++;
