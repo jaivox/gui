@@ -100,6 +100,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	};
 	static TreeMap<String, String> ttsCodes;
 	static TreeMap<String, String> asrCodes;
+        private GrammarListHelper grammarListHelper;
 
 	/**
 	 * Creates new form JvxMainFrame
@@ -413,6 +414,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         grammarList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 grammarListMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                grammarListMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                grammarListMouseReleased(evt);
             }
         });
         jScrollPane2.setViewportView(grammarList);
@@ -1104,8 +1111,22 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		if (evt.isPopupTrigger ()) {
 			return;
 		}
-		JList grams = (JList) evt.getSource ();
+		getGrammarList().handleClick();
     }//GEN-LAST:event_grammarListMouseClicked
+
+    private void grammarListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grammarListMouseReleased
+        // TODO add your handling code here:
+        if (evt.isPopupTrigger ()) {
+            getGrammarList().handleRClick();
+        }
+    }//GEN-LAST:event_grammarListMouseReleased
+
+    private void grammarListMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_grammarListMousePressed
+        // TODO add your handling code here:
+        if (evt.isPopupTrigger ()) {
+            getGrammarList().handleRClick();
+	}
+    }//GEN-LAST:event_grammarListMousePressed
 
     private void selectDbButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDbButtonActionPerformed
 		// TODO add your handling code here:
@@ -1292,8 +1313,9 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		return dialogTree;
 	}
 
-	public JList getGrammarList () {
-		return grammarList;
+	public GrammarListHelper getGrammarList () {
+		if(grammarListHelper == null) grammarListHelper = new GrammarListHelper(this.grammarList);
+        return grammarListHelper;
 	}
 
 	public JTable getSynsTab () {
