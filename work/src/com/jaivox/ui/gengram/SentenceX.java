@@ -44,6 +44,7 @@ public class SentenceX implements SelectionHandler {
 	private ArrayList<String> excludes = new ArrayList<String> ();
 	public static Set<String> userWords = new TreeSet<String> ();
 	public static Map<String, List<String>> usersyns = new HashMap ();
+        public ArrayList<String> alternateSentences = new ArrayList(0); 
 
 	public void setTheSentence (Sentence theSentence) {
 		this.theSentence = theSentence;
@@ -185,6 +186,9 @@ public class SentenceX implements SelectionHandler {
 				sb.append (pad).append (alt).append ('\n');
 			}
 		}
+                for(String s : alternateSentences) {
+                    sb.append("\t").append(s).append("\n");
+                }
 		return sb.toString ();
 	}
 

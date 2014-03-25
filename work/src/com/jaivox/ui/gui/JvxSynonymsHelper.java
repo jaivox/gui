@@ -30,12 +30,17 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.JPopupMenu;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.undo.UndoableEdit;
 
@@ -464,4 +469,102 @@ class PopUpMenuAction implements ActionListener {
 			JOptionPane.showMessageDialog (theFrame, "Drag and drop from data into synonyms table.");
 		}
 	}
+}
+
+class GrammarListHelper {
+    JPopupMenu jmCell;
+    JTextField txtListCell;
+    JList glist;
+    GrammarListHelper(JList glist) {
+        this.glist = glist;
+    }
+    void setListData(Object[] rows) {
+        ArrayList<Object> al = new ArrayList(Arrays.asList(rows));
+        SentenceX sx = getSentence();
+        if(sx != null) al.addAll(sx.alternateSentences);
+        
+        DefaultListModel model = new DefaultListModel();
+        for(Object s : al) {
+            model.addElement(s);
+        }
+        glist.setModel(model);
+    }
+    void handleClick() {
+        SentenceX sx = getSentence();
+        if(sx == null) return;
+        String old = glist.getSelectedValue().toString().trim();
+        if(old.length() > 0 && sx != null && !sx.alternateSentences.contains(old)) return;
+        
+        editCell();
+    }
+    void handleRClick() {
+        SentenceX sx = getSentence();
+        if(sx == null) return;
+        DefaultListModel model = (DefaultListModel)glist.getModel();
+
+        model.addElement(" ");
+        
+        glist.setModel(model);
+        glist.setSelectedIndex(model.getSize() - 1);
+        editCell();
+    }
+    SentenceX getSentence() {
+        SentenceX sx = null;
+        TreePath tp = JvxMainFrame.getInstance ().getDialogTree().getSelectionPath();
+        if(tp != null) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
+            if(node != null && !node.isRoot () && node.getLevel () > 1) {
+                Object ox = node.getUserObject();
+                if(ox != null && ox instanceof SentenceX) {
+                    sx = (SentenceX) ox;
+                }
+            }
+        }
+        return sx;
+    }
+    void editCell() {
+        int row = glist.getSelectedIndex();
+        Rectangle r = glist.getCellBounds(row, row);
+
+        if (jmCell == null) createEditCell();
+        jmCell.setPreferredSize(new Dimension(r.width, r.height));
+        jmCell.show(glist, r.x, r.y);
+
+        txtListCell.setText( glist.getSelectedValue().toString() );
+        txtListCell.selectAll();
+        txtListCell.requestFocusInWindow();
+    }
+    void createEditCell() {
+        txtListCell = new JTextField();
+        Border border = UIManager.getBorder("List.focusCellHighlightBorder");
+        txtListCell.setBorder( border );
+        
+        ActionListener l = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String old = glist.getSelectedValue().toString().trim();
+                String value = txtListCell.getText().trim();
+                if(value.equals(old)) return;
+                
+                ListModel model = glist.getModel();
+                int row = glist.getSelectedIndex();
+                DefaultListModel dlm = (DefaultListModel)model;
+                SentenceX sx = getSentence();
+                    
+                if(value.length() > 0) {
+                    dlm.set(row, value);
+                    if(sx != null) sx.alternateSentences.add(value);
+                }
+                else dlm.remove(row);
+                if(old.length() > 0) {
+                    if(sx != null) sx.alternateSentences.remove(old);
+                }
+                jmCell.setVisible(false);
+            }
+        };
+        txtListCell.addActionListener(l);
+
+        jmCell = new JPopupMenu();
+        jmCell.setBorder( new EmptyBorder(0, 0, 0, 0) );
+        jmCell.add(txtListCell);
+    }
 }

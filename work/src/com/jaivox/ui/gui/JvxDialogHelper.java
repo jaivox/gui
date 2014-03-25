@@ -272,10 +272,11 @@ public class JvxDialogHelper {
 				ArrayList<String> oks = new ArrayList<String> ();
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tpath.getLastPathComponent ();
 				if (node.isRoot () || node.getLevel () <= 1) {
+                                        JvxMainFrame.getInstance ().getGrammarList ().setListData (new String[] {});
 					return;
 				}
 
-				System.out.println (node);
+				//System.out.println (node);
 
 				ArrayList<String> al = null;
 				Object sx = node.getUserObject ();
