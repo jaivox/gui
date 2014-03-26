@@ -22,29 +22,22 @@ package com.jaivox.ui.appmaker;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Gui2Gram {
 
 	String keys[];
 	String questions[];
 	LinkedHashMap<String, ArrayList<String>> rules;
-        TreeSet<String> defSet;
-        String defFile;
 	// note terms here include underline symbol to filter out _ between words
 	static String terms = " \t\r\n~`!@#$%^&*()_+={}[]|\\:;<>,.?/\"\'";
 
-	public Gui2Gram (String dir, String g, String t, String d) {
-                defFile = dir + d;
+	public Gui2Gram (String dir, String g, String t) {
 		String gramfile = dir + g;
 		String treefile = dir + t;
 		loadGram (gramfile);
@@ -184,31 +177,8 @@ public class Gui2Gram {
 		String t = new String (sb).trim ();
 		return t;
 	}
-        void loadAltDefenitions() {
-            defSet = new TreeSet();
-            BufferedReader in = null;
-            try {
-                in = new BufferedReader (new FileReader (defFile));
-                String line;
-                
-                while ((line = in.readLine ()) != null) {
-                    line = line.trim ().toLowerCase ();
-                    if(line.equals("{")) continue;
-                    if(line.endsWith(";")) continue;
-                    defSet.add(line);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(Gui2Gram.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    in.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Gui2Gram.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+
 	void writeRules (PrintWriter out) {
-                loadAltDefenitions();
 		try {
 			Set<String> heads = rules.keySet ();
 			for (Iterator<String> it = heads.iterator (); it.hasNext ();) {
@@ -218,7 +188,6 @@ public class Gui2Gram {
 				if (key.indexOf (".") == -1) {
 					key = "_" + key;
 				}
-                                if(defSet.contains(key)) continue;
 				ArrayList<String> vals = rules.get (head);
 				// if (vals.size () < 2) continue;
 				ArrayList<String> written = new ArrayList<String> ();

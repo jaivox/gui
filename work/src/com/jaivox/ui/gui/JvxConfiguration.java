@@ -178,7 +178,7 @@ public class JvxConfiguration {
 	private void setContentSpec (JvxMainFrame theFrame) {
 		try {
 			theFrame.dlgHelper.dumpTreeToFile (appFolder + appName + ".tree");
-			theFrame.dlgHelper.dumpDialogToFile (appFolder + "dialog" + ".tree", appFolder + "dialog" + ".def");
+			theFrame.dlgHelper.dumpDialogToFile (appFolder + "dialog" + ".tree");
 			theFrame.dlgHelper.dumpUserSynonyms (appFolder + appName);
 			theFrame.dlgHelper.dumpSynonymSelections (appFolder + appName);
 			copyFile (appFolder + "dialog" + ".tree", appFolder + appName + ".sav");

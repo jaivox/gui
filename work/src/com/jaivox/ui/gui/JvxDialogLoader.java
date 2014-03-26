@@ -178,8 +178,21 @@ public class JvxDialogLoader {
 					level++;
 				}
 				DefaultMutableTreeNode tn = null;
+				int ntoks = 0;
+                                SentenceX sx = null;
 				StringTokenizer st = new StringTokenizer (line, GrammarGenerator.DLG_DLIM);
-				while (st.hasMoreTokens ()) {
+                                if(st.countTokens() == 1) {
+                                    String token = st.nextToken ().trim ();
+                                    if (token.length () > 0) {
+                                        if(node[level] != null) {
+                                            sx = (SentenceX) node[level].getUserObject();
+                                            if(sx != null) sx.alternateSentences.add(token);
+                                        }
+                                    }
+                                    continue;
+                                }
+                                        
+                                while (st.hasMoreTokens ()) {
 					String token = st.nextToken ().trim ();
 					if (token.length () == 0) {
 						continue;
@@ -187,8 +200,13 @@ public class JvxDialogLoader {
 					if (!token.endsWith ("?") && !token.endsWith (".")) {
 						token = token + ".";
 					}
+                                        if(ntoks++ > 1) {                   //  (Q?) (A.) (A1.) (A2.)
+                                            sx.alternateSentences.add(token);
+                                            continue;
+                                        }
+                                        
 					Sentence c = gen.getSentence (token);
-					SentenceX sx = c == null ? null : new SentenceX (c);
+					sx = c == null ? null : new SentenceX (c);
 					if (tn == null) {
 						tn = new DefaultMutableTreeNode (sx == null ? token : sx);
 					} else {
