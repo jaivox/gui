@@ -26,6 +26,7 @@ package com.jaivox.ui.gui;
 
 import bitpix.list.basicNode;
 import com.jaivox.ui.appmaker.GuiPrep;
+import com.jaivox.ui.dlg.QAnode;
 import com.jaivox.ui.gengram.SentenceX;
 import javax.swing.*;
 import java.awt.*;
@@ -143,7 +144,36 @@ public class JvxDialogHelper {
 		} else {
 		}
 	}
+  void saveTreeAsTabbedFile(String fname) throws IOException {
+    java.io.FileOutputStream out = new FileOutputStream (fname);
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) theFrame.getDialogTree ().getModel ().getRoot ();
+		StringBuilder tdump = new StringBuilder ();
 
+		saveAsTabbed (0, root, tdump);
+		out.write (tdump.toString ().getBytes ());
+  }
+  void saveAsTabbed(int level, DefaultMutableTreeNode node, StringBuilder sb) {
+    //int level = node.getLevel();
+    if(node.getLevel() >= 2)  {
+      StringBuilder tabs = new StringBuilder();
+      for(int i = 2; i < level; i++) tabs.append('\t');
+      sb.append(tabs);
+      Object sx = node.getUserObject ();
+      sb.append(sx.toString()).append("\n");
+      if (sx instanceof SentenceX) {
+        for(String s : ((SentenceX) sx).alternateSentences) {
+          sb.append(tabs);
+          sb.append(s).append("\n");
+        }
+      }
+    }
+    int il = 1;
+    for(Enumeration e = node.children(); e.hasMoreElements();) {
+      DefaultMutableTreeNode child = (DefaultMutableTreeNode) e.nextElement();
+      saveAsTabbed(level + il, child, sb);
+      if(node.getLevel() >= 2) il++;
+    }
+  }
 	public void dumpTreeToFile (String fname) throws IOException {
 		java.io.FileOutputStream out = new FileOutputStream (fname);
 		//out.write(dumpTree(theFrame.getDialogTree()).getBytes());
@@ -179,7 +209,7 @@ public class JvxDialogHelper {
 		out.write (tdump.toString ().getBytes ());
 	}
 
-	public void dumpDialog (DefaultMutableTreeNode node, StringBuffer tdump) {
+  public void dumpDialog (DefaultMutableTreeNode node, StringBuffer tdump) {
 		int level = 0;
 		while (node != null) {
 			level = node.getLevel ();
@@ -192,7 +222,7 @@ public class JvxDialogHelper {
 				tdump.append ('\t');
 			}
 			tdump.append ('(').append (node.toString ()).append (')');
-			if (!node.isLeaf ()) {
+  		if (!node.isLeaf ()) {
 				node = (DefaultMutableTreeNode) node.getNextNode ();
 				tdump.append (" (").append (node.toString ()).append (')');
 			}

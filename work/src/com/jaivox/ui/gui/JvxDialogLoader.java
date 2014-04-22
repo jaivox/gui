@@ -24,14 +24,13 @@ this package.
 
 package com.jaivox.ui.gui;
 
-import bitpix.list.LispTree;
-import bitpix.list.basicNode;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.JTree;
 
 import com.jaivox.tools.*;
 import com.jaivox.ui.db.JvxDBMgr;
+import com.jaivox.ui.dlg.*;
 import com.jaivox.ui.gengram.GrammarGenerator;
 import com.jaivox.ui.gengram.Parse;
 import com.jaivox.ui.gengram.SentenceX;
@@ -49,7 +48,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -93,8 +91,17 @@ public class JvxDialogLoader {
 		System.out.println ("datadir path: " + dataFolder.getAbsolutePath ());
 		System.out.println ("Dialog file: " + dlgfile);
 		System.out.println ("Data file: " + datfile);
-		gen.load (dlgfile, datfile);
-		gen.generate (dlgfile);
+    
+    String dfile = dlgfile;
+    if(dlgfile.endsWith(".json")) {
+      String f = new File(dlgfile).getName();
+      f.replace(".json", ".txt");
+      f = new File("/tmp/", f).getAbsolutePath();
+      new JsonData (dlgfile).writeAsTabbed(f);
+      dfile = f;
+    }
+		gen.load (dfile, datfile);
+		gen.generate (dfile);
 	}
 
 	public void loadDialogFile (String file) {
@@ -145,163 +152,75 @@ public class JvxDialogLoader {
 			root.add (knode);
 		}
 	}
-        public DefaultMutableTreeNode readDialogTree(String file, DefaultMutableTreeNode root) {
-            LispTree tree = new LispTree(file);
-            tree.PrintList(tree.Root);
-            for (int i=0; i < tree.Root.ListChild.size(); i++) {
-                basicNode pnode = (basicNode)(tree.Root.ListChild.elementAt(i));
-                DefaultMutableTreeNode node = readDialogNode(pnode);
-                if(node != null) root.add(node);
-            }
-            return root;
+    
+    QAnode findAndCreateQANode(String file) {
+      QAnode root = null;
+      if(file.endsWith(".json")) root = new JsonData (file).getRoot();
+      else if(file.endsWith(".tree")) root = new ListData (file).getRoot();
+      
+      if(root == null) root = new  TabbedData(file).getRoot();
+      return root;
+    }
+    public DefaultMutableTreeNode readDialogTree(String file, DefaultMutableTreeNode root) {
+      QAnode qa_root = findAndCreateQANode(file);
+      if(qa_root == null) return null;
+      DefaultMutableTreeNode node = loadFromQANode(qa_root, root);
+      if(node != null) root.add(node);
+      return root;
+    }
+    DefaultMutableTreeNode loadFromQANode(QAnode qa_root, DefaultMutableTreeNode root) {
+      SentenceX sx = null;
+      DefaultMutableTreeNode node = createGuiNode( qa_root.getQuestions() );
+      if(node != null) {
+        DefaultMutableTreeNode asn = createGuiNode( qa_root.getAnswers() );
+        if(asn != null) node.add(asn);
+      }
+      if(qa_root.getFollowups() == null) return node;
+      
+      for(QAnode qan : qa_root.getFollowups()) {
+         DefaultMutableTreeNode child = loadFromQANode(qan, null);
+         if(child != null) {
+           if(root != null) root.add(child);
+           else if(node != null) node.add(child);
+           else if(node == null) node = child;
+         }
+      }
+      return node;
+    }
+    DefaultMutableTreeNode createGuiNode(ArrayList<String> al) {
+      DefaultMutableTreeNode node = null;
+      SentenceX sx = null;
+      if(al != null) {
+        for(String s : al) {
+          if(sx == null) sx = createSentence(s);
+          else sx.alternateSentences.add(s);
+          if(sx == null) continue;
+          if(node == null) node = new DefaultMutableTreeNode(sx);
         }
-        DefaultMutableTreeNode readDialogNode(basicNode root) {
-            DefaultMutableTreeNode node = null;
-            for (int i=0; i < root.ListChild.size(); i++) {
-                basicNode pnode = (basicNode)(root.ListChild.elementAt(i));
-                DefaultMutableTreeNode tn = readDialogQA(pnode, i);
-                if(tn != null) {
-                    if(node == null) node = tn;
-                    else node.add(tn);
-                } 
-            }
-            return node;
-        }
-        DefaultMutableTreeNode readDialogQA(basicNode root, int ord) {
-            SentenceX sx = null;
-            DefaultMutableTreeNode tn = null;
-            for (int i=0; i < root.ListChild.size(); i++) {
-                StringBuilder sb = new StringBuilder();
-                basicNode pnode = (basicNode)(root.ListChild.elementAt(i));
-                getNodeString(pnode, sb);
-                System.out.println((ord%2 == 0 ? "Q" : "A") +"---"+ sb );
-                String line = Parse.padQuotes (GrammarGenerator.regxQuoted, sb.toString());
-                line = line.trim ();
-                if (line.length () == 0) {
-                    continue;
-                }
-                if (!line.endsWith ("?") && !line.endsWith (".")) {
-                    line = line + ".";
-                }
-                if(sx == null) {
-                    Sentence c = gen.getSentence (line);
-                    sx = c == null ? null : new SentenceX (c);
-                }
-                else {
-                    sx.alternateSentences.add(line);
-                }
-            }
-            if(sx != null) tn = new DefaultMutableTreeNode (sx);
-            return tn;
-        }
-        void getNodeString(basicNode node, StringBuilder sb) {
-            if (node.ListChild == null || node.ListChild.size() == 0) {
-                sb.append(node.Tag).append(' ');
-            }
-            else {
-                if (!node.Tag.equals ("List")) sb.append(node.Tag).append(' ');
-                for (int i=0; i<node.ListChild.size(); i++) {
-                    basicNode pnode = (basicNode)(node.ListChild.elementAt(i));
-                       getNodeString(pnode, sb); 
-                }
-            }
-        }
-        public DefaultMutableTreeNode readConversation (String filename, String rootName) {
-             getGrammarGenerator ();
-             BufferedReader in = null;
-             DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootName);
-             readDialogTree(filename, root);
-             return root;
-        }
-        public DefaultMutableTreeNode readConversation_0 (String filename, String rootName) {
-		getGrammarGenerator ();
-		BufferedReader in = null;
-		int level = 0;
-		DefaultMutableTreeNode node[] = new DefaultMutableTreeNode[10];
-		node[0] = new DefaultMutableTreeNode (rootName);
+      }
+      return node;
+    }
+    SentenceX createSentence(String sq) {
+      String line = Parse.padQuotes (GrammarGenerator.regxQuoted, sq);
+      line = line.trim ();
+      if (line.length () == 0) {
+          return null;
+      }
+      if (!line.endsWith ("?") && !line.endsWith (".")) {
+          line = line + ".";
+      }
+      Sentence c = gen.getSentence (line);
+      return c == null ? null : new SentenceX (c);
+    }
 
-		try {
-			in = new BufferedReader (new FileReader (filename));
-			String line;
-			boolean skip = false;
-
-			while ((line = in.readLine ()) != null) {
-				line = Parse.padQuotes (GrammarGenerator.regxQuoted, line);
-				String tabline = line;
-				line = line.trim ();
-				if (line.length () <= 0) {
-					continue;
-				}
-				if (line.startsWith ("{")) {
-					skip = true;
-				}
-				if (line.startsWith ("}")) {
-					skip = false;
-					continue;
-				}
-				if (skip) {
-					continue;
-				}
-				level = 1;
-				for (int i = 0; tabline.charAt (i) == '\t'; i++) {
-					level++;
-				}
-				DefaultMutableTreeNode tn = null;
-				int ntoks = 0;
-                                SentenceX sx = null;
-				StringTokenizer st = new StringTokenizer (line, GrammarGenerator.DLG_DLIM);
-                                if(st.countTokens() == 1) {
-                                    String token = st.nextToken ().trim ();
-                                    if (token.length () > 0) {
-                                        if(node[level] != null) {
-                                            sx = (SentenceX) node[level].getUserObject();
-                                            if(sx != null) sx.alternateSentences.add(token);
-                                        }
-                                    }
-                                    continue;
-                                }
-                                        
-                                while (st.hasMoreTokens ()) {
-					String token = st.nextToken ().trim ();
-					if (token.length () == 0) {
-						continue;
-					}
-					if (!token.endsWith ("?") && !token.endsWith (".")) {
-						token = token + ".";
-					}
-                                        if(ntoks++ > 1) {                   //  (Q?) (A.) (A1.) (A2.)
-                                            sx.alternateSentences.add(token);
-                                            continue;
-                                        }
-                                        
-					Sentence c = gen.getSentence (token);
-					sx = c == null ? null : new SentenceX (c);
-					if (tn == null) {
-						tn = new DefaultMutableTreeNode (sx == null ? token : sx);
-					} else {
-						tn.add (new DefaultMutableTreeNode (sx == null ? token : sx));
-					}
-				}
-
-				node[level] = tn;
-				node[level - 1].add (tn);
-
-				System.out.println (line);
-			}
-		} catch (Exception e) {
-			e.printStackTrace ();
-		} finally {
-			try {
-				if (in != null) {
-					in.close ();
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace ();
-			}
-		}
-		return node[0];
-	}
-
+    public DefaultMutableTreeNode readConversation (String filename, String rootName) {
+         getGrammarGenerator ();
+         BufferedReader in = null;
+         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootName);
+         readDialogTree(filename, root);
+         return root;
+    }
+    
 	public void loadDoNotExpandwords () {
 		String f = JvxConfiguration.theConfig ().getDoNotExpandWords ();
 		try {
@@ -430,4 +349,6 @@ public class JvxDialogLoader {
 			});
 		}
 	}
+
+
 }

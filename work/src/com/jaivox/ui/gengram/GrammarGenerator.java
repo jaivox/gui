@@ -73,9 +73,9 @@ public class GrammarGenerator {
 		}
 
 		if (dlgFile != null) {
-			if (P == null) {
+		//	if (P == null) {
 				P = new Parse (dlgFile);
-			}
+		//	}
 			if (P.Valid) {
 				P.createsentences ();
 			}

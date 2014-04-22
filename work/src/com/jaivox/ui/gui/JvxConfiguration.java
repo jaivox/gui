@@ -181,7 +181,8 @@ public class JvxConfiguration {
 			theFrame.dlgHelper.dumpDialogToFile (appFolder + "dialog" + ".tree");
 			theFrame.dlgHelper.dumpUserSynonyms (appFolder + appName);
 			theFrame.dlgHelper.dumpSynonymSelections (appFolder + appName);
-			copyFile (appFolder + "dialog" + ".tree", appFolder + appName + ".sav");
+			//copyFile (appFolder + "dialog" + ".tree", appFolder + appName + ".sav");
+      theFrame.dlgHelper.saveTreeAsTabbedFile(appFolder + appName + ".sav");
 		} catch (IOException ex) {
 			Logger.getLogger (JvxConfiguration.class.getName ()).log (Level.SEVERE, null, ex);
 		}
