@@ -25,6 +25,7 @@ import com.jaivox.interpreter.Interact;
 import com.jaivox.recognizer.web.SpeechInput;
 import com.jaivox.recognizer.web.Mike;
 import com.jaivox.synthesizer.Synthesizer;
+import com.jaivox.ui.gui.JvxMainFrame;
 import java.util.Properties;
 
 public class AppWeb extends JvxApp {
@@ -35,6 +36,7 @@ public class AppWeb extends JvxApp {
 	Interact inter;
 	Synthesizer speaker;
 	String asrLang = "en-US";
+	static String apiKey = "";
 	static int wait = 10; // maximum length of input in seconds
         
 	public AppWeb (Properties kv) {
@@ -55,6 +57,9 @@ public class AppWeb extends JvxApp {
 		basedir = kv.getProperty ("Base");
 		project = kv.getProperty ("project");
 		asrLang = kv.getProperty ("lang");
+		apiKey = kv.getProperty ("googleapikey");
+		if (apiKey == null) apiKey = JvxMainFrame.apiKey;
+		if (apiKey == null) apiKey = "";
         // speaker will get ttsLang = kv.getProperty ("ttslang");
 		Command cmd = new Command ();
 		inter = new Interact (basedir, kv, cmd);
@@ -74,7 +79,7 @@ public class AppWeb extends JvxApp {
 	}
 
 	void processSpeech () {
-		SpeechInput R = new SpeechInput ();
+		SpeechInput R = new SpeechInput (apiKey);
 		Mike mike = new Mike (project, type);
 		int empty = 0;
 		int maxempty = 5;
@@ -108,7 +113,7 @@ public class AppWeb extends JvxApp {
         
     public void processSpeech (String speech) {
         speech = RecordTask.wavToflac(speech);
-        SpeechInput R = new SpeechInput ();
+        SpeechInput R = new SpeechInput (apiKey);
         int empty = 0;
         int maxempty = 5;
         if (speech != null) {
@@ -146,12 +151,12 @@ public class AppWeb extends JvxApp {
 
     public static boolean testSpeech (String speech) {
         // speech = RecordTask.wavToflac(speech);
-        SpeechInput R = new SpeechInput ();
+        SpeechInput R = new SpeechInput (JvxMainFrame.apiKey);
         int empty = 0;
         int maxempty = 5;
         if (speech != null) {
             String result = R.recognize (speech, "en-US");
-            System.out.println ("result:" + result);
+            System.out.println ("google api result:" + result);
             if (result.trim ().length () > 0) return true;
 			else return false;
         }

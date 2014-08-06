@@ -29,6 +29,7 @@ import com.jaivox.ui.appmaker.AppSphinx;
 import com.jaivox.ui.appmaker.AppWeb;
 import com.jaivox.ui.appmaker.GuiPrep;
 import com.jaivox.ui.appmaker.RecordTask;
+import com.jaivox.ui.gengram.Parse;
 // import test.JvxTest;
 import java.awt.Component;
 import java.awt.Container;
@@ -38,14 +39,19 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,6 +75,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	static boolean dirty_flag = false;
 	static boolean generated_flag = false;
 	static String recognizer = null;
+	public static String apiKey = "";
 	static UndoManager undoManager_;
 	static UndoableEditSupport undoSupport_;
 	static JvxHelpFrame helpFrame = null;
@@ -128,12 +135,12 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		expandYNButton.setSelected (false);
 		expandYNButton.setText ("Expand Synonyms");
 		
-                testButton.setEnabled(isTesting());
-                testButton.setVisible(isTesting());
-                // turn off while testing
-                // if(!isTesting()) {
-                //     checkInstalled ();
-                // }
+		testButton.setEnabled(isTesting());
+		testButton.setVisible(isTesting());
+		// turn off while testing
+		if(!isTesting()) {
+			 checkInstalled ();
+		}
 		initLanguages ();
 		initLanguageCodes ();
 		createButtonGroups ();
@@ -825,6 +832,28 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 			return false;
 		}
 	}
+	
+	public static boolean checkGoogleAPIkey () {
+		try {
+			BufferedReader in = new BufferedReader (new FileReader (
+					"work/apps/common/googleapi.key"));
+			String line;
+			apiKey = "xxxx"; // 4 x's will be in the default file
+			while ((line = in.readLine ()) != null) {
+				if (line.trim ().length () == 0) continue;
+				StringTokenizer st = new StringTokenizer (line, Parse.breaks);
+				String token = st.nextToken ();
+				while (st.hasMoreTokens ()) token = st.nextToken ();
+				apiKey = token;
+			}
+			if (!apiKey.equals ("xxxx")) return true;
+			else return false;
+		}
+		catch (Exception e) {
+			System.out.println ("Error reading work/apps/common/googleapi.key");
+			return false;
+		}
+	}
 
 	/**
 	 * Check for jar file in class path
@@ -853,7 +882,6 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		cbGoogleRecognizer.setEnabled (installed ("sox"));
 		cbFreetts.setEnabled (checkClasspath ("freetts.jar"));
 		// cbFreetts.setEnabled (false);
-		cbGoogleRecognizer.setEnabled (AppWeb.testSpeech ("work/apps/common/test.flac"));
 		Synthesizer speaker = new Synthesizer ();
 		cbGoogletts.setEnabled (speaker.speak ("testing google text to speech"));
 
@@ -888,7 +916,30 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 		}
 		cbSphinx.setEnabled (true);
 
-
+		// check for work/common/googleapi.key
+		boolean ok = checkGoogleAPIkey ();
+		if (!ok) {
+			// need a dialog to create the googleapi.key file if it does not exist
+			String msg = "Google recognizer now requies an API key.\n";
+			msg += "Please see http://www.chromium.org/developers/how-tos/api-keys\n";
+			msg += "If you have a key, you can enter it here.\n";
+			String input = JOptionPane.showInputDialog (msg);
+			if (input != null) {
+				apiKey = input;
+				try {
+					PrintWriter out = new PrintWriter (
+							new FileWriter ("work/apps/common/googleapi.key"));
+					out.println (apiKey);
+					out.close ();
+				}
+				catch (Exception e) {
+					System.out.println ("could not write work/apps/common/googleapi.key");
+					return;
+				}
+			}
+			
+		}
+		cbGoogleRecognizer.setEnabled (AppWeb.testSpeech ("work/apps/common/test.flac"));
 		// check some urls, does not seem to work right
 		/*
 		 boolean okwebasr = 

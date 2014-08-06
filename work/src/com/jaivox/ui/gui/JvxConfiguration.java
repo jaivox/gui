@@ -137,6 +137,7 @@ public class JvxConfiguration {
 		conf.put ("destination", getAppFolder ());
 		conf.put ("appfolder", getAppFolder ());
 		conf.put ("onedirectory", "yes");
+		conf.put ("googleapikey", JvxMainFrame.apiKey);
 
 		setTargetSpec (theFrame);
 		setMisc (theFrame);

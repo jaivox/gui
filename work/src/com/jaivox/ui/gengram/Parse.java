@@ -37,7 +37,7 @@ public class Parse {
 
 	static String penntags = "penn.txt";
 	// note underline symbol is not a break, as in Java or C
-	static String breaks = "~`!@#$%^&*()+={}[]|\\:;\'\"<>,.?/ \t\r\n";
+	public static String breaks = "~`!@#$%^&*()+={}[]|\\:;\'\"<>,.?/ \t\r\n";
 	static TreeMap<String, String> tags;
 	ArrayList<String> statements;
 	int testlimit = 10;
