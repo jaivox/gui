@@ -1,4 +1,6 @@
 Jaivox Application Generator (JAG) version 0.2 March 2014
+Modified August 2014 to utilize Google's web recognizer API key
+
 Copyright 2010-2014 by Bits and Pixels, Inc.
 Developed by Rajesh John rajesh@jaivox.com
 
@@ -17,6 +19,9 @@ limitations under the License.
 Please see work/licenses for licenses to other components included with
 this package.
 ================================
+Please see http://www.chromium.org/developers/how-tos/api-keys
+Please read instructions there, you need to join the Chromium developer's group.
+Add this key as the value of "googleapikey" in your conf file
 
 The executable is the jar file jag.jar, you run this using java.
 
