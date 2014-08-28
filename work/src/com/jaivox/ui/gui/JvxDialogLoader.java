@@ -81,6 +81,7 @@ public class JvxDialogLoader {
 	}
 
 	public void reInit () {
+    //new com.jaivox.util.Log();
 		getGrammarGenerator ();
 		JvxMainFrame.getInstance ().setDirtyFlag (false);
 		datadir = JvxConfiguration.theConfig ().getDataFolder ();
@@ -301,52 +302,58 @@ public class JvxDialogLoader {
 	public static boolean isDataLoaded () {
 		return dataLoaded;
 	}
-
+        public void showDBTable(String tab) {
+            List<List<String>> rows = dbInter.getDBMgr ().queryTab (tab);
+            if(rows == null) rows = new ArrayList<List<String>>();
+            Object vals[][] = new Object[rows.size ()][];
+            int i = 0;
+            for (List row : rows) {
+                vals[i++] = row.toArray ();
+                if (!dataLoaded) {
+                    dataLoaded = true;
+                }
+            }
+            try {
+                    this.theFrame.getQualdbTable ().setModel (
+                                    new javax.swing.table.DefaultTableModel (vals,
+                                    dbInter.getDBMgr ().getTableFields (tab).toArray ()));
+            } catch (SQLException ex) {
+                    Logger.getLogger (JvxDialogLoader.class.getName ()).log (Level.SEVERE, null, ex);
+            }
+        }
 	public void interfaceDialogs (ActionEvent evt) {
 		if (evt.getActionCommand ().equals ("DBInterface")) {
-			if (dbInter != null) {
-				List<String> tabs = dbInter.getSeletedTabs ();
-				System.out.println ("interfaceDialogs: done: tabs: " + tabs.size ());
-				dbInter.dispose ();
-				if (tabs.size () > 0) {
-					List<List<String>> rows = dbInter.getDBMgr ().queryTab (tabs.get (0));
-
-					Object vals[][] = new Object[rows.size ()][];
-					int i = 0;
-					for (List row : rows) {
-						vals[i++] = row.toArray ();
-						if (!dataLoaded) {
-							dataLoaded = true;
-						}
-					}
-					try {
-						this.theFrame.getQualdbTable ().setModel (
-								new javax.swing.table.DefaultTableModel (vals,
-								dbInter.getDBMgr ().getTableFields (tabs.get (0)).toArray ()));
-					} catch (SQLException ex) {
-						Logger.getLogger (JvxDialogLoader.class.getName ()).log (Level.SEVERE, null, ex);
-					}
-				}
-			}
-			dbInter = null;
+                    if (dbInter != null) {
+                        List<String> tabs = dbInter.getSeletedTabs ();
+                        System.out.println ("interfaceDialogs: done: tabs: " + tabs.size ());
+                        dbInter.dispose ();
+                        theFrame.getQualdbList().removeAllItems();
+                        for(String tab: tabs) {
+                            theFrame.getQualdbList().addItem(tab);
+                        }
+                        if (tabs.size () > 0) {
+                            showDBTable(tabs.get(0));
+                        }
+                    }
+                    //dbInter = null;
 		} else {
-			java.awt.EventQueue.invokeLater (new Runnable () {
-				public void run () {
-					dbInter = new JvxDBMgr (theFrame, true);
-					dbInter.addWindowListener (new java.awt.event.WindowAdapter () {
-						@Override
-						public void windowClosing (java.awt.event.WindowEvent e) {
-							System.out.println ("interfaceDialogs: db inteface closing");
-						}
+                    java.awt.EventQueue.invokeLater (new Runnable () {
+                        public void run () {
+                            dbInter = new JvxDBMgr (theFrame, true);
+                            dbInter.addWindowListener (new java.awt.event.WindowAdapter () {
+                                @Override
+                                public void windowClosing (java.awt.event.WindowEvent e) {
+                                        System.out.println ("interfaceDialogs: db inteface closing");
+                                }
 
-						@Override
-						public void windowClosed (java.awt.event.WindowEvent e) {
-							System.out.println ("interfaceDialogs: db inteface closed");
-						}
-					});
-					dbInter.setVisible (true);
-				}
-			});
+                                @Override
+                                public void windowClosed (java.awt.event.WindowEvent e) {
+                                        System.out.println ("interfaceDialogs: db inteface closed");
+                                }
+                            });
+                            dbInter.setVisible (true);
+                        }
+                    });
 		}
 	}
 

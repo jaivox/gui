@@ -273,7 +273,7 @@ public class JvxDBMetas {
 
 	public List<List<String>> queryTab (String tab) {
 		try {
-			if (!valid) {
+			if (!valid || tab == null || tab.trim().length() <= 0) {
 				return null;
 			}
 

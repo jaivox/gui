@@ -81,6 +81,7 @@ public class Sentence {
 		Map<String, String[]> dbsyns = link.dbsyns;
 		Integer One = new Integer (1);
 		for (int i = 0; i < N; i++) {
+      if(words == null || words.length == 0) continue;
 			String w = "";
 			int best = -1;
 			String bestw = null;
@@ -88,7 +89,7 @@ public class Sentence {
 				if (i + j >= N) {
 					break;
 				}
-				w += (" " + words[i + j]);
+        w += (" " + words[i + j]);
 				w = w.trim ();
 				if (link.synsget (w, forms[i + j]) != null) {
 					best = j;

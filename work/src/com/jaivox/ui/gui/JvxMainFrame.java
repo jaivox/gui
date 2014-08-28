@@ -261,6 +261,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         selectDbButton = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         qualdbTable = new javax.swing.JTable();
+        jComboDBTabs = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         appName = new javax.swing.JTextField();
@@ -399,6 +400,9 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 synsTabMousePressed(evt);
             }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                synsTabMouseReleased(evt);
+            }
         });
         jScrollPane1.setViewportView(synsTab);
 
@@ -475,22 +479,32 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         qualdbTable.setName("qualdbTable"); // NOI18N
         jScrollPane4.setViewportView(qualdbTable);
 
+        jComboDBTabs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboDBTabsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(selectDbButton, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(selectDbButton, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                    .addComponent(jComboDBTabs, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(selectDbButton)
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(jComboDBTabs, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(64, Short.MAX_VALUE))
             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -1303,6 +1317,17 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
         // TODO add your handling code here:
     }//GEN-LAST:event_osListActionPerformed
 
+    private void jComboDBTabsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboDBTabsActionPerformed
+        String t = (String) this.jComboDBTabs.getSelectedItem();
+        this.dlgLoader.showDBTable(t);
+    }//GEN-LAST:event_jComboDBTabsActionPerformed
+
+    private void synsTabMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_synsTabMouseReleased
+        if (evt.isPopupTrigger ()) {
+            synsHelper.synsTabMouseRClicked (evt);
+	}        // TODO add your handling code here:
+    }//GEN-LAST:event_synsTabMouseReleased
+
 	public boolean wordsToBeExpanded () {
 		return (this.expandYNButton.isEnabled () && expandYNButton.isSelected ());
 	}
@@ -1376,7 +1401,9 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
 	public JTable getQualdbTable () {
 		return qualdbTable;
 	}
-
+        public JComboBox getQualdbList() {
+            return this.jComboDBTabs;
+        }
 	public String getRecognizer () {
 		if (this.cbGoogleRecognizer.isSelected ()) {
 			return "web";
@@ -1585,6 +1612,7 @@ public class JvxMainFrame extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JScrollPane dlgTreeScrollPane;
     private javax.swing.JToggleButton expandYNButton;
     private javax.swing.JList grammarList;
+    private javax.swing.JComboBox jComboDBTabs;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
